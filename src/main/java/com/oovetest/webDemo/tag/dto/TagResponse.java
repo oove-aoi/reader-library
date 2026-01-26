@@ -1,0 +1,10 @@
+package com.oovetest.webDemo.tag.dto;
+
+import lombok.Data;
+
+@Data
+public class TagResponse {
+    private Long id;
+    private String name;
+    private String tagGroupName;
+}
