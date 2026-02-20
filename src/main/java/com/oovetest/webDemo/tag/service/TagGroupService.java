@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.oovetest.webDemo.tag.repository.TagGroupRepository;
 import com.oovetest.webDemo.tag.dto.TagGroupRequest;
+import com.oovetest.webDemo.tag.dto.TagGroupResponse;
 import com.oovetest.webDemo.tag.dto.TagGroupUpdateRequest;
 import com.oovetest.webDemo.tag.dto.TagGroupWithTagsResponse;
 import com.oovetest.webDemo.tag.model.TagGroup;
@@ -23,34 +24,42 @@ public class TagGroupService {
         this.tagGroupMapper = tagGroupMapper;
     }
 
-    public TagGroup findByName(String name) {
-        return tagGroupRepository.findByTagGroupName(name)
-                                 .orElseThrow(() -> new RuntimeException("TagGroup not found"));
-    }
-
-
-    public TagGroup findById(Long id) {
+    public TagGroup getEntityById(Long id) {
         return tagGroupRepository.findById(id)
-                                 .orElseThrow(() -> new RuntimeException("TagGroup not found"));
+                .orElseThrow(() -> new RuntimeException("TagGroup not found"));
     }
 
-    public TagGroup createTagGroup(TagGroupRequest request) {
+
+
+    @Transactional(readOnly = true)
+    public TagGroupResponse findByName(String name) {
+        TagGroup tagGroup = tagGroupRepository.findByTagGroupName(name)
+                                 .orElseThrow(() -> new RuntimeException("TagGroup not found"));
+        return tagGroupMapper.toResponse(tagGroup);
+    }
+
+    @Transactional(readOnly = true)
+    public TagGroupResponse findById(Long id) {
+        TagGroup tagGroup = getEntityById(id);
+        return tagGroupMapper.toResponse(tagGroup);
+    }
+
+    public TagGroupResponse createTagGroup(TagGroupRequest request) {
         //code還是別用setter了、免得沒驗證出事
         TagGroup tagGroup = new TagGroup(request.getCode(), request.getDisplayName());
         
-        return tagGroupRepository.save(tagGroup);
+        return tagGroupMapper.toResponse(tagGroupRepository.save(tagGroup));
     }
 
-    public TagGroup updateTagGroup(Long id, TagGroupUpdateRequest request) {
-        TagGroup tagGroup = findById(id);             
+    public TagGroupResponse updateTagGroup(Long id, TagGroupUpdateRequest request) {
+        TagGroup tagGroup = getEntityById(id);                                             
         tagGroup.setTagGroupName(request.getDisplayName());
 
-        return tagGroupRepository.save(tagGroup);
+        return tagGroupMapper.toResponse(tagGroupRepository.save(tagGroup));
     }
 
     public TagGroupWithTagsResponse findTagsByGroupId(Long groupId) {
-        TagGroup tagGroup = findById(groupId);
-
+        TagGroup tagGroup = getEntityById(groupId);
         return tagGroupMapper.toTagGroupWithTagsResponse(tagGroup);
     }
 

@@ -8,9 +8,11 @@ import java.util.stream.Collectors;
 import com.oovetest.webDemo.author.model.Author;
 import com.oovetest.webDemo.booktag.BookTag;
 import com.oovetest.webDemo.experience.model.Experience;
+import com.oovetest.webDemo.series.model.Series;
 import com.oovetest.webDemo.tag.model.Tag;
 
 import jakarta.persistence.*;
+import jakarta.persistence.criteria.CriteriaBuilder.In;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -60,8 +62,16 @@ public class Book {
     )
     private Set<BookTag> bookTags = new HashSet<>();
     
+    //追加關於系列的設定
+    @ManyToOne(optional = false)
+    private Series series;
+
+    private Integer volume; // 第幾集
+
+    //心得
     @OneToOne(mappedBy = "book", cascade = CascadeType.ALL, orphanRemoval = true)
     private Experience experience;
+
 
     // Helper 方法
 
@@ -84,7 +94,5 @@ public class Book {
                        .map(BookTag::getTag)
                        .collect(Collectors.toUnmodifiableSet());
     }
-
-    
 }
 

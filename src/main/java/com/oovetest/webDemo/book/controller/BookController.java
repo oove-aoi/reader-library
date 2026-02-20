@@ -40,8 +40,7 @@ public class BookController {
     @GetMapping("/books/id/{bookId}")
     public ResponseEntity<BookResponse> getBook(@PathVariable Long bookid) {
         try {
-            Book book = bookService.getBookById(bookid);
-            return ResponseEntity.ok(bookMapper.toResponse(book));
+            return ResponseEntity.ok(bookService.getBookById(bookid));
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
@@ -55,9 +54,7 @@ public class BookController {
     @GetMapping("/books/name/{bookName}")
     public ResponseEntity<BookResponse> getBook(@PathVariable String bookName) {
         try {
-
-            Book book = bookService.getBookByTitle(bookName);
-            return ResponseEntity.ok(bookMapper.toResponse(book));
+            return ResponseEntity.ok(bookService.getBookByTitle(bookName));
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
@@ -71,8 +68,8 @@ public class BookController {
     @GetMapping("/authors/id/{authorId}/books")
     public ResponseEntity<List<BookSimpleResponse>> getBooksByAuthor(@PathVariable Long authorId) {
         try {
-            List<Book> books = bookService.getAllBookByAuthorId(authorId);
-            return ResponseEntity.ok(bookMapper.toSimpleResponse(books));
+            List<BookSimpleResponse> books = bookService.getAllBookByAuthorId(authorId);
+            return ResponseEntity.ok(books);
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
@@ -86,8 +83,8 @@ public class BookController {
     @GetMapping("/authors/name/{authorName}/books")
     public ResponseEntity<List<BookSimpleResponse>> getBooksByAuthor(@PathVariable String authorName) {
         try {
-            List<Book> books = bookService.getAllBooksByAuthorName(authorName);
-            return ResponseEntity.ok(bookMapper.toSimpleResponse(books));
+            List<BookSimpleResponse> books = bookService.getAllBooksByAuthorName(authorName);
+            return ResponseEntity.ok(books);
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
@@ -101,8 +98,8 @@ public class BookController {
     @GetMapping("/tags/id/{tagId}/books")
     public ResponseEntity<List<BookSimpleResponse>> getBooksByTag(@PathVariable Long tagId) {
         try {
-            List<Book> books = bookService.getAllBooksByTagId(tagId);
-            return ResponseEntity.ok(bookMapper.toSimpleResponse(books));
+            List<BookSimpleResponse> books = bookService.getAllBooksByTagId(tagId);
+            return ResponseEntity.ok(books);
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
@@ -116,8 +113,8 @@ public class BookController {
     @GetMapping("/tags/name/{tagName}/books")
     public ResponseEntity<List<BookSimpleResponse>> getBooksByTagName(@PathVariable String tagName) {
         try {
-            List<Book> books = bookService.getAllBookByTagName(tagName);
-            return ResponseEntity.ok(bookMapper.toSimpleResponse(books));
+            List<BookSimpleResponse> books = bookService.getAllBookByTagName(tagName);
+            return ResponseEntity.ok(books);
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
@@ -130,9 +127,9 @@ public class BookController {
     )
     @PostMapping("/books")
     public ResponseEntity<BookSimpleResponse> createBook(@RequestBody BookRequest bookRequest){
-        Book book = bookService.createBook(bookRequest);
+        BookSimpleResponse book = bookService.createBook(bookRequest);
         return ResponseEntity.status(HttpStatus.CREATED)
-            .body(bookMapper.toSimpleResponse(book));
+            .body(book);
     }
 
     @Operation(
@@ -145,8 +142,8 @@ public class BookController {
             @PathVariable Long bookid,
              @RequestBody BookRequest bookRequest){
         try {
-            Book book = bookService.updateBookById(bookid, bookRequest);
-            return ResponseEntity.status(HttpStatus.OK).body(bookMapper.toResponse(book));
+            BookResponse book = bookService.updateBookById(bookid, bookRequest);
+            return ResponseEntity.status(HttpStatus.OK).body(book);
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }

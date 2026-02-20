@@ -15,7 +15,7 @@ import com.oovetest.webDemo.tag.domain.TagGroupCode;
 @Table(
     name = "tag_group",
     uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"tagGroupName"})
+        @UniqueConstraint(columnNames = {"tag_group_name"})
     }
 )
 @Getter @Setter
@@ -33,7 +33,7 @@ public class TagGroup {
     private String code;   
 
     //實務上給使用者用的名稱
-    @Column(nullable = false, unique = true, name = "display_name")
+    @Column(nullable = false, unique = true, name = "tag_group_name")
     private String tagGroupName; 
 
     @OneToMany(

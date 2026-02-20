@@ -3,7 +3,7 @@ package com.oovetest.webDemo.book.mapper;
 import java.util.List;
 
 import org.springframework.stereotype.Component;
-
+import com.oovetest.webDemo.book.dto.SeriesBookSimpleResponse;
 import com.oovetest.webDemo.book.dto.BookResponse;
 import com.oovetest.webDemo.book.dto.BookSimpleResponse;
 import com.oovetest.webDemo.book.model.Book;
@@ -51,6 +51,25 @@ public class BookMapper {
     public List<BookSimpleResponse> toSimpleResponse(List<Book> books){
         return books.stream()
                     .map(this::toSimpleResponse)
+                    .toList();
+    }
+
+    public SeriesBookSimpleResponse toSeriesBookSimpleResponse(Book book) {
+        SeriesBookSimpleResponse response = new SeriesBookSimpleResponse();
+        
+        response.setId(book.getId());
+        response.setTitle(book.getBookTitle());
+        if (book.getSeries() != null) {
+            response.setSeriesName(book.getSeries().getTitle());
+            response.setVolume(book.getVolume());
+        }
+        
+        return response;
+    }
+
+    public List<SeriesBookSimpleResponse> toSeriesBookSimpleResponse(List<Book> books){
+        return books.stream()
+                    .map(this::toSeriesBookSimpleResponse)
                     .toList();
     }
 }

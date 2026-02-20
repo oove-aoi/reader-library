@@ -1,26 +1,24 @@
 package com.oovetest.webDemo.tag.controller;
 
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.annotation.RestController;
-
-import com.oovetest.webDemo.tag.service.TagService;
-
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import io.swagger.v3.oas.annotations.Operation;
 
 import com.oovetest.webDemo.tag.dto.TagResponse;
 import com.oovetest.webDemo.tag.mapper.TagMapper;
+import com.oovetest.webDemo.tag.service.TagService;
 import com.oovetest.webDemo.tag.model.Tag;
 import com.oovetest.webDemo.tag.dto.TagRequest;
 import com.oovetest.webDemo.tag.service.TagGroupService;
 
 @RestController
+@RequestMapping("/api")
 public class TagController {
     private final TagService tagService;
-    private final TagMapper tagMapper;
-    
-    public TagController(TagService tagService, TagGroupService tagGroupService, TagMapper tagMapper) {
+
+    public TagController(TagService tagService, TagGroupService tagGroupService) {
         this.tagService = tagService;
-        this.tagMapper = tagMapper;
     }
 
     @Operation(
@@ -29,9 +27,12 @@ public class TagController {
         description = "依tag ID搜尋tag資料"
     )
     @GetMapping("/tags/id/{tagId}")
-    public TagResponse findTagById(Long tagId) {
-        Tag tag = tagService.findById(tagId);
-        return tagMapper.toResponse(tag);
+    public ResponseEntity<TagResponse> findTagById(Long tagId) {
+        try {
+            return ResponseEntity.ok(tagService.findById(tagId));
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
 
     @Operation(
@@ -40,9 +41,12 @@ public class TagController {
         description = "依tag名稱搜尋tag資料"
     )
     @GetMapping("/tags/name/{tagName}")
-    public TagResponse findTagByName(String tagName) {
-        Tag tag = tagService.findByName(tagName);
-        return tagMapper.toResponse(tag);
+    public ResponseEntity<TagResponse> findTagByName(String tagName) {
+         try {
+            return ResponseEntity.ok(tagService.findByName(tagName));
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
 
     @Operation(
@@ -51,9 +55,13 @@ public class TagController {
         description = "建立新的tag"
     )
     @PostMapping("/tags")
-    public TagResponse createTag(TagRequest tagRequest) {
-        Tag tag = tagService.createTag(tagRequest);
-        return tagMapper.toResponse(tag);
+    public ResponseEntity<TagResponse> createTag(TagRequest tagRequest) {
+        try {
+            TagResponse tagResponse = tagService.createTag(tagRequest);
+            return ResponseEntity.status(HttpStatus.CREATED).body(tagResponse);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
     }
 
     @Operation(
@@ -62,9 +70,12 @@ public class TagController {
         description = "更新tag資料"
     )
     @PutMapping("/tags/id/{tagId}")
-    public TagResponse updateTag(Long tagId, TagRequest tagRequest) {
-        Tag tag = tagService.updateTag(tagId, tagRequest);
-        return tagMapper.toResponse(tag);
+    public ResponseEntity<TagResponse> updateTag(Long tagId, TagRequest tagRequest) {
+        try {
+            return ResponseEntity.ok(tagService.updateTag(tagId, tagRequest));
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
 
 

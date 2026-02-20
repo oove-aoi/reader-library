@@ -7,8 +7,9 @@ import java.time.LocalDateTime;
 import com.oovetest.webDemo.book.model.Book;
 import com.oovetest.webDemo.book.repository.BookRepository;
 import com.oovetest.webDemo.experience.dto.ExperienceRequest;
+import com.oovetest.webDemo.experience.dto.ExperienceResponse;
 import com.oovetest.webDemo.experience.model.Experience;
-
+import com.oovetest.webDemo.experience.mapper.ExperienceMapper;
 
 import com.oovetest.webDemo.experience.repository.ExperienceRepository;
 
@@ -17,32 +18,40 @@ import com.oovetest.webDemo.experience.repository.ExperienceRepository;
 public class ExperienceService {
     private final ExperienceRepository experienceRepository;
     private final BookRepository bookRepository;
+    private final ExperienceMapper experienceMapper;
 
     public ExperienceService(ExperienceRepository experienceRepository,
-                            BookRepository bookRepository) {
+                            BookRepository bookRepository,
+                            ExperienceMapper experienceMapper) {
         this.experienceRepository = experienceRepository;
         this.bookRepository = bookRepository;
+        this.experienceMapper = experienceMapper;
     }
 
     @Transactional(readOnly = true)
-    public Experience getExperienceByBookTitle(String title) {
-        return experienceRepository.findByBook_BookTitle(title)
+    public ExperienceResponse getExperienceByBookTitle(String title) {
+        Experience experience = experienceRepository.findByBook_BookTitle(title)
                 .orElseThrow(() -> new RuntimeException("找不到這本書的心得"));
+
+        return experienceMapper.toResponse(experience);
     }
 
     @Transactional(readOnly = true)
-    public Experience getExperienceByBookId(Long bookId) {
-        return experienceRepository.findByBook_Id(bookId)
+    public ExperienceResponse getExperienceByBookId(Long bookId) {
+        Experience experience =  experienceRepository.findByBook_Id(bookId)
                 .orElseThrow(() -> new RuntimeException("找不到這本書的心得"));
+        return experienceMapper.toResponse(experience);
     }
     
     @Transactional(readOnly = true)
-    public Experience getExperienceById(Long experienceId) {
-        return experienceRepository.findById(experienceId)
-                .orElseThrow(() -> new RuntimeException("找不到心得"));
+    public ExperienceResponse getExperienceById(Long experienceId) {
+        Experience experience =  experienceRepository.findById(experienceId)
+                .orElseThrow(() -> new RuntimeException("找不到這本書的心得"));
+
+        return experienceMapper.toResponse(experience);
     }
 
-    public Experience saveExperience(ExperienceRequest experienceRequest) {
+    public ExperienceResponse saveExperience(ExperienceRequest experienceRequest) {
         Experience experience = new Experience();
         Book book = bookRepository.findById(experienceRequest.getBookId())
                 .orElseThrow(() -> new RuntimeException("找不到這本書"));
@@ -52,11 +61,11 @@ public class ExperienceService {
         experience.setBook(book);
         experience.setCreatedAt(LocalDateTime.now());
 
-        return experienceRepository.save(experience);
+        return experienceMapper.toResponse(experienceRepository.save(experience));
     }
 
-    public Experience updateExperience(Long experienceId, 
-                                       ExperienceRequest experienceRequest) {
+    public ExperienceResponse updateExperience(Long experienceId, 
+                                               ExperienceRequest experienceRequest) {
         Experience experience = experienceRepository.findById(experienceId)
                 .orElseThrow(() -> new RuntimeException("找不到心得"));
 
@@ -67,7 +76,7 @@ public class ExperienceService {
         experience.setRating(experienceRequest.getRating());
         experience.setBook(book);
 
-        return experienceRepository.save(experience);
+        return experienceMapper.toResponse(experienceRepository.save(experience));
     }
 
     public void deleteExperience(Long experienceId) {

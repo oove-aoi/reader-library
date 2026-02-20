@@ -11,8 +11,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.oovetest.webDemo.experience.dto.ExperienceRequest;
 import com.oovetest.webDemo.experience.dto.ExperienceResponse;
-import com.oovetest.webDemo.experience.mapper.ExperienceMapper;
-import com.oovetest.webDemo.experience.model.Experience;
 import com.oovetest.webDemo.experience.service.ExperienceService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -27,12 +25,9 @@ import org.springframework.web.bind.annotation.PutMapping;
 @RequestMapping("/api")
 public class ExperienceController {
     private final ExperienceService experienceService;
-    private final ExperienceMapper experienceMapper;
 
-    public ExperienceController(ExperienceService experienceService, 
-                                ExperienceMapper experienceMapper) {
+    public ExperienceController(ExperienceService experienceService) {
         this.experienceService = experienceService;
-        this.experienceMapper = experienceMapper;
     }
 
     @Operation(
@@ -43,8 +38,8 @@ public class ExperienceController {
     @GetMapping("/books/id/{bookId}/experience")
     public ResponseEntity<ExperienceResponse> getExperienceByBookId(@PathVariable Long bookid) {
         try {
-            Experience experience = experienceService.getExperienceByBookId(bookid);
-            return ResponseEntity.ok(experienceMapper.toResponse(experience));
+            ExperienceResponse experienceResponse = experienceService.getExperienceByBookId(bookid);
+            return ResponseEntity.ok(experienceResponse);
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
@@ -67,8 +62,8 @@ public class ExperienceController {
                                                 "與路徑不一致，請確認請求內容");
         }
         
-        Experience experience = experienceService.saveExperience(experienceRequest);
-        return ResponseEntity.ok(experienceMapper.toResponse(experience));
+        ExperienceResponse experienceResponse = experienceService.saveExperience(experienceRequest);
+        return ResponseEntity.status(HttpStatus.CREATED).body(experienceResponse);
     }
 
     @Operation(
@@ -77,18 +72,16 @@ public class ExperienceController {
         description = "更新心得資料，需提供書籍ID"
     )
     @PutMapping("/books/id/{bookId}/experience")
-    public ResponseEntity<ExperienceResponse> updateExperience(
-        @PathVariable Long bookId, 
-        @RequestBody ExperienceRequest experienceRequest) {
-
+    public ResponseEntity<ExperienceResponse> updateExperience(@PathVariable Long bookId, 
+                                                               @RequestBody ExperienceRequest experienceRequest) {
         if (experienceRequest.getBookId() != null && 
             !experienceRequest.getBookId().equals(bookId)) {
             throw new IllegalArgumentException("ExperienceRequest 的 bookId" +
                                                 "與路徑不一致，請確認請求內容");
         }
 
-        Experience experience = experienceService.updateExperience(bookId, experienceRequest);
-        return ResponseEntity.ok(experienceMapper.toResponse(experience));
+        ExperienceResponse experienceResponse = experienceService.updateExperience(bookId, experienceRequest);
+        return ResponseEntity.ok(experienceResponse);
     }
 
     @Operation(

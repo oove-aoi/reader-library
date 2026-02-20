@@ -3,13 +3,15 @@ package com.oovetest.webDemo.book.repository;
 import com.oovetest.webDemo.book.model.Book;
 import com.oovetest.webDemo.book.service.BookSearchCondition;
 import com.oovetest.webDemo.author.model.Author;
+import com.oovetest.webDemo.series.model.Series;
 
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
+
 import java.util.List;
 import java.util.Optional;
 
-public interface BookRepository extends JpaRepository<Book, Long>, BookRepositoryCustom{
+public interface BookRepository extends JpaRepository<Book, Long>, BookRepositoryCustom {
     @EntityGraph(attributePaths = "author, bookTags.tag, experience")
     public Optional<Book> findWithDetailById(Long id); // 透過ID查詢書籍並帶出關聯資料
 
@@ -22,6 +24,10 @@ public interface BookRepository extends JpaRepository<Book, Long>, BookRepositor
     public List<Book> findAllByBookTitleContaining(String keyword); //查詢書名改用模糊識別
     public boolean existsByAuthorAndBookTitle(Author author, String bookTitle);
 
+    public List<Book> findAllBySeries_Id(Long seriesId); // 透過系列ID查詢書籍
+    public List<Book> findAllBySeries_Name(String seriesName); // 透過系列名稱查詢書籍
+    public boolean existsBySeriesAndVolume(Series series, Integer volume); // 檢查同系列同卷數的書籍是否存在
+    
     @EntityGraph(attributePaths = "author, bookTags.tag, experience")
     public List<Book> search(BookSearchCondition condition);//新增複合條件查詢
 

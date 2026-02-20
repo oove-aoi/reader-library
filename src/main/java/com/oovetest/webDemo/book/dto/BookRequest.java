@@ -14,6 +14,8 @@ public class BookRequest {
     private BookStatus status;
     private String isbn;
     private LocalDateTime buyTime;
+    private String seriesName;
+    private Integer volume;
 
     // 用 Set<String> 代替 Tag 實體
     private Set<String> tagNames = new HashSet<>();

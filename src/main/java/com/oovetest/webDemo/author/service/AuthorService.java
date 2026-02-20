@@ -1,49 +1,72 @@
 package com.oovetest.webDemo.author.service;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.oovetest.webDemo.author.dto.AuthorRequest;
+import com.oovetest.webDemo.author.dto.AuthorResponse;
+import com.oovetest.webDemo.author.dto.AuthorWithBooksResponse;
 import com.oovetest.webDemo.author.model.Author;
 import com.oovetest.webDemo.author.repository.AuthorRepository;
+import com.oovetest.webDemo.author.mapper.AuthorMapper;
 import lombok.NonNull;
 
 @Service
+@Transactional
 public class AuthorService {
     //getAuthorById, createAuthor, updateAuthor, deleteAuthorById
     //
     private final AuthorRepository authorRepository;
+    private final AuthorMapper authorMapper;
 
-    public AuthorService(AuthorRepository authorRepository) {
+    public AuthorService(AuthorRepository authorRepository, AuthorMapper authorMapper) {
         this.authorRepository = authorRepository;
+        this.authorMapper = authorMapper;
+    }
+
+    public Author getEntityById(Long id) {
+        return authorRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("找不到這位作者"));
+    }
+
+    public Author getEntityByName(String name) {
+        return authorRepository.findByName(name)
+                .orElseThrow(() -> new RuntimeException("找不到這位作者"));
     }
 
     //作者不帶書
-    public Author getAuthorById(@NonNull Long authorId) {
-        return authorRepository.findById(authorId)
-                .orElseThrow(() -> new RuntimeException("找不到這位作者"));
+    @Transactional(readOnly = true)
+    public AuthorResponse getAuthorById(@NonNull Long authorId) {
+        Author author = getEntityById(authorId);
+        return authorMapper.toResponse(author);
     }
 
-    public Author getAuthorByName(@NonNull String authorName) {
-        return authorRepository.findByName(authorName)
+    @Transactional(readOnly = true)
+    public AuthorResponse getAuthorByName(@NonNull String authorName) {
+        Author author = authorRepository.findByName(authorName)
                 .orElseThrow(() -> new RuntimeException("找不到這位作者"));
+        return authorMapper.toResponse(author);
     }
 
     //作者帶書籍基本資料
-    public Author getAuthorWithBooksById(@NonNull Long authorId) {
-        return authorRepository.findById(authorId)
-                .orElseThrow(() -> new RuntimeException("找不到這位作者"));
+    @Transactional(readOnly = true)
+    public AuthorWithBooksResponse getAuthorWithBooksById(@NonNull Long authorId) {
+        Author author = getEntityById(authorId);
+        return authorMapper.toWithBooksResponse(author);
     }
 
-    public Author getAuthorWithBooksByName(@NonNull String authorName) {
-        return authorRepository.findByName(authorName)
+    @Transactional(readOnly = true)
+    public AuthorWithBooksResponse getAuthorWithBooksByName(@NonNull String authorName) {
+        Author author = authorRepository.findByName(authorName)
                 .orElseThrow(() -> new RuntimeException("找不到這位作者"));
+        return authorMapper.toWithBooksResponse(author);
     }
     
-    public Author createAuthor(AuthorRequest authorRequest) {
+    public AuthorResponse createAuthor(AuthorRequest authorRequest) {
         Author author = new Author();
         author.setName(authorRequest.getName());
-            
-        return authorRepository.save(author);
+
+        return authorMapper.toResponse(authorRepository.save(author));
     }
 
     /* 先暫時不寫攜帶書籍資料的方法
@@ -75,13 +98,12 @@ public class AuthorService {
 
     */
 
-    public Author updateAuthor(@NonNull Long authorId, AuthorRequest authorRequest) {
-        Author existingAuthor = authorRepository.findById(authorId)
-                .orElseThrow(() -> new RuntimeException("找不到這位作者"));
+    public AuthorResponse updateAuthor(@NonNull Long authorId, AuthorRequest authorRequest) {
+        Author existingAuthor = getEntityById(authorId);
 
         existingAuthor.setName(authorRequest.getName());
 
-        return authorRepository.save(existingAuthor);
+        return authorMapper.toResponse(authorRepository.save(existingAuthor));
     }
 
     public void deleteAuthorById(@NonNull Long authorId) {

@@ -7,7 +7,7 @@ import java.util.HashSet;
 import com.oovetest.webDemo.book.model.BookStatus;
 
 @Data
-public class BookWithNoAuthorRequest {
+public class BookWithNoAuthorReponse {
     private String title;
     private BookStatus status;
     private String isbn;
