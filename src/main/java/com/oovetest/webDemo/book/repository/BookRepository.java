@@ -25,7 +25,7 @@ public interface BookRepository extends JpaRepository<Book, Long>, BookRepositor
     public boolean existsByAuthorAndBookTitle(Author author, String bookTitle);
 
     public List<Book> findAllBySeries_Id(Long seriesId); // 透過系列ID查詢書籍
-    public List<Book> findAllBySeries_Name(String seriesName); // 透過系列名稱查詢書籍
+    //public List<Book> findAllBySeries_Name(String seriesName); // 透過系列名稱查詢書籍
     public boolean existsBySeriesAndVolume(Series series, Integer volume); // 檢查同系列同卷數的書籍是否存在
     
     @EntityGraph(attributePaths = "author, bookTags.tag, experience")

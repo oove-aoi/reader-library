@@ -9,6 +9,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import com.oovetest.webDemo.series.dto.SeriesRequest;
 import com.oovetest.webDemo.series.dto.SeriesResponse;
 
+import jakarta.validation.constraints.NotNull;
+
 
 @RestController
 @RequestMapping("/api")

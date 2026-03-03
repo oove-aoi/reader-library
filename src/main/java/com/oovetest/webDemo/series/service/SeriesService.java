@@ -27,8 +27,8 @@ public class SeriesService {
                 .orElseThrow(() -> new RuntimeException("Series not found"));
     }
 
-    public Series getEntityByName(String name) {
-        return seriesRepository.findByName(name);
+    public Series getEntityByTitle(String name) {
+        return seriesRepository.findByTitle(name);
     }
 
     public SeriesResponse getSeriesById(Long id) {

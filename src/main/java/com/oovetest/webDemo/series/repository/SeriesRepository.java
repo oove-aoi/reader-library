@@ -4,6 +4,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.oovetest.webDemo.series.model.Series;
 
 public interface SeriesRepository extends JpaRepository<Series, Long> {
-    public Series findByName(String name);
+    public Series findByTitle(String title);
     
 } 

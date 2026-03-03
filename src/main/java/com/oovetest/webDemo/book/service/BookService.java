@@ -73,7 +73,7 @@ public class BookService {
         //雙邊關係，關聯欄位得自己手動更新
         Book book = new Book();
         Author author = authorService.getEntityByName(bookRequest.getAuthorName());
-        Series series = seriesService.getEntityByName(bookRequest.getSeriesName());
+        Series series = seriesService.getEntityByTitle(bookRequest.getSeriesName());
         
         if (bookRepository.existsByAuthorAndBookTitle(author, bookRequest.getTitle())) {
             throw new IllegalStateException("該作者已存在同名書籍");
@@ -203,14 +203,14 @@ public class BookService {
                 .toList();
     }
 
-
+    /*
     public List<SeriesBookSimpleResponse> getAllBooksInSeriesByName(@NonNull String keyword) {
         return bookRepository.findAllBySeries_Name(keyword)
                 .stream()
                 .map(bookMapper::toSeriesBookSimpleResponse)
                 .toList();
     }
-
+    */
 
     //複合條件查詢、考慮將上面那些加上其他條件的搜索方法去掉
     @Transactional(readOnly = true)
