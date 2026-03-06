@@ -37,7 +37,7 @@ public class Experience {
     @Column(name = "rating")
     @Min(0)
     @Max(10)
-    private int rating; //考慮改Interger 以允許null
+    private Integer rating; //考慮改Interger 以允許null
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;

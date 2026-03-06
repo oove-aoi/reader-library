@@ -3,6 +3,7 @@ package com.oovetest.webDemo.experience.controller;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,13 +15,16 @@ import com.oovetest.webDemo.experience.dto.ExperienceResponse;
 import com.oovetest.webDemo.experience.service.ExperienceService;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Positive;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PutMapping;
 
 
-
+@Validated
 @RestController
 @RequestMapping("/api")
 public class ExperienceController {
@@ -36,14 +40,19 @@ public class ExperienceController {
         description = "查詢心得資料，需提供書籍ID"
     )
     @GetMapping("/books/id/{bookId}/experience")
-    public ResponseEntity<ExperienceResponse> getExperienceByBookId(@PathVariable Long bookid) {
-        try {
-            ExperienceResponse experienceResponse = experienceService.getExperienceByBookId(bookid);
-            return ResponseEntity.ok(experienceResponse);
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
+    public ResponseEntity<ExperienceResponse> getExperienceByBookId(
+        @PathVariable 
+        @Positive(message = "作者ID必須為正整數")
+        @Parameter(description = "書籍ID", example = "123456789")
+        Long bookId) {
+            try {
+                ExperienceResponse experienceResponse = experienceService.getExperienceByBookId(bookId);
+                return ResponseEntity.ok(experienceResponse);
+            } catch (RuntimeException e) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            }
     }
+    
     @Operation(
         summary = "以書籍ID新增心得",
         tags = {"心得管理"},
@@ -51,20 +60,27 @@ public class ExperienceController {
     )
     @PostMapping("/books/id/{bookId}/experience")
     public ResponseEntity<ExperienceResponse> createExperience(
-        @PathVariable Long bookId,
-        @RequestBody ExperienceRequest experienceRequest) {
+        @PathVariable 
+        @Positive(message = "書籍ID必須為正整數")
+        @Parameter(description = "書籍ID", example = "123456789")
+        Long bookId,
 
-        // 確認路徑變數的 bookId 與請求體內的 bookId 是否一致 
-        // 可考慮使用@ControllerAdvice
-        if (experienceRequest.getBookId() != null && 
-            !experienceRequest.getBookId().equals(bookId)) {
-            throw new IllegalArgumentException("ExperienceRequest 的 bookId" +
-                                                "與路徑不一致，請確認請求內容");
+        @RequestBody 
+        @Valid
+        @Parameter(description = "心得資料")
+        ExperienceRequest experienceRequest) {
+
+            // 確認路徑變數的 bookId 與請求體內的 bookId 是否一致 
+            // 可考慮使用@ControllerAdvice
+            if (experienceRequest.getBookId() != null && 
+                !experienceRequest.getBookId().equals(bookId)) {
+                throw new IllegalArgumentException("ExperienceRequest 的 bookId" +
+                                                    "與路徑不一致，請確認請求內容");
+            }
+            
+            ExperienceResponse experienceResponse = experienceService.saveExperience(experienceRequest);
+            return ResponseEntity.status(HttpStatus.CREATED).body(experienceResponse);
         }
-        
-        ExperienceResponse experienceResponse = experienceService.saveExperience(experienceRequest);
-        return ResponseEntity.status(HttpStatus.CREATED).body(experienceResponse);
-    }
 
     @Operation(
         summary = "以書籍ID更新心得",
@@ -72,16 +88,24 @@ public class ExperienceController {
         description = "更新心得資料，需提供書籍ID"
     )
     @PutMapping("/books/id/{bookId}/experience")
-    public ResponseEntity<ExperienceResponse> updateExperience(@PathVariable Long bookId, 
-                                                               @RequestBody ExperienceRequest experienceRequest) {
-        if (experienceRequest.getBookId() != null && 
-            !experienceRequest.getBookId().equals(bookId)) {
-            throw new IllegalArgumentException("ExperienceRequest 的 bookId" +
-                                                "與路徑不一致，請確認請求內容");
-        }
+    public ResponseEntity<ExperienceResponse> updateExperience(
+        @PathVariable 
+        @Positive(message = "書籍ID必須為正整數")
+        @Parameter(description = "書籍ID", example = "123456789")
+        Long bookId, 
 
-        ExperienceResponse experienceResponse = experienceService.updateExperience(bookId, experienceRequest);
-        return ResponseEntity.ok(experienceResponse);
+        @RequestBody 
+        @Valid
+        @Parameter(description = "心得資料")
+        ExperienceRequest experienceRequest) {
+            if (experienceRequest.getBookId() != null && 
+                !experienceRequest.getBookId().equals(bookId)) {
+                throw new IllegalArgumentException("ExperienceRequest 的 bookId" +
+                                                    "與路徑不一致，請確認請求內容");
+            }
+
+            ExperienceResponse experienceResponse = experienceService.updateExperience(bookId, experienceRequest);
+            return ResponseEntity.ok(experienceResponse);
     }
 
     @Operation(
@@ -90,13 +114,16 @@ public class ExperienceController {
         description = "刪除心得資料，需提供書籍ID"
     )
     @DeleteMapping("/books/id/{bookId}/experience")
-    public ResponseEntity<?> deleteExperience(@PathVariable Long bookId) {
-        try { //所有的例外處理可以考慮全改成全域例外處理
-            experienceService.deleteExperience(bookId);
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-        } catch (EmptyResultDataAccessException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
+    public ResponseEntity<?> deleteExperience(@PathVariable 
+        @Positive(message = "書籍ID必須為正整數")
+        @Parameter(description = "書籍ID", example = "123456789")
+        Long bookId) {
+            try { //所有的例外處理可以考慮全改成全域例外處理
+                experienceService.deleteExperience(bookId);
+                return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+            } catch (EmptyResultDataAccessException e) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            }
     }
 
 }
