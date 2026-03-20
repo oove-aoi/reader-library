@@ -3,6 +3,7 @@ package com.oovetest.webDemo.series.model;
 import com.oovetest.webDemo.author.model.Author;
 import com.oovetest.webDemo.book.model.Book;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.FetchType;
@@ -42,6 +43,7 @@ public class Series {
     @Enumerated(EnumType.STRING)
     private SeriesStatus status; // e.g., "ongoing", "completed"
 
+    @Column(unique = true)
     private String title;
 
     @ManyToOne(fetch = FetchType.LAZY)

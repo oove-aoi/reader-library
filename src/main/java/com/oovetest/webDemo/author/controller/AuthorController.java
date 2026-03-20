@@ -37,13 +37,9 @@ public class AuthorController {
     public ResponseEntity<AuthorResponse> getAuthorById(
         @PathVariable 
         @Positive(message = "作者ID必須為正整數")  //id 不應為 0 或負數
-        @Parameter(description = "作者ID", example = "123456789")
+        @Parameter(description = "作者ID", example = "1")
         Long authorid) {
-            try {
-                return ResponseEntity.ok(authorService.getAuthorById(authorid));
-            } catch (RuntimeException e) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-            }
+            return ResponseEntity.ok(authorService.getAuthorById(authorid));
     }
 
     @Operation(
@@ -58,11 +54,8 @@ public class AuthorController {
         @Size(max = 100, message = "作者名稱長度不可超過100字元") //名稱不應過長
         @Parameter(description = "作者名稱", example = "J.K. Rowling")
         String authorName) {
-            try {
-                return ResponseEntity.ok(authorService.getAuthorByName(authorName));
-            } catch (RuntimeException e) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-            }
+            return ResponseEntity.ok(authorService.getAuthorByName(authorName));
+            
     }
     
 
@@ -102,19 +95,14 @@ public class AuthorController {
     public ResponseEntity<AuthorResponse> updateAuthor(
         @PathVariable 
         @Positive(message = "作者ID必須為正整數")  //id 不應為 0 或負數
-        @Parameter(description = "作者ID", example = "123456789")
+        @Parameter(description = "作者ID", example = "1")
         Long authorid,
 
         @RequestBody 
         @Valid 
         AuthorRequest authorRequest){
-
-            try {
-                AuthorResponse authorResponse = authorService.updateAuthor(authorid, authorRequest);
-                return ResponseEntity.status(HttpStatus.OK).body(authorResponse);
-            } catch (RuntimeException e) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-            }
+            AuthorResponse authorResponse = authorService.updateAuthor(authorid, authorRequest);
+            return ResponseEntity.status(HttpStatus.OK).body(authorResponse);
     }
     
     @Operation(
@@ -126,10 +114,10 @@ public class AuthorController {
     public ResponseEntity<Void> deleteAuthorById(
         @PathVariable 
         @Positive(message = "作者ID必須為正整數")  //id 不應為 0 或負數
-        @Parameter(description = "作者ID", example = "123456789")
+        @Parameter(description = "作者ID", example = "1")
         Long authorid) {
-        authorService.deleteAuthorById(authorid);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+            authorService.deleteAuthorById(authorid);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
     
 }

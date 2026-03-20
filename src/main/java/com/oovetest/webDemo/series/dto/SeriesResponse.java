@@ -8,7 +8,9 @@ import lombok.Data;
 public class SeriesResponse {
     private Long id;
     private String title;
-    private Integer bookCount; 
+    private Long bookCount; 
     private SeriesStatus status;
     private Long authorId;
+
+    
 }

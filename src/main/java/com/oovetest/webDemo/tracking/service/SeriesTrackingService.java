@@ -7,6 +7,7 @@ import com.oovetest.webDemo.tracking.dto.SeriesTrackingRequest;
 import com.oovetest.webDemo.tracking.dto.SeriesTrackingResponse;
 import com.oovetest.webDemo.tracking.mapper.SeriesTrackingMapper;
 import com.oovetest.webDemo.tracking.model.SeriesTracking;
+import com.oovetest.webDemo.exception.NotFoundException;
 import com.oovetest.webDemo.series.model.Series;
 import java.time.LocalDateTime;
 
@@ -25,7 +26,7 @@ public class SeriesTrackingService {
 
     public SeriesTracking getEntityById(Long id) {
         return seriesTrackingRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("SeriesTracking not found"));
+                .orElseThrow(() -> new NotFoundException("查無此系列追蹤ID"));
     }
 
 

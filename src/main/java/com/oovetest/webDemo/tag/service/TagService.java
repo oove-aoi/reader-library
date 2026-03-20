@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.oovetest.webDemo.exception.NotFoundException;
 import com.oovetest.webDemo.tag.dto.TagRequest;
 import com.oovetest.webDemo.tag.dto.TagResponse;
 import com.oovetest.webDemo.tag.model.Tag;
@@ -28,12 +29,12 @@ public class TagService {
    
     public Tag getEntityById(Long id) {
         return tagRepository.findById(id)
-                            .orElseThrow(()-> new RuntimeException("找不到這個標籤"));
+                            .orElseThrow(()-> new NotFoundException("ID 未查找到相應的Tag"));
     }
 
     public Tag getEntityByName(String name) {
         return tagRepository.findByName(name)
-                            .orElseThrow(()-> new RuntimeException("找不到這個標籤"));
+                            .orElseThrow(()-> new NotFoundException("名稱未查找到相應的Tag"));
     }
 
     public TagResponse findByName(String name)  {

@@ -15,7 +15,7 @@ public class TagGroupMapper {
         TagGroupResponse tagGroupResponse = new TagGroupResponse();
 
         tagGroupResponse.setId(tagGroup.getGroupid());
-        tagGroupResponse.setCode(tagGroup.getCode());
+        tagGroupResponse.setCode(tagGroup.getCode().name());
         tagGroupResponse.setDisplayName(tagGroup.getTagGroupName());
 
         return tagGroupResponse;

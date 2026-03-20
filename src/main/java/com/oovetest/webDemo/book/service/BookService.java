@@ -46,21 +46,21 @@ public class BookService {
     }
 
     @Transactional(readOnly = true)
-    public Book getEntityById(Long bookId) {
+    private Book getEntityById(@NonNull Long bookId) {
         //findById 回傳 Optional<Book> 所以後面必須加上orElseThrow
         return bookRepository.findById(bookId)
                 .orElseThrow(() -> new RuntimeException("找不到這本書"));
     }
 
     @Transactional(readOnly = true)
-    public Book getEntityByTitle(String bookName) {
+    private Book getEntityByTitle(@NonNull String bookName) {
         return bookRepository.findByBookTitle(bookName)
                 .orElseThrow(() -> new RuntimeException("找不到這本書"));
     }
 
 
     @Transactional(readOnly = true)
-    public BookResponse getBookById(@NonNull Long bookId) {
+    public BookResponse getBookById(long bookId) {
         return bookMapper.toResponse(getEntityById(bookId));
     }
 
@@ -112,7 +112,7 @@ public class BookService {
         return bookMapper.toSimpleResponse(bookRepository.save(book));
     }
 
-    public BookResponse updateBookById(@NonNull Long bookId, BookRequest bookRequest) {
+    public BookResponse updateBookById(long bookId, BookRequest bookRequest) {
         Book existingBook = getEntityById(bookId);
         Author author = authorService.getEntityByName(bookRequest.getAuthorName());
 
@@ -136,6 +136,10 @@ public class BookService {
         bookRepository.deleteById(bookId);
     }
 
+
+    public long countBySeriesId(Long seriesId) {
+        return bookRepository.countBySeriesId(seriesId);
+    }
 
     /*
     使用作者名、ID搜索書籍列表的方法、

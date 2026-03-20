@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.oovetest.webDemo.exception.ValidationException;
 import com.oovetest.webDemo.experience.dto.ExperienceRequest;
 import com.oovetest.webDemo.experience.dto.ExperienceResponse;
 import com.oovetest.webDemo.experience.service.ExperienceService;
@@ -43,14 +44,10 @@ public class ExperienceController {
     public ResponseEntity<ExperienceResponse> getExperienceByBookId(
         @PathVariable 
         @Positive(message = "作者ID必須為正整數")
-        @Parameter(description = "書籍ID", example = "123456789")
+        @Parameter(description = "書籍ID", example = "1")
         Long bookId) {
-            try {
-                ExperienceResponse experienceResponse = experienceService.getExperienceByBookId(bookId);
-                return ResponseEntity.ok(experienceResponse);
-            } catch (RuntimeException e) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-            }
+            ExperienceResponse experienceResponse = experienceService.getExperienceByBookId(bookId);
+            return ResponseEntity.ok(experienceResponse);
     }
     
     @Operation(
@@ -62,7 +59,7 @@ public class ExperienceController {
     public ResponseEntity<ExperienceResponse> createExperience(
         @PathVariable 
         @Positive(message = "書籍ID必須為正整數")
-        @Parameter(description = "書籍ID", example = "123456789")
+        @Parameter(description = "書籍ID", example = "1")
         Long bookId,
 
         @RequestBody 
@@ -70,12 +67,9 @@ public class ExperienceController {
         @Parameter(description = "心得資料")
         ExperienceRequest experienceRequest) {
 
-            // 確認路徑變數的 bookId 與請求體內的 bookId 是否一致 
-            // 可考慮使用@ControllerAdvice
-            if (experienceRequest.getBookId() != null && 
+            if (experienceRequest.getBookId() != null &&
                 !experienceRequest.getBookId().equals(bookId)) {
-                throw new IllegalArgumentException("ExperienceRequest 的 bookId" +
-                                                    "與路徑不一致，請確認請求內容");
+                    throw new ValidationException("RequestBody 中 bookId 與路徑不一致");
             }
             
             ExperienceResponse experienceResponse = experienceService.saveExperience(experienceRequest);
@@ -91,7 +85,7 @@ public class ExperienceController {
     public ResponseEntity<ExperienceResponse> updateExperience(
         @PathVariable 
         @Positive(message = "書籍ID必須為正整數")
-        @Parameter(description = "書籍ID", example = "123456789")
+        @Parameter(description = "書籍ID", example = "1")
         Long bookId, 
 
         @RequestBody 
@@ -100,7 +94,7 @@ public class ExperienceController {
         ExperienceRequest experienceRequest) {
             if (experienceRequest.getBookId() != null && 
                 !experienceRequest.getBookId().equals(bookId)) {
-                throw new IllegalArgumentException("ExperienceRequest 的 bookId" +
+                throw new ValidationException("ExperienceRequest 的 bookId" +
                                                     "與路徑不一致，請確認請求內容");
             }
 
@@ -116,14 +110,10 @@ public class ExperienceController {
     @DeleteMapping("/books/id/{bookId}/experience")
     public ResponseEntity<?> deleteExperience(@PathVariable 
         @Positive(message = "書籍ID必須為正整數")
-        @Parameter(description = "書籍ID", example = "123456789")
+        @Parameter(description = "書籍ID", example = "1")
         Long bookId) {
-            try { //所有的例外處理可以考慮全改成全域例外處理
-                experienceService.deleteExperience(bookId);
-                return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-            } catch (EmptyResultDataAccessException e) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-            }
+            experienceService.deleteExperience(bookId);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
 }

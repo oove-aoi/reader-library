@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 
 import com.oovetest.webDemo.book.model.Book;
 import com.oovetest.webDemo.book.repository.BookRepository;
+import com.oovetest.webDemo.exception.NotFoundException;
 import com.oovetest.webDemo.experience.dto.ExperienceRequest;
 import com.oovetest.webDemo.experience.dto.ExperienceResponse;
 import com.oovetest.webDemo.experience.model.Experience;
@@ -28,10 +29,21 @@ public class ExperienceService {
         this.experienceMapper = experienceMapper;
     }
 
+    Experience getEntityById(Long id) {
+        return experienceRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("使用這個心得ID找不到這本書的心得"));
+    }
+
+    @Transactional(readOnly = true)
+    public ExperienceResponse getExperienceById(Long experienceId) {
+        Experience experience =  getEntityById(experienceId);
+        return experienceMapper.toResponse(experience);
+    }
+
     @Transactional(readOnly = true)
     public ExperienceResponse getExperienceByBookTitle(String title) {
         Experience experience = experienceRepository.findByBook_BookTitle(title)
-                .orElseThrow(() -> new RuntimeException("找不到這本書的心得"));
+                .orElseThrow(() -> new NotFoundException("使用這個書籍名稱找不到這本書的心得"));
 
         return experienceMapper.toResponse(experience);
     }
@@ -39,22 +51,14 @@ public class ExperienceService {
     @Transactional(readOnly = true)
     public ExperienceResponse getExperienceByBookId(Long bookId) {
         Experience experience =  experienceRepository.findByBook_Id(bookId)
-                .orElseThrow(() -> new RuntimeException("找不到這本書的心得"));
-        return experienceMapper.toResponse(experience);
-    }
-    
-    @Transactional(readOnly = true)
-    public ExperienceResponse getExperienceById(Long experienceId) {
-        Experience experience =  experienceRepository.findById(experienceId)
-                .orElseThrow(() -> new RuntimeException("找不到這本書的心得"));
-
+                .orElseThrow(() -> new NotFoundException("使用此書籍ID找不到這本書的心得"));
         return experienceMapper.toResponse(experience);
     }
 
     public ExperienceResponse saveExperience(ExperienceRequest experienceRequest) {
         Experience experience = new Experience();
         Book book = bookRepository.findById(experienceRequest.getBookId())
-                .orElseThrow(() -> new RuntimeException("找不到這本書"));
+                .orElseThrow(() -> new NotFoundException("使用此書籍ID找不到這本書"));
 
         experience.setContent(experienceRequest.getContent());
         experience.setRating(experienceRequest.getRating());
@@ -66,11 +70,10 @@ public class ExperienceService {
 
     public ExperienceResponse updateExperience(Long experienceId, 
                                                ExperienceRequest experienceRequest) {
-        Experience experience = experienceRepository.findById(experienceId)
-                .orElseThrow(() -> new RuntimeException("找不到心得"));
+        Experience experience = getEntityById(experienceId);
 
         Book book = bookRepository.findById(experienceRequest.getBookId())
-                .orElseThrow(() -> new RuntimeException("找不到這本書"));
+                .orElseThrow(() -> new NotFoundException("使用此書籍ID找不到這本書"));
 
         experience.setContent(experienceRequest.getContent());
         experience.setRating(experienceRequest.getRating());

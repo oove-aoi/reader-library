@@ -8,6 +8,7 @@ import com.oovetest.webDemo.author.dto.AuthorResponse;
 import com.oovetest.webDemo.author.dto.AuthorWithBooksResponse;
 import com.oovetest.webDemo.author.model.Author;
 import com.oovetest.webDemo.author.repository.AuthorRepository;
+import com.oovetest.webDemo.exception.NotFoundException;
 import com.oovetest.webDemo.author.mapper.AuthorMapper;
 import lombok.NonNull;
 
@@ -26,12 +27,12 @@ public class AuthorService {
 
     public Author getEntityById(Long id) {
         return authorRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("找不到這位作者"));
+                .orElseThrow(() -> new NotFoundException("查無此作者ID"));
     }
 
     public Author getEntityByName(String name) {
         return authorRepository.findByName(name)
-                .orElseThrow(() -> new RuntimeException("找不到這位作者"));
+                .orElseThrow(() -> new NotFoundException("查無此作者名稱"));
     }
 
     //作者不帶書
@@ -43,8 +44,7 @@ public class AuthorService {
 
     @Transactional(readOnly = true)
     public AuthorResponse getAuthorByName(@NonNull String authorName) {
-        Author author = authorRepository.findByName(authorName)
-                .orElseThrow(() -> new RuntimeException("找不到這位作者"));
+        Author author = getEntityByName(authorName);
         return authorMapper.toResponse(author);
     }
 
@@ -57,8 +57,7 @@ public class AuthorService {
 
     @Transactional(readOnly = true)
     public AuthorWithBooksResponse getAuthorWithBooksByName(@NonNull String authorName) {
-        Author author = authorRepository.findByName(authorName)
-                .orElseThrow(() -> new RuntimeException("找不到這位作者"));
+        Author author = getEntityByName(authorName);
         return authorMapper.toWithBooksResponse(author);
     }
     
@@ -100,7 +99,6 @@ public class AuthorService {
 
     public AuthorResponse updateAuthor(@NonNull Long authorId, AuthorRequest authorRequest) {
         Author existingAuthor = getEntityById(authorId);
-
         existingAuthor.setName(authorRequest.getName());
 
         return authorMapper.toResponse(authorRepository.save(existingAuthor));

@@ -23,14 +23,15 @@ import com.oovetest.webDemo.tag.domain.TagGroupCode;
 @NoArgsConstructor
 public class TagGroup {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "tag_group_id")
     @EqualsAndHashCode.Include
     private Long groupid;
 
     //工程端、使用domain中enum定義的選項 GENRE, TONE, RELATIONSHIP 
+    @Enumerated(EnumType.STRING)
     @Column(unique = true, nullable = false)
-    private String code;   
+    private TagGroupCode code;   
 
     //實務上給使用者用的名稱
     @Column(nullable = false, unique = true, name = "tag_group_name")
@@ -44,8 +45,10 @@ public class TagGroup {
     )
     private Set<Tag> tags = new HashSet<>();
 
-    public TagGroup(String code, String tagGroupName) {
-        this.code = TagGroupCode.from(code).name();
+    public TagGroup(TagGroupCode code, String tagGroupName) {
+        //valueOf嘗試將傳入的code轉換為TagGroupCode enum，如果無效會拋出IllegalArgumentException
+        this.code = TagGroupCode.valueOf(code.name()); 
+
         this.tagGroupName = tagGroupName;
     }
     

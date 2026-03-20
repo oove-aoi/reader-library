@@ -41,12 +41,13 @@ public class BookController {
         description = "查詢書籍資料，需提供書籍ID"
     )
     @GetMapping("/books/id/{bookId}")
-    public ResponseEntity<BookResponse> getBook(@PathVariable 
+    public ResponseEntity<BookResponse> getBook(
+        @PathVariable 
         @Positive(message = "書籍ID必須為正整數") 
-        @Parameter(description = "書籍ID", example = "123456789")
-        Long bookid) {
+        @Parameter(description = "書籍ID", example = "1")
+        Long bookId) {
             try {
-                return ResponseEntity.ok(bookService.getBookById(bookid));
+                return ResponseEntity.ok(bookService.getBookById(bookId));
             } catch (RuntimeException e) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
             }
@@ -80,7 +81,7 @@ public class BookController {
     public ResponseEntity<List<BookSimpleResponse>> getBooksByAuthor(
         @PathVariable 
         @Positive(message = "作者ID必須為正整數")
-        @Parameter(description = "作者ID", example = "123456789")
+        @Parameter(description = "作者ID", example = "1")
         Long authorId) {
             try {
                 List<BookSimpleResponse> books = bookService.getAllBookByAuthorId(authorId);
@@ -172,7 +173,7 @@ public class BookController {
     @PutMapping("/books/id/{bookid}")
     public ResponseEntity<BookResponse> updateBook(
         @Positive(message = "作者ID必須為正整數")
-        @Parameter(description = "作者ID", example = "123456789")
+        @Parameter(description = "作者ID", example = "1")
         @PathVariable Long bookid,
 
         @Valid
@@ -196,7 +197,7 @@ public class BookController {
     public ResponseEntity<?> deleteBook(
         @PathVariable 
         @Positive(message = "書籍ID必須為正整數")
-        @Parameter(description = "書籍ID", example = "123456789")
+        @Parameter(description = "書籍ID", example = "1")
         Long bookid){
         try { //所有的例外處理可以考慮全改成全域例外處理
             bookService.deleteBookById(bookid);
