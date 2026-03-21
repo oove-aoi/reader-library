@@ -3,8 +3,6 @@ package com.oovetest.webDemo.book.controller;
 import com.oovetest.webDemo.book.dto.BookRequest;
 import com.oovetest.webDemo.book.dto.BookResponse;
 import com.oovetest.webDemo.book.dto.BookSimpleResponse;
-import com.oovetest.webDemo.book.mapper.BookMapper;
-import com.oovetest.webDemo.book.model.Book;
 import com.oovetest.webDemo.book.service.BookSearchCondition;
 import com.oovetest.webDemo.book.service.BookService;
 
@@ -46,12 +44,8 @@ public class BookController {
         @Positive(message = "書籍ID必須為正整數") 
         @Parameter(description = "書籍ID", example = "1")
         Long bookId) {
-            try {
-                return ResponseEntity.ok(bookService.getBookById(bookId));
-            } catch (RuntimeException e) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-            }
-    }
+            return ResponseEntity.ok(bookService.getBookById(bookId));
+        }
 
     @Operation(
         summary = "以書名查詢一本書",
@@ -65,12 +59,8 @@ public class BookController {
         @Size(max = 100, message = "書名長度不能超過100字元")
         @Parameter(description = "書名", example = "Java程式設計")
         String bookName) {
-            try {
-                return ResponseEntity.ok(bookService.getBookByTitle(bookName));
-            } catch (RuntimeException e) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-            }
-    }
+            return ResponseEntity.ok(bookService.getBookByTitle(bookName));
+        }
     
     @Operation(
         summary = "以作者ID查詢該作者的所有書籍",
@@ -83,13 +73,9 @@ public class BookController {
         @Positive(message = "作者ID必須為正整數")
         @Parameter(description = "作者ID", example = "1")
         Long authorId) {
-            try {
-                List<BookSimpleResponse> books = bookService.getAllBookByAuthorId(authorId);
-                return ResponseEntity.ok(books);
-            } catch (RuntimeException e) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-            }
-    }
+            List<BookSimpleResponse> books = bookService.getAllBookByAuthorId(authorId);
+            return ResponseEntity.ok(books);
+        }      
 
     @Operation(
         summary = "以作者名稱查詢該作者的所有書籍",
@@ -103,13 +89,9 @@ public class BookController {
         @Size(max = 100, message = "作者名稱長度不能超過100字元")
         @Parameter(description = "作者名稱", example = "張三")
         String authorName) {
-            try {
-                List<BookSimpleResponse> books = bookService.getAllBooksByAuthorName(authorName);
-                return ResponseEntity.ok(books);
-            } catch (RuntimeException e) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-            }
-    }
+            List<BookSimpleResponse> books = bookService.getAllBooksByAuthorName(authorName);
+            return ResponseEntity.ok(books);
+        }
 
     @Operation(
         summary = "以標籤ID查詢該標籤的所有書籍",
@@ -121,13 +103,9 @@ public class BookController {
         @PathVariable 
         @Positive(message = "標籤ID必須為正整數")
         Long tagId) {
-            try {
-                List<BookSimpleResponse> books = bookService.getAllBooksByTagId(tagId);
-                return ResponseEntity.ok(books);
-            } catch (RuntimeException e) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-            }
-    }
+            List<BookSimpleResponse> books = bookService.getAllBooksByTagId(tagId);
+            return ResponseEntity.ok(books);
+        }
 
     @Operation(
         summary = "以標籤名稱查詢該標籤的所有書籍",
@@ -141,13 +119,9 @@ public class BookController {
         @Size(max = 100, message = "標籤名稱長度不能超過100字元")
         @Parameter(description = "標籤名稱", example = "程式設計")
         String tagName) {
-            try {
-                List<BookSimpleResponse> books = bookService.getAllBookByTagName(tagName);
-                return ResponseEntity.ok(books);
-            } catch (RuntimeException e) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-            }
-    }
+            List<BookSimpleResponse> books = bookService.getAllBookByTagName(tagName);
+            return ResponseEntity.ok(books);
+        }
 
     @Operation(
         summary = "新增書籍",
@@ -161,9 +135,8 @@ public class BookController {
         @Parameter(description = "書籍資料", example = "{\"title\":\"Java程式設計\",\"authorName\":\"張三\",\"status\":\"AVAILABLE\",\"isbn\":\"978-0134685991\"}")
         BookRequest bookRequest){
             BookSimpleResponse book = bookService.createBook(bookRequest);
-            return ResponseEntity.status(HttpStatus.CREATED)
-                .body(book);
-    }
+            return ResponseEntity.status(HttpStatus.CREATED).body(book);
+        }
 
     @Operation(
         summary = "更新書籍資料",
@@ -180,13 +153,10 @@ public class BookController {
         @RequestBody 
         @Parameter(description = "書籍資料", example = "{\"title\":\"Java程式設計\",\"authorName\":\"張三\",\"status\":\"AVAILABLE\",\"isbn\":\"978-0134685991\"}")
         BookRequest bookRequest){
-        try {
+       
             BookResponse book = bookService.updateBookById(bookid, bookRequest);
             return ResponseEntity.status(HttpStatus.OK).body(book);
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-    }
 
     @Operation(
         summary = "刪除書籍",
@@ -199,13 +169,9 @@ public class BookController {
         @Positive(message = "書籍ID必須為正整數")
         @Parameter(description = "書籍ID", example = "1")
         Long bookid){
-        try { //所有的例外處理可以考慮全改成全域例外處理
             bookService.deleteBookById(bookid);
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-        } catch (EmptyResultDataAccessException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-    }
 
     //搜索條件設計
     @Operation(
@@ -217,6 +183,6 @@ public class BookController {
     public ResponseEntity<List<BookResponse>> searchBooks(
         @Valid
         BookSearchCondition condition) {
-        return ResponseEntity.ok(bookService.search(condition));
-    }
+            return ResponseEntity.ok(bookService.search(condition));
+        }
 }

@@ -9,6 +9,7 @@ import com.oovetest.webDemo.tag.model.Tag;
 import com.oovetest.webDemo.author.model.Author;
 import com.oovetest.webDemo.series.model.Series;
 import com.oovetest.webDemo.book.repository.BookRepository;
+import com.oovetest.webDemo.exception.NotFoundException;
 import com.oovetest.webDemo.author.service.AuthorService;
 import com.oovetest.webDemo.tag.service.TagService;
 import com.oovetest.webDemo.book.mapper.BookMapper;
@@ -46,16 +47,16 @@ public class BookService {
     }
 
     @Transactional(readOnly = true)
-    private Book getEntityById(@NonNull Long bookId) {
+    private Book getEntityById(Long bookId) {
         //findById 回傳 Optional<Book> 所以後面必須加上orElseThrow
         return bookRepository.findById(bookId)
-                .orElseThrow(() -> new RuntimeException("找不到這本書"));
+                .orElseThrow(() -> new NotFoundException("ID 未查找到相應的書籍"));
     }
 
     @Transactional(readOnly = true)
-    private Book getEntityByTitle(@NonNull String bookName) {
+    private Book getEntityByTitle(String bookName) {
         return bookRepository.findByBookTitle(bookName)
-                .orElseThrow(() -> new RuntimeException("找不到這本書"));
+                .orElseThrow(() -> new NotFoundException("書名未查找到相應的書籍"));
     }
 
 
@@ -65,7 +66,7 @@ public class BookService {
     }
 
     @Transactional(readOnly = true)
-    public BookResponse getBookByTitle(@NonNull String bookName) {
+    public BookResponse getBookByTitle(String bookName) {
         return bookMapper.toResponse(getEntityByTitle(bookName));
     }
 
