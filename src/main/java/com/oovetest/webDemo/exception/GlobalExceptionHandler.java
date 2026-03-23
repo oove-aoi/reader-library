@@ -2,10 +2,14 @@ package com.oovetest.webDemo.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.oovetest.webDemo.exception.dto.ErrorDTO;
+
+import jakarta.validation.ConstraintViolationException;
+
 import com.oovetest.webDemo.exception.NotFoundException;
 import com.oovetest.webDemo.exception.PermissionException;
 import com.oovetest.webDemo.exception.ValidationException;
@@ -26,5 +30,34 @@ public class GlobalExceptionHandler {
         };
         return ResponseEntity.status(status)
                              .body(new ErrorDTO(ex.getErrorCode(), ex.getMessage()));
+    }
+
+    //抓vaild拋出的錯誤
+    // 這個是純驗參數
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<ErrorDTO> handleValidation(ConstraintViolationException ex) {
+        return ResponseEntity.badRequest()
+                .body(new ErrorDTO("VALIDATION_ERROR", ex.getMessage()));
+    }
+
+    // 這個是驗DTO
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ErrorDTO> handleMethodArgumentNotValid(MethodArgumentNotValidException ex) {
+        //處理那個長的超醜的錯誤訊息
+        String message = ex.getBindingResult()
+                .getFieldErrors()
+                .stream()
+                .map(error -> error.getDefaultMessage())
+                .findFirst()
+                .orElse("Validation error");
+
+        return ResponseEntity.badRequest()
+                .body(new ErrorDTO("VALIDATION_ERROR", message));
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ErrorDTO> handleAll(Exception ex) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ErrorDTO("INTERNAL_ERROR", ex.getMessage()));
     }
 }

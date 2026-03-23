@@ -9,6 +9,7 @@ import com.oovetest.webDemo.author.dto.AuthorWithBooksResponse;
 import com.oovetest.webDemo.author.model.Author;
 import com.oovetest.webDemo.author.repository.AuthorRepository;
 import com.oovetest.webDemo.exception.NotFoundException;
+import com.oovetest.webDemo.exception.ValidationException;
 import com.oovetest.webDemo.author.mapper.AuthorMapper;
 import lombok.NonNull;
 
@@ -25,7 +26,7 @@ public class AuthorService {
         this.authorMapper = authorMapper;
     }
 
-    public Author getEntityById(Long id) {
+    public Author getEntityById(long id) {
         return authorRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("查無此作者ID"));
     }
@@ -62,9 +63,15 @@ public class AuthorService {
     }
     
     public AuthorResponse createAuthor(AuthorRequest authorRequest) {
+        authorRepository.findByName(authorRequest.getName())
+                .ifPresent(a -> {
+                    throw new ValidationException("已存在相同作者名稱");
+                });
+                
         Author author = new Author();
         author.setName(authorRequest.getName());
 
+        System.out.println("進入重複檢查");
         return authorMapper.toResponse(authorRepository.save(author));
     }
 

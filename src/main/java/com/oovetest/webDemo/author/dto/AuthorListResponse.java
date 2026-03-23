@@ -1,13 +1,11 @@
 package com.oovetest.webDemo.author.dto;
 
 
-import lombok.Data;
+public record AuthorListResponse (
+    long id,
+    String name,
+    int bookCount,
+    boolean hasBooks
+){
 
-@Data
-public class AuthorListResponse {
-
-    private Long id;
-    private String name;
-    private int bookCount;
-    private boolean hasBooks;
 }

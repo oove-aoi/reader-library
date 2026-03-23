@@ -23,14 +23,12 @@ public class AuthorMapper {
     }
 
     public AuthorListResponse toListResponse(Author author) {
-        AuthorListResponse response = new AuthorListResponse();
-
-        response.setId(author.getId());
-        response.setName(author.getName());
-        response.setBookCount(author.getBooks().size());
-        response.setHasBooks(author.getBooks().isEmpty() ? false : true);
-
-
+        AuthorListResponse response = new AuthorListResponse(
+            author.getId(),
+            author.getName(),
+            author.getBooks().size(),
+            author.getBooks().isEmpty() ? false : true
+        );
         return response;
     }
 
