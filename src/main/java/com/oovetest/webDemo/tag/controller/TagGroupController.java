@@ -35,9 +35,9 @@ public class TagGroupController {
         tags = {"tag群組查詢"},
         description = "查詢tag群組資料，需提供tag群組名稱"
     )
-    @GetMapping("/taggroups/name/{name}")
+    @GetMapping("/tagGroups/{name}")
     public ResponseEntity<TagGroupResponse> getTagGroupByName(
-        @PathVariable
+        @RequestParam
         @NotBlank(message = "tag群組名稱不能為空")
         @Size(max = 100, message = "tag群組名稱長度不能超過100字元")
         @Parameter(description = "tag群組名稱", example = "類型")
@@ -52,7 +52,7 @@ public class TagGroupController {
         tags = {"tag群組查詢"},
         description = "查詢tag群組資料，需提供tag群組ID"
     )
-    @GetMapping("/taggroups/id/{id}")
+    @GetMapping("/tagGroups/{id}")
     public ResponseEntity<TagGroupResponse> getTagGroupById(
         @PathVariable
         @Positive(message = "tag群組ID必須為正整數")
@@ -68,7 +68,7 @@ public class TagGroupController {
         tags = {"tag群組查詢"},
         description = "查詢tag群組內所有資料"
     )
-    @GetMapping("/taggroups")
+    @GetMapping("/tagGroups")
     public ResponseEntity<List<TagGroupResponse>> getAllTagGroups() {
         return ResponseEntity.ok(tagGroupService.findAllTagGroups());
     }

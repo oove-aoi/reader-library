@@ -30,7 +30,7 @@ public class TagController {
         tags = {"tag查詢"},
         description = "依tag ID搜尋tag資料"
     )
-    @GetMapping("/tags/id/{tagId}")
+    @GetMapping("/tags/{tagId}")
     public ResponseEntity<TagResponse> findTagById(
         @PathVariable 
         @Positive(message = "tag ID必須為正整數")
@@ -48,9 +48,9 @@ public class TagController {
         tags = {"tag查詢"},
         description = "依tag名稱搜尋tag資料"
     )
-    @GetMapping("/tags/name/{tagName}")
+    @GetMapping("/tags")
     public ResponseEntity<TagResponse> findTagByName(
-        @PathVariable
+        @RequestParam
         @NotBlank(message = "tag名稱不能為空")
         @Size(max = 100, message = "tag名稱長度不能超過100字元")
         @Parameter(description = "tag名稱", example = "技術")
@@ -80,7 +80,7 @@ public class TagController {
         tags = {"tag管理"},
         description = "更新tag資料"
     )
-    @PutMapping("/tags/id/{tagId}")
+    @PutMapping("/tags/{tagId}")
     public ResponseEntity<TagResponse> updateTag(
         @PathVariable
         @Positive(message = "tag ID必須為正整數")
@@ -102,7 +102,7 @@ public class TagController {
         tags = {"tag管理"},
         description = "刪除tag資料"
     )
-    @DeleteMapping("/tags/id/{tagId}")
+    @DeleteMapping("/tags/{tagId}")
     public void deleteTag(
         @PathVariable
         @Positive(message = "tag ID必須為正整數")

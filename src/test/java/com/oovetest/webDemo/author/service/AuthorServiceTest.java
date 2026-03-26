@@ -307,11 +307,11 @@ class AuthorServiceTest {
 
     @Test
     void deleteAuthor_shouldThrowException_WhenAuthorIdNotExists() {
-        Long authorId = 999L;
+        long authorId = 999L;
 
-        doThrow(new RuntimeException("delete failed")).when(authorRepository).deleteById(authorId);
+        doThrow(new NotFoundException("delete failed")).when(authorRepository).deleteById(authorId);
 
-        assertThrows(RuntimeException.class, () -> {
+        assertThrows(NotFoundException.class, () -> {
             authorService.deleteAuthorById(authorId);
         });
 

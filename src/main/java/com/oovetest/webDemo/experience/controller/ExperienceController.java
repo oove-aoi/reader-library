@@ -40,7 +40,7 @@ public class ExperienceController {
         tags = {"心得查詢"},
         description = "查詢心得資料，需提供書籍ID"
     )
-    @GetMapping("/books/id/{bookId}/experience")
+    @GetMapping("/books/{bookId}/experience")
     public ResponseEntity<ExperienceResponse> getExperienceByBookId(
         @PathVariable 
         @Positive(message = "作者ID必須為正整數")
@@ -55,7 +55,7 @@ public class ExperienceController {
         tags = {"心得管理"},
         description = "新增心得資料，需提供書籍ID"
     )
-    @PostMapping("/books/id/{bookId}/experience")
+    @PostMapping("/books/{bookId}/experience")
     public ResponseEntity<ExperienceResponse> createExperience(
         @PathVariable 
         @Positive(message = "書籍ID必須為正整數")
@@ -81,7 +81,7 @@ public class ExperienceController {
         tags = {"心得管理"},
         description = "更新心得資料，需提供書籍ID"
     )
-    @PutMapping("/books/id/{bookId}/experience")
+    @PutMapping("/books/{bookId}/experience")
     public ResponseEntity<ExperienceResponse> updateExperience(
         @PathVariable 
         @Positive(message = "書籍ID必須為正整數")
@@ -107,7 +107,7 @@ public class ExperienceController {
         tags = {"心得管理"},
         description = "刪除心得資料，需提供書籍ID"
     )
-    @DeleteMapping("/books/id/{bookId}/experience")
+    @DeleteMapping("/books/{bookId}/experience")
     public ResponseEntity<?> deleteExperience(@PathVariable 
         @Positive(message = "書籍ID必須為正整數")
         @Parameter(description = "書籍ID", example = "1")

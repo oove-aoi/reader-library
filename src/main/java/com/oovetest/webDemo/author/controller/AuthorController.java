@@ -33,7 +33,7 @@ public class AuthorController {
         tags = {"作者查詢"},
         description = "依據作者ID查詢作者資料"
     )
-    @GetMapping("/authors/id/{authorid}")
+    @GetMapping("/authors/{authorid}")
     public ResponseEntity<AuthorResponse> getAuthorById(
         @PathVariable 
         @Positive(message = "作者ID必須為正整數")  //id 不應為 0 或負數
@@ -47,14 +47,14 @@ public class AuthorController {
         tags = {"作者查詢"},
         description = "依據作者名稱查詢作者資料"
     )
-    @GetMapping("/authors/name/{authorName}")
+    @GetMapping("/authors")
     public ResponseEntity<AuthorResponse> getAuthorByName(
-        @PathVariable 
+        @RequestParam  
         @NotBlank(message = "作者名稱不可為空白") //名稱不應為空白
         @Size(max = 100, message = "作者名稱長度不可超過100字元") //名稱不應過長
         @Parameter(description = "作者名稱", example = "J.K. Rowling")
-        String authorName) {
-            return ResponseEntity.ok(authorService.getAuthorByName(authorName));
+        String name) {
+            return ResponseEntity.ok(authorService.getAuthorByName(name));
             
     }
     
@@ -64,9 +64,11 @@ public class AuthorController {
         tags = {"作者管理"},
         description = "需提供作者名稱等欄位資訊"
     )
-    @PostMapping("/authors/")
+    @PostMapping("/authors")
     public ResponseEntity<AuthorResponse> createAuthor(
-        @RequestBody @Valid AuthorRequest authorRequest) {
+        @RequestBody 
+        @Valid 
+        AuthorRequest authorRequest) {
             AuthorResponse authorResponse = authorService.createAuthor(authorRequest);
             return ResponseEntity.status(HttpStatus.CREATED).body(authorResponse);
     }
@@ -91,7 +93,7 @@ public class AuthorController {
         tags = {"作者管理"},
         description = "需提供作者名稱等欄位資訊"
     )
-    @PutMapping("/authors/id/{authorid}")
+    @PutMapping("/authors/{authorid}")
     public ResponseEntity<AuthorResponse> updateAuthor(
         @PathVariable 
         @Positive(message = "作者ID必須為正整數")  //id 不應為 0 或負數
@@ -110,7 +112,7 @@ public class AuthorController {
         tags = {"作者管理"},
         description = "需提供作者ID"
     )
-    @DeleteMapping("/authors/id/{authorid}")
+    @DeleteMapping("/authors/{authorid}")
     public ResponseEntity<Void> deleteAuthorById(
         @PathVariable 
         @Positive(message = "作者ID必須為正整數")  //id 不應為 0 或負數

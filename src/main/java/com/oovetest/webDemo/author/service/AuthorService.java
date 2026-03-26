@@ -112,6 +112,9 @@ public class AuthorService {
     }
 
     public void deleteAuthorById(@NonNull Long authorId) {
+        if (!authorRepository.existsById(authorId)) {
+            throw new NotFoundException("查無此作者ID");
+        }
         authorRepository.deleteById(authorId);
     }
 }

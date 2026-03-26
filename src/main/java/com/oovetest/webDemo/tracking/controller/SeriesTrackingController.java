@@ -27,7 +27,7 @@ public class SeriesTrackingController {
         tags = {"追蹤查詢"},
         description = "查詢追蹤資料，需提供追蹤ID"
     )
-    @GetMapping("series-tracking/{id}")
+    @GetMapping("/series-tracking/{id}")
     public ResponseEntity<SeriesTrackingResponse> getSeriesTracking(
         @PathVariable 
         @Positive(message = "追蹤ID必須為正數")
@@ -41,18 +41,14 @@ public class SeriesTrackingController {
         tags = {"追蹤管理"},
         description = "創建追蹤資料，需提供系列ID與追蹤狀態"
     )
-    @PostMapping("series-tracking")
+    @PostMapping("/series-tracking")
     public ResponseEntity<SeriesTrackingResponse> createSeriesTracking(
         @RequestBody
         @Valid
         @Parameter(description = "追蹤請求", required = true)
         SeriesTrackingRequest request) {
-            try {
-                SeriesTrackingResponse seriesTracking = seriesTrackingService.createSeriesTracking(request);
-                return ResponseEntity.status(201).body(seriesTracking);
-            } catch (RuntimeException e) {
-                return ResponseEntity.notFound().build();
-            }
+            SeriesTrackingResponse seriesTracking = seriesTrackingService.createSeriesTracking(request);
+            return ResponseEntity.status(201).body(seriesTracking);   
     }
 
     @Operation(
@@ -65,20 +61,14 @@ public class SeriesTrackingController {
         @PathVariable 
         @Positive(message = "追蹤ID必須為正數")
         @Parameter(description = "追蹤ID", required = true)
-
         Long id, 
 
         @RequestBody
         @Valid
         @Parameter(description = "追蹤更新請求", required = true)
-
         SeriesTrackingRequest request) {
-            try {
-                SeriesTrackingResponse seriesTracking = seriesTrackingService.updateSeriesTracking(id, request);
-                return ResponseEntity.ok(seriesTracking);
-            } catch (RuntimeException e) {
-                return ResponseEntity.notFound().build();
-            }
+            SeriesTrackingResponse seriesTracking = seriesTrackingService.updateSeriesTracking(id, request);
+            return ResponseEntity.ok(seriesTracking);
     }
 
     @Operation(
@@ -92,11 +82,8 @@ public class SeriesTrackingController {
         @Positive(message = "追蹤ID必須為正數")
         @Parameter(description = "追蹤ID", required = true)
         Long id) {
-            try {
-                seriesTrackingService.deleteSeriesTracking(id);
-                return ResponseEntity.noContent().build();
-            } catch (RuntimeException e) {
-                return ResponseEntity.notFound().build();
-            }   
+            seriesTrackingService.deleteSeriesTracking(id);
+            return ResponseEntity.noContent().build();
+            
     }
 }
