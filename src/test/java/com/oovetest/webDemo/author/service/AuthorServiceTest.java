@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.never;
@@ -298,6 +299,9 @@ class AuthorServiceTest {
     void deleteAuthorById_shouldCallRepository_whenIdExists() {
         long authorId = 1L;
 
+        // Arrange
+        when(authorRepository.existsById(authorId)).thenReturn(true);
+
         // Act
         authorService.deleteAuthorById(authorId);
 
@@ -309,13 +313,13 @@ class AuthorServiceTest {
     void deleteAuthor_shouldThrowException_WhenAuthorIdNotExists() {
         long authorId = 999L;
 
-        doThrow(new NotFoundException("delete failed")).when(authorRepository).deleteById(authorId);
+        when(authorRepository.existsById(authorId)).thenReturn(false);
 
         assertThrows(NotFoundException.class, () -> {
             authorService.deleteAuthorById(authorId);
         });
 
-        verify(authorRepository).deleteById(authorId);
+        verify(authorRepository, never()).deleteById(anyLong());
         
     }
 }
