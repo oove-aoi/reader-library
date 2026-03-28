@@ -32,19 +32,33 @@
 
 採用典型三層式架構：
 
-```
 Controller → Service → Repository → Database
-             ↓
-            DTO
-```
+        ↓
+       DTO ⇄ Mapper ⇄ Entity
 
 ### 各層職責：
 
-* **Controller**：處理 HTTP Request / Response
-* **Service**：業務邏輯與資料驗證
-* **Repository**：資料存取（JPA）
-* **DTO**：對外資料傳輸，避免直接暴露 Entity
+* **Controller**
+  處理 HTTP Request / Response，負責接收前端請求並回傳結果，不包含業務邏輯。
 
+* **Service**
+  負責核心業務邏輯處理與資料驗證，並協調 Repository 與 Mapper。
+
+* **Repository**
+  負責資料存取，透過 JPA 操作資料庫。
+
+* **DTO（Data Transfer Object）**
+  作為對外資料傳輸模型，避免直接暴露 Entity，提升系統安全性與彈性。
+
+* **Mapper**
+  負責 Entity 與 DTO 之間的轉換，將資料轉為適合對外輸出的格式，或將請求資料轉為系統內部使用的 Entity。
+
+### 設計說明：
+
+* 將 DTO 與 Entity 明確分離，避免資料結構耦合
+* 透過 Mapper 集中管理轉換邏輯，提升程式可讀性與維護性
+* Service 層不直接處理資料格式轉換，確保單一職責原則（SRP）
+  
 ---
 
 ## 四、核心模組設計
@@ -133,14 +147,8 @@ http://localhost:8080
 
 ## 九、資料庫設定
 
-* 開發環境：H2 (in-memory database)
+* 開發環境：MySQL
 * 測試環境：H2
-
-H2 Console：
-
-```
-http://localhost:8080/h2-console
-```
 
 ---
 
@@ -151,7 +159,7 @@ http://localhost:8080/h2-console
 ### 處理範圍：
 
 * 資源不存在（NotFoundException → 404）
-* 請求格式錯誤（MethodArgumentNotValidException → 400）
+* 請求格式錯誤（ValidationException → 400）
 * 其他未預期錯誤（500）
 
 ### 設計重點：
@@ -164,11 +172,8 @@ http://localhost:8080/h2-console
 
 ```json
 {
-  "timestamp": "2026-03-28T12:00:00",
-  "status": 404,
-  "error": "Not Found",
-  "message": "查無該書籍",
-  "path": "/books/1"
+  "errorCode": "NOT_FOUND",
+  "message": "查無此作者ID"
 }
 ```
 
@@ -176,34 +181,23 @@ http://localhost:8080/h2-console
 
 ## 十一、單元測試（Unit Test）
 
-本專案針對 Service 與 Repository 層撰寫單元測試，以確保系統邏輯與資料存取正確性。
+本專案針對 Service 與 Controller 層撰寫單元測試，以確保系統邏輯與資料存取正確性。
 
 ### 使用技術：
 
 * JUnit 5
 * Mockito
-* Spring Boot Test
 
-### 測試範圍：
+#本專案使用 JUnit 與 Mockito 進行單元測試，確保核心邏輯正確性。
 
-#### Service 層：
+目前測試重點：
 
-* 正常流程測試
-* Exception 測試（例如查無資料）
-* Repository 呼叫驗證（verify）
+- Controller：驗證 API 行為與回應格式
+- Service：驗證業務邏輯、資料處理與例外拋出
 
-#### Repository 層：
-
-* 使用 `@DataJpaTest`
-* 測試 JPA 查詢
-* 驗證關聯與自訂 Query
-
-### 測試案例示例：
-
-* deleteAuthorById
-
-  * 當 author 存在 → 成功刪除
-  * 當 author 不存在 → 拋出 NotFoundException
+Repository（JPA）測試目前尚未完整導入，
+主要因資料庫初始化與測試隔離設定仍在調整中，
+後續預計使用 @DataJpaTest 補強。
 
 ---
 
