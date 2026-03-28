@@ -31,11 +31,11 @@
 ## 三、系統架構
 
 採用典型三層式架構：
-
+```
 Controller → Service → Repository → Database
         ↓
        DTO ⇄ Mapper ⇄ Entity
-
+```
 ### 各層職責：
 
 * **Controller**
