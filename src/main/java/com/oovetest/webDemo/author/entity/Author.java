@@ -1,8 +1,8 @@
-package com.oovetest.webDemo.author.model;
+package com.oovetest.webDemo.author.entity;
 
 import java.util.Set;
 
-import com.oovetest.webDemo.book.model.Book;
+import com.oovetest.webDemo.book.entity.Book;
 
 import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;

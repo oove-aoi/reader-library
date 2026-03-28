@@ -6,8 +6,8 @@ import org.springframework.stereotype.Component;
 
 import com.oovetest.webDemo.tag.dto.TagGroupResponse;
 import com.oovetest.webDemo.tag.dto.TagGroupWithTagsResponse;
-import com.oovetest.webDemo.tag.model.TagGroup;
 import com.oovetest.webDemo.tag.dto.TagsResponse;
+import com.oovetest.webDemo.tag.entity.TagGroup;
 
 @Component
 public class TagGroupMapper {

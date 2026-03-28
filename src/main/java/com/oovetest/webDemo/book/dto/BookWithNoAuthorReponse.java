@@ -2,9 +2,11 @@ package com.oovetest.webDemo.book.dto;
 import lombok.Data;
 
 import java.util.Set;
+
+import com.oovetest.webDemo.book.entity.BookStatus;
+
 import java.time.LocalDateTime;
 import java.util.HashSet;
-import com.oovetest.webDemo.book.model.BookStatus;
 
 @Data
 public class BookWithNoAuthorReponse {

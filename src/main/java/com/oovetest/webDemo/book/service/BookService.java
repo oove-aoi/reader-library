@@ -4,15 +4,15 @@ import com.oovetest.webDemo.book.dto.BookRequest;
 import com.oovetest.webDemo.book.dto.BookResponse;
 import com.oovetest.webDemo.book.dto.BookSimpleResponse;
 import com.oovetest.webDemo.book.dto.SeriesBookSimpleResponse;
-import com.oovetest.webDemo.book.model.Book;
-import com.oovetest.webDemo.tag.model.Tag;
-import com.oovetest.webDemo.author.model.Author;
-import com.oovetest.webDemo.series.model.Series;
+import com.oovetest.webDemo.book.entity.Book;
 import com.oovetest.webDemo.book.repository.BookRepository;
 import com.oovetest.webDemo.exception.NotFoundException;
+import com.oovetest.webDemo.author.entity.Author;
 import com.oovetest.webDemo.author.service.AuthorService;
+import com.oovetest.webDemo.tag.entity.Tag;
 import com.oovetest.webDemo.tag.service.TagService;
 import com.oovetest.webDemo.book.mapper.BookMapper;
+import com.oovetest.webDemo.series.entity.Series;
 import com.oovetest.webDemo.series.service.SeriesService;
 
 import lombok.NonNull;
@@ -47,7 +47,7 @@ public class BookService {
     }
 
     @Transactional(readOnly = true)
-    private Book getEntityById(Long bookId) {
+    private Book getEntityById(@NonNull Long bookId) {
         //findById 回傳 Optional<Book> 所以後面必須加上orElseThrow
         return bookRepository.findById(bookId)
                 .orElseThrow(() -> new NotFoundException("ID 未查找到相應的書籍"));

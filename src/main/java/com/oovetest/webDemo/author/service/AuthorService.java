@@ -6,7 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.oovetest.webDemo.author.dto.AuthorRequest;
 import com.oovetest.webDemo.author.dto.AuthorResponse;
 import com.oovetest.webDemo.author.dto.AuthorWithBooksResponse;
-import com.oovetest.webDemo.author.model.Author;
+import com.oovetest.webDemo.author.entity.Author;
 import com.oovetest.webDemo.author.repository.AuthorRepository;
 import com.oovetest.webDemo.exception.NotFoundException;
 import com.oovetest.webDemo.exception.ValidationException;
@@ -71,7 +71,6 @@ public class AuthorService {
         Author author = new Author();
         author.setName(authorRequest.getName());
 
-        System.out.println("進入重複檢查");
         return authorMapper.toResponse(authorRepository.save(author));
     }
 

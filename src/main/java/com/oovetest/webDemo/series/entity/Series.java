@@ -1,7 +1,7 @@
-package com.oovetest.webDemo.series.model;
+package com.oovetest.webDemo.series.entity;
 
-import com.oovetest.webDemo.author.model.Author;
-import com.oovetest.webDemo.book.model.Book;
+import com.oovetest.webDemo.author.entity.Author;
+import com.oovetest.webDemo.book.entity.Book;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

@@ -8,7 +8,7 @@ import com.oovetest.webDemo.tag.repository.TagGroupRepository;
 import com.oovetest.webDemo.exception.NotFoundException;
 import com.oovetest.webDemo.tag.dto.TagGroupResponse;
 import com.oovetest.webDemo.tag.dto.TagGroupWithTagsResponse;
-import com.oovetest.webDemo.tag.model.TagGroup;
+import com.oovetest.webDemo.tag.entity.TagGroup;
 import com.oovetest.webDemo.tag.mapper.TagGroupMapper;
 
 

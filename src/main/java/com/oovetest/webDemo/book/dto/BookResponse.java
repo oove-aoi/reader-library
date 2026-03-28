@@ -5,7 +5,7 @@ import lombok.Data;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import com.oovetest.webDemo.book.model.BookStatus;
+import com.oovetest.webDemo.book.entity.BookStatus;
 
 
 @Data

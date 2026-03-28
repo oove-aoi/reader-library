@@ -2,13 +2,14 @@ package com.oovetest.webDemo.tracking.service;
 
 import org.springframework.stereotype.Service;
 import com.oovetest.webDemo.tracking.repository.SeriesTrackingRepository;
+import com.oovetest.webDemo.series.entity.Series;
 import com.oovetest.webDemo.series.service.SeriesService;
 import com.oovetest.webDemo.tracking.dto.SeriesTrackingRequest;
 import com.oovetest.webDemo.tracking.dto.SeriesTrackingResponse;
+import com.oovetest.webDemo.tracking.entity.SeriesTracking;
 import com.oovetest.webDemo.tracking.mapper.SeriesTrackingMapper;
-import com.oovetest.webDemo.tracking.model.SeriesTracking;
 import com.oovetest.webDemo.exception.NotFoundException;
-import com.oovetest.webDemo.series.model.Series;
+
 import java.time.LocalDateTime;
 
 @Service

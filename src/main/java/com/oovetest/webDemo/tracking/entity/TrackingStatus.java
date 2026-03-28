@@ -1,4 +1,4 @@
-package com.oovetest.webDemo.tracking.model;
+package com.oovetest.webDemo.tracking.entity;
 
 public enum TrackingStatus {
     TRACKING, //追蹤中

@@ -2,8 +2,8 @@ package com.oovetest.webDemo.author.controller;
 
 import com.oovetest.webDemo.author.dto.AuthorRequest;
 import com.oovetest.webDemo.author.dto.AuthorResponse;
+import com.oovetest.webDemo.author.entity.Author;
 import com.oovetest.webDemo.author.mapper.AuthorMapper;
-import com.oovetest.webDemo.author.model.Author;
 import com.oovetest.webDemo.author.repository.AuthorRepository;
 import com.oovetest.webDemo.author.service.AuthorService;
 import com.oovetest.webDemo.exception.GlobalExceptionHandler;

@@ -1,18 +1,17 @@
-package com.oovetest.webDemo.book.model;
+package com.oovetest.webDemo.book.entity;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import com.oovetest.webDemo.author.model.Author;
+import com.oovetest.webDemo.author.entity.Author;
 import com.oovetest.webDemo.booktag.BookTag;
-import com.oovetest.webDemo.experience.model.Experience;
-import com.oovetest.webDemo.series.model.Series;
-import com.oovetest.webDemo.tag.model.Tag;
+import com.oovetest.webDemo.experience.entity.Experience;
+import com.oovetest.webDemo.series.entity.Series;
+import com.oovetest.webDemo.tag.entity.Tag;
 
 import jakarta.persistence.*;
-import jakarta.persistence.criteria.CriteriaBuilder.In;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

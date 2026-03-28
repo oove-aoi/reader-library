@@ -4,9 +4,9 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 import com.oovetest.webDemo.book.dto.SeriesBookSimpleResponse;
+import com.oovetest.webDemo.book.entity.Book;
 import com.oovetest.webDemo.book.dto.BookResponse;
 import com.oovetest.webDemo.book.dto.BookSimpleResponse;
-import com.oovetest.webDemo.book.model.Book;
 
 @Component
 public class BookMapper {

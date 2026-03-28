@@ -1,9 +1,9 @@
 package com.oovetest.webDemo.book.repository;
 
-import com.oovetest.webDemo.book.model.Book;
+import com.oovetest.webDemo.author.entity.Author;
+import com.oovetest.webDemo.book.entity.Book;
 import com.oovetest.webDemo.book.service.BookSearchCondition;
-import com.oovetest.webDemo.author.model.Author;
-import com.oovetest.webDemo.series.model.Series;
+import com.oovetest.webDemo.series.entity.Series;
 
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;

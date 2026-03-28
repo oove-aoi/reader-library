@@ -5,13 +5,16 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Component;
 
 import com.oovetest.webDemo.author.dto.AuthorListResponse;
+import com.oovetest.webDemo.author.dto.AuthorRequest;
 import com.oovetest.webDemo.author.dto.AuthorResponse;
 import com.oovetest.webDemo.author.dto.AuthorWithBooksResponse;
-import com.oovetest.webDemo.author.model.Author;
+import com.oovetest.webDemo.author.entity.Author;
 import com.oovetest.webDemo.book.dto.BookWithNoAuthorReponse;
 
 @Component
 public class AuthorMapper {
+
+    
     
     public AuthorResponse toResponse(Author author) {
         AuthorResponse response = new AuthorResponse();

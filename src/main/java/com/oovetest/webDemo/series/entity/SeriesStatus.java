@@ -1,4 +1,4 @@
-package com.oovetest.webDemo.series.model;
+package com.oovetest.webDemo.series.entity;
 
 public enum SeriesStatus {
     ONGOING, //進行中

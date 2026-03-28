@@ -3,7 +3,7 @@ package com.oovetest.webDemo.tracking.mapper;
 import org.springframework.stereotype.Component;
 
 import com.oovetest.webDemo.tracking.dto.SeriesTrackingResponse;
-import com.oovetest.webDemo.tracking.model.SeriesTracking;
+import com.oovetest.webDemo.tracking.entity.SeriesTracking;
 
 @Component
 public class SeriesTrackingMapper {

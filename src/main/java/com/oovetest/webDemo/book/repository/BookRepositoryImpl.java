@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
-import com.oovetest.webDemo.book.model.Book;
+import com.oovetest.webDemo.book.entity.Book;
 import com.oovetest.webDemo.book.service.BookSearchCondition;
 
 import jakarta.persistence.EntityManager;

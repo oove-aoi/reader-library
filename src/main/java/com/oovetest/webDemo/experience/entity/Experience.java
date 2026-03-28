@@ -1,8 +1,8 @@
-package com.oovetest.webDemo.experience.model;
+package com.oovetest.webDemo.experience.entity;
 
 import java.time.LocalDateTime;
 
-import com.oovetest.webDemo.book.model.Book;
+import com.oovetest.webDemo.book.entity.Book;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;

@@ -5,8 +5,8 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.oovetest.webDemo.tag.model.TagGroup;
-import com.oovetest.webDemo.tag.model.Tag;
+import com.oovetest.webDemo.tag.entity.Tag;
+import com.oovetest.webDemo.tag.entity.TagGroup;
 
 public interface TagGroupRepositoryTest extends JpaRepository<TagGroup, Long> {
 

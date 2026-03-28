@@ -1,6 +1,6 @@
 package com.oovetest.webDemo.series.dto;
 
-import com.oovetest.webDemo.series.model.SeriesStatus;
+import com.oovetest.webDemo.series.entity.SeriesStatus;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;

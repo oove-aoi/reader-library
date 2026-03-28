@@ -1,7 +1,7 @@
 package com.oovetest.webDemo.booktag;
 
-import com.oovetest.webDemo.book.model.Book;
-import com.oovetest.webDemo.tag.model.Tag;
+import com.oovetest.webDemo.book.entity.Book;
+import com.oovetest.webDemo.tag.entity.Tag;
 
 import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;

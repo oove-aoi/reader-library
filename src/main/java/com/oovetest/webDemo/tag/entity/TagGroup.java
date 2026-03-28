@@ -1,4 +1,4 @@
-package com.oovetest.webDemo.tag.model;
+package com.oovetest.webDemo.tag.entity;
 
 import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;

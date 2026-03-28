@@ -1,4 +1,4 @@
-package com.oovetest.webDemo.tracking.model;
+package com.oovetest.webDemo.tracking.entity;
 
 import java.time.LocalDateTime;
 import jakarta.persistence.Entity;
@@ -14,8 +14,8 @@ import lombok.Setter;
 import jakarta.persistence.Id;
 import jakarta.persistence.EnumType;
 
-import com.oovetest.webDemo.series.model.Series;
-import com.oovetest.webDemo.tracking.model.TrackingStatus;
+import com.oovetest.webDemo.series.entity.Series;
+import com.oovetest.webDemo.tracking.entity.TrackingStatus;
 
 @Entity
 @Table(

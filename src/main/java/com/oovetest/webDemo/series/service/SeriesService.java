@@ -2,12 +2,12 @@ package com.oovetest.webDemo.series.service;
 
 import org.springframework.stereotype.Service;
 
-import com.oovetest.webDemo.author.model.Author;
 import com.oovetest.webDemo.series.dto.SeriesRequest;
 import com.oovetest.webDemo.series.dto.SeriesResponse;
-import com.oovetest.webDemo.series.model.Series;
+import com.oovetest.webDemo.series.entity.Series;
 import com.oovetest.webDemo.series.repository.SeriesRepository;
 import com.oovetest.webDemo.series.mapper.SeriesMapper;
+import com.oovetest.webDemo.author.entity.Author;
 import com.oovetest.webDemo.author.service.AuthorService;
 import com.oovetest.webDemo.book.repository.BookRepository;
 import com.oovetest.webDemo.exception.NotFoundException;

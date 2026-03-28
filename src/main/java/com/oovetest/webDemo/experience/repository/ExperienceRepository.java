@@ -4,7 +4,7 @@ import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.oovetest.webDemo.experience.model.Experience;
+import com.oovetest.webDemo.experience.entity.Experience;
 
 public interface ExperienceRepository extends JpaRepository<Experience, Long> {
     public Optional<Experience> findByBook_BookTitle(String title);

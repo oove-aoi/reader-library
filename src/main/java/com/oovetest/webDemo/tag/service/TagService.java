@@ -8,8 +8,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.oovetest.webDemo.exception.NotFoundException;
 import com.oovetest.webDemo.tag.dto.TagRequest;
 import com.oovetest.webDemo.tag.dto.TagResponse;
-import com.oovetest.webDemo.tag.model.Tag;
-import com.oovetest.webDemo.tag.model.TagGroup;
+import com.oovetest.webDemo.tag.entity.Tag;
+import com.oovetest.webDemo.tag.entity.TagGroup;
 import com.oovetest.webDemo.tag.repository.TagRepository;
 import com.oovetest.webDemo.tag.mapper.TagMapper;
 

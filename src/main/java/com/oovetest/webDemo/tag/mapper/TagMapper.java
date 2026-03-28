@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 
 import com.oovetest.webDemo.tag.dto.TagResponse;
-import com.oovetest.webDemo.tag.model.Tag;
+import com.oovetest.webDemo.tag.entity.Tag;
 
 
 @Component

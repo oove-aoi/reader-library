@@ -1,4 +1,4 @@
-package com.oovetest.webDemo.book.model;
+package com.oovetest.webDemo.book.entity;
 
 public enum BookStatus {
     BUYED,  //已購買

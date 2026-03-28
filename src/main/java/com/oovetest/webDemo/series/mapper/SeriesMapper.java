@@ -3,7 +3,7 @@ package com.oovetest.webDemo.series.mapper;
 import org.springframework.stereotype.Component;
 
 import com.oovetest.webDemo.series.dto.SeriesResponse;
-import com.oovetest.webDemo.series.model.Series;
+import com.oovetest.webDemo.series.entity.Series;
 
 @Component
 public class SeriesMapper {

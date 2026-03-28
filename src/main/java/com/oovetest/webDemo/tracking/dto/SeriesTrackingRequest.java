@@ -1,9 +1,10 @@
 package com.oovetest.webDemo.tracking.dto;
 
 import lombok.Data;
-import com.oovetest.webDemo.tracking.model.TrackingStatus;
-
 import jakarta.validation.constraints.Positive;
+
+import com.oovetest.webDemo.tracking.entity.TrackingStatus;
+
 import jakarta.validation.constraints.NotNull;
 
 @Data

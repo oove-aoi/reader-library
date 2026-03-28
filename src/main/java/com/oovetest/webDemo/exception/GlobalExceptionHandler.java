@@ -10,11 +10,6 @@ import com.oovetest.webDemo.exception.dto.ErrorDTO;
 
 import jakarta.validation.ConstraintViolationException;
 
-import com.oovetest.webDemo.exception.NotFoundException;
-import com.oovetest.webDemo.exception.PermissionException;
-import com.oovetest.webDemo.exception.ValidationException;
-import com.oovetest.webDemo.exception.AppException;
-import com.oovetest.webDemo.exception.dto.ErrorDTO;
 
 //全局異常處理器
 @RestControllerAdvice
