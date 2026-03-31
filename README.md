@@ -51,12 +51,12 @@ Controller → Service → Repository → Database
   作為對外資料傳輸模型，避免直接暴露 Entity，提升系統安全性與彈性。
 
 * **Mapper**
-  負責 Entity 與 DTO 之間的轉換，將資料轉為適合對外輸出的格式，或將請求資料轉為系統內部使用的 Entity。
+  負責 Entity 與 DTO 之間的轉換，將資料轉為對外輸出的Response格式。
 
 ### 設計說明：
 
 * 將 DTO 與 Entity 明確分離，避免資料結構耦合
-* 透過 Mapper 集中管理轉換邏輯，提升程式可讀性與維護性
+* 透過 Mapper 管理轉換邏輯，提升程式可讀性與維護性
 * Service 層不直接處理資料格式轉換，確保單一職責原則（SRP）
   
 ---
