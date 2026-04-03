@@ -34,7 +34,7 @@ public class TagController {
     public ResponseEntity<TagResponse> findTagById(
         @PathVariable 
         @Positive(message = "tag ID必須為正整數")
-        @Parameter(description = "tag ID", example = "1")
+        @Parameter(description = "tag ID", example = "1", required = true)
         Long tagId) {
             try {
                 return ResponseEntity.ok(tagService.findById(tagId));
@@ -53,7 +53,7 @@ public class TagController {
         @RequestParam
         @NotBlank(message = "tag名稱不能為空")
         @Size(max = 100, message = "tag名稱長度不能超過100字元")
-        @Parameter(description = "tag名稱", example = "技術")
+        @Parameter(description = "tag名稱", example = "技術", required = true)
         String tagName) {
             return ResponseEntity.ok(tagService.findByName(tagName));
     }
@@ -84,7 +84,7 @@ public class TagController {
     public ResponseEntity<TagResponse> updateTag(
         @PathVariable
         @Positive(message = "tag ID必須為正整數")
-        @Parameter(description = "tag ID", example = "1")
+        @Parameter(description = "tag ID", example = "1", required = true)
         Long tagId,
 
         @RequestBody
@@ -106,7 +106,7 @@ public class TagController {
     public void deleteTag(
         @PathVariable
         @Positive(message = "tag ID必須為正整數")
-        @Parameter(description = "tag ID", example = "1")
+        @Parameter(description = "tag ID", example = "1", required = true)
         Long tagId) {
             tagService.deleteTag(tagId);
     }

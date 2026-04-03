@@ -31,7 +31,7 @@ public class SeriesTrackingController {
     public ResponseEntity<SeriesTrackingResponse> getSeriesTracking(
         @PathVariable 
         @Positive(message = "追蹤ID必須為正數")
-        @Parameter(description = "追蹤ID", required = true)
+        @Parameter(description = "追蹤ID", example = "1", required = true)
         Long id) {
             return ResponseEntity.ok(seriesTrackingService.getSeriesTracking(id)); 
     }
@@ -60,7 +60,7 @@ public class SeriesTrackingController {
     public ResponseEntity<SeriesTrackingResponse> updateSeriesTracking(
         @PathVariable 
         @Positive(message = "追蹤ID必須為正數")
-        @Parameter(description = "追蹤ID", required = true)
+        @Parameter(description = "追蹤ID", example = "1",required = true)
         Long id, 
 
         @RequestBody
@@ -80,7 +80,7 @@ public class SeriesTrackingController {
     public ResponseEntity<?> deleteSeriesTracking(
         @PathVariable 
         @Positive(message = "追蹤ID必須為正數")
-        @Parameter(description = "追蹤ID", required = true)
+        @Parameter(description = "追蹤ID", example = "1", required = true)
         Long id) {
             seriesTrackingService.deleteSeriesTracking(id);
             return ResponseEntity.noContent().build();

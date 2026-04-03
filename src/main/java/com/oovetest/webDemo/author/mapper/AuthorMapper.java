@@ -13,8 +13,6 @@ import com.oovetest.webDemo.book.dto.BookWithNoAuthorReponse;
 
 @Component
 public class AuthorMapper {
-
-    
     
     public AuthorResponse toResponse(Author author) {
         AuthorResponse response = new AuthorResponse();

@@ -10,6 +10,7 @@ public class SeriesTrackingMapper {
     public SeriesTrackingResponse toResponse(SeriesTracking seriesTracking) {
         SeriesTrackingResponse response = new SeriesTrackingResponse();
         
+        response.setSeriesTrackingId(seriesTracking.getId());
         response.setSeriesId(seriesTracking.getSeries().getId());
         response.setStatus(seriesTracking.getStatus());
         response.setCreatedAt(seriesTracking.getCreatedAt());

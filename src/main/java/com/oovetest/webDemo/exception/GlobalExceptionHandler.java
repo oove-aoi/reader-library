@@ -27,15 +27,15 @@ public class GlobalExceptionHandler {
                              .body(new ErrorDTO(ex.getErrorCode(), ex.getMessage()));
     }
 
-    //抓vaild拋出的錯誤
-    // 這個是純驗參數
+    //這兩個處理驗證控制器參數時自動回拋的錯誤
+    //這個處理純參數驗證未通過
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<ErrorDTO> handleValidation(ConstraintViolationException ex) {
         return ResponseEntity.badRequest()
                 .body(new ErrorDTO("VALIDATION_ERROR", ex.getMessage()));
     }
 
-    // 這個是驗DTO
+    //這個處理DTO驗證未通過
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorDTO> handleMethodArgumentNotValid(MethodArgumentNotValidException ex) {
         //處理那個長的超醜的錯誤訊息

@@ -7,9 +7,7 @@ import com.oovetest.webDemo.book.service.BookSearchCondition;
 import com.oovetest.webDemo.book.service.BookService;
 
 import io.swagger.v3.oas.annotations.Operation;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
-import jakarta.validation.constraints.Size;
 
 import java.util.List;
 
@@ -41,7 +39,7 @@ public class BookController {
     public ResponseEntity<BookResponse> getBookById(
         @PathVariable 
         @Positive(message = "書籍ID必須為正整數") 
-        @Parameter(description = "書籍ID", example = "1")
+        @Parameter(description = "書籍ID", example = "1", required = true)
         Long bookId) {
             return ResponseEntity.ok(bookService.getBookById(bookId));
         }
@@ -57,7 +55,7 @@ public class BookController {
     public ResponseEntity<List<BookSimpleResponse>> getBooksByAuthorId(
         @PathVariable 
         @Positive(message = "作者ID必須為正整數")
-        @Parameter(description = "作者ID", example = "1")
+        @Parameter(description = "作者ID", example = "1", required = true)
         Long authorId) {
             List<BookSimpleResponse> books = bookService.getAllBookByAuthorId(authorId);
             return ResponseEntity.ok(books);
@@ -72,6 +70,7 @@ public class BookController {
     public ResponseEntity<List<BookSimpleResponse>> getBooksByTagId(
         @PathVariable 
         @Positive(message = "標籤ID必須為正整數")
+        @Parameter(description = "標籤ID", example = "1", required = true)
         Long tagId) {
             List<BookSimpleResponse> books = bookService.getAllBooksByTagId(tagId);
             return ResponseEntity.ok(books);
@@ -100,7 +99,7 @@ public class BookController {
     @PutMapping("/books/{bookid}")
     public ResponseEntity<BookResponse> updateBookById(
         @Positive(message = "作者ID必須為正整數")
-        @Parameter(description = "作者ID", example = "1")
+        @Parameter(description = "作者ID", example = "1", required = true)
         @PathVariable Long bookid,
 
         @Valid

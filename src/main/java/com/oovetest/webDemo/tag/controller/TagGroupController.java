@@ -40,7 +40,7 @@ public class TagGroupController {
         @RequestParam
         @NotBlank(message = "tag群組名稱不能為空")
         @Size(max = 100, message = "tag群組名稱長度不能超過100字元")
-        @Parameter(description = "tag群組名稱", example = "類型")
+        @Parameter(description = "tag群組名稱", example = "類型", required = true)
         String name) {
             
             return ResponseEntity.ok(tagGroupService.findByName(name));
@@ -56,7 +56,7 @@ public class TagGroupController {
     public ResponseEntity<TagGroupResponse> getTagGroupById(
         @PathVariable
         @Positive(message = "tag群組ID必須為正整數")
-        @Parameter(description = "tag群組ID", example = "1")
+        @Parameter(description = "tag群組ID", example = "1", required = true)
         Long id) {  
             
             return ResponseEntity.ok(tagGroupService.findById(id));
@@ -83,7 +83,7 @@ public class TagGroupController {
     public ResponseEntity<TagGroupWithTagsResponse> getTagsByGroupId(
         @PathVariable
         @Positive(message = "tag群組ID必須為正整數")
-        @Parameter(description = "tag群組ID", example = "1")
+        @Parameter(description = "tag群組ID", example = "1", required = true)
         Long id) {
             return ResponseEntity.ok(tagGroupService.findTagsByGroupId(id));
     }

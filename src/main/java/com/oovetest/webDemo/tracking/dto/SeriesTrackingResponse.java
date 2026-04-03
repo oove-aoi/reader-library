@@ -8,7 +8,7 @@ import lombok.Data;
 
 @Data
 public class SeriesTrackingResponse {
-    private Long id;
+    private Long seriesTrackingId;
     private Long seriesId;
     private TrackingStatus status;
     private String seriesTitle;
