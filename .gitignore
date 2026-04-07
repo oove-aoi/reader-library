@@ -1,10 +1,27 @@
 HELP.md
+################################
+# Backend (Spring Boot / Maven)
+################################
+
 target/
-.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
 
-### STS ###
+.mvn/wrapper/maven-wrapper.jar
+
+# application config（避免敏感資訊）
+backend/application.properties
+
+################################
+# Frontend (Vue / Node)
+################################
+
+frontend/node_modules/
+frontend/dist/
+frontend/.env
+frontend/.env.*
+
+# Eclipse / STS
 .apt_generated
 .classpath
 .factorypath
@@ -13,13 +30,7 @@ target/
 .springBeans
 .sts4-cache
 
-### IntelliJ IDEA ###
-.idea
-*.iws
-*.iml
-*.ipr
-
-### NetBeans ###
+# NetBeans
 /nbproject/private/
 /nbbuild/
 /dist/
@@ -29,12 +40,17 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 
-### VS Code ###
-.vscode/
+# VS Code
+backend/.vscode/
+frontend/.vscode/
+
 
 ### 重要設定跟筆記 ###
 
-AI問答 - Spring boot 作品方向_單元測試跟全域例外處理.txt
 goal.TXT
-流程規劃.TXT
-application.properties
+backend/AI問答 - Spring boot 作品方向_單元測試跟全域例外處理.txt
+backend/流程規劃.TXT
+
+
+
+
