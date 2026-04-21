@@ -12,6 +12,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.Optional;
+import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -106,9 +107,7 @@ class AuthorServiceTest {
         author.setId(authorId);
         author.setName("Tom");
 
-        AuthorResponse response = new AuthorResponse();
-        response.setId(authorId);
-        response.setName("Tom");
+        AuthorResponse response = new AuthorResponse(authorId, "Tom");
 
         // <-- 這裡放 stub
         doReturn(response).when(authorMapper).toResponse(any(Author.class));
@@ -123,8 +122,8 @@ class AuthorServiceTest {
         AuthorResponse result = authorService.getAuthorById(1L);
 
         // Assert
-        assertEquals(authorId, result.getId());
-        assertEquals("Tom", result.getName());
+        assertEquals(authorId, result.id());
+        assertEquals("Tom", result.name());
 
         // 行為驗證（重點）
         verify(authorRepository).findById(authorId);
@@ -151,9 +150,7 @@ class AuthorServiceTest {
         author.setId(authorId);
         author.setName("Tom");
 
-        AuthorWithBooksResponse response = new AuthorWithBooksResponse();
-        response.setId(authorId);
-        response.setName("Tom");
+        AuthorWithBooksResponse response = new AuthorWithBooksResponse(authorId, "Tom", Set.of());
 
         when(authorRepository.findById(1L))
                 .thenReturn(Optional.of(author));
@@ -162,8 +159,8 @@ class AuthorServiceTest {
         
         AuthorWithBooksResponse result = authorService.getAuthorWithBooksById(authorId);
 
-        assertEquals(authorId, result.getId());
-        assertEquals("Tom", result.getName());
+        assertEquals(authorId, result.id());
+        assertEquals("Tom", result.name());
 
         verify(authorRepository).findById(authorId);
         verify(authorMapper).toWithBooksResponse(author);
@@ -185,16 +182,16 @@ class AuthorServiceTest {
     @Test
     void createAuthor_shouldReturnAuthorResponse_WhenCreateSuccess() {
         long authorId = 1L;
-        AuthorRequest request = new AuthorRequest();
-        request.setName("Tom");
+        AuthorRequest request = new AuthorRequest("Tom");
 
         Author savedAuthor = new Author();
         savedAuthor.setId(1L);
         savedAuthor.setName("Tom");
 
-        AuthorResponse response = new AuthorResponse();
-        response.setId(authorId);
-        response.setName("Tom");
+        AuthorResponse response = new AuthorResponse(authorId, "Tom");
+
+        when(authorRepository.findByName("Tom"))
+                .thenReturn(Optional.empty());
 
         when(authorRepository.save(any(Author.class)))
             .thenReturn(savedAuthor);
@@ -203,8 +200,8 @@ class AuthorServiceTest {
 
         AuthorResponse result = authorService.createAuthor(request);
 
-        assertEquals(authorId, result.getId());
-        assertEquals("Tom", result.getName());
+        assertEquals(authorId, result.id());
+        assertEquals("Tom", result.name());
 
         // 驗證傳進 save 的內容（關鍵）
         ArgumentCaptor<Author> captor = ArgumentCaptor.forClass(Author.class);
@@ -219,8 +216,8 @@ class AuthorServiceTest {
 
     @Test
     void createAuthor_shouldThrowException_WhenAuthorNameAlreadyExists() {
-        AuthorRequest request = new AuthorRequest();
-        request.setName("Tom");
+        AuthorRequest request = new AuthorRequest("Tom");
+        
 
         Author existingAuthor = new Author();
         existingAuthor.setName("Tom");
@@ -242,8 +239,7 @@ class AuthorServiceTest {
     @Test
     void updateAuthor_shouldReturnAuthorResponse_WhenUpdateSuccess() {
         long authorId = 1L;
-        AuthorRequest request = new AuthorRequest();
-        request.setName("Nail");
+        AuthorRequest request = new AuthorRequest("Nail");
 
         // 現存 Author
         Author existingAuthor = new Author();
@@ -254,9 +250,7 @@ class AuthorServiceTest {
         savedAuthor.setId(authorId);
         savedAuthor.setName("Nail");
 
-        AuthorResponse response = new AuthorResponse();
-        response.setId(authorId);
-        response.setName("NewName");
+        AuthorResponse response = new AuthorResponse(authorId, "Nail");
 
         // Mock repository 行為
         when(authorRepository.findById(authorId)).thenReturn(Optional.of(existingAuthor));
@@ -269,7 +263,7 @@ class AuthorServiceTest {
         AuthorResponse result = authorService.updateAuthor(authorId, request);
 
         // Assert
-        assertEquals("NewName", result.getName());
+        assertEquals("NewName", result.name());
         verify(authorRepository).findById(authorId);
         verify(authorRepository).save(existingAuthor);
         verify(authorMapper).toResponse(savedAuthor);
@@ -279,8 +273,7 @@ class AuthorServiceTest {
     @Test
     void updateAuthor_shouldThrowException_WhenAuthorIdNotExists() {
         long authorId = 999L; // 不存在的 id
-        AuthorRequest request = new AuthorRequest();
-        request.setName("NewName");
+        AuthorRequest request = new AuthorRequest("NewName");
 
         // mock repository 回傳空
         when(authorRepository.findById(authorId)).thenReturn(Optional.empty());

@@ -4,13 +4,10 @@ import com.oovetest.webDemo.series.entity.SeriesStatus;
 
 import lombok.Data;
 
-@Data
-public class SeriesResponse {
-    private Long id;
-    private String title;
-    private Long bookCount; 
-    private SeriesStatus status;
-    private Long authorId;
-
-    
-}
+public record SeriesResponse(
+    Long id,
+    String title,
+    Long bookCount,
+    SeriesStatus status,
+    Long authorId
+) {} 

@@ -1,6 +1,7 @@
 package com.oovetest.webDemo.series.service;
 
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 
 import com.oovetest.webDemo.series.dto.SeriesRequest;
 import com.oovetest.webDemo.series.dto.SeriesResponse;
@@ -18,6 +19,7 @@ import com.oovetest.webDemo.exception.ValidationException;
 
 
 @Service
+@Validated
 public class SeriesService {
     private final SeriesRepository seriesRepository;
     private final SeriesMapper seriesMapper;
@@ -63,15 +65,15 @@ public class SeriesService {
     }
 
     public SeriesResponse createSeries(SeriesRequest seriesRequest) {
-        Author author = authorService.getEntityById(seriesRequest.getAuthorId());
-        if (seriesRepository.existsByTitle(seriesRequest.getTitle())) {
+        Author author = authorService.getEntityById(seriesRequest.authorId());
+        if (seriesRepository.existsByTitle(seriesRequest.title())) {
             throw new ValidationException("已存在相同的系列名稱");
         }
 
         Series series = new Series();
         
-        series.setTitle(seriesRequest.getTitle());
-        series.setStatus(seriesRequest.getStatus());
+        series.setTitle(seriesRequest.title());
+        series.setStatus(seriesRequest.status());
         series.setAuthor(author);
 
         Series saved = seriesRepository.save(series);
@@ -81,11 +83,11 @@ public class SeriesService {
 
     public SeriesResponse updateSeries(Long id, SeriesRequest seriesRequest) {
         Series series = getEntityById(id);
-        Author author = authorService.getEntityById(seriesRequest.getAuthorId());
+        Author author = authorService.getEntityById(seriesRequest.authorId());
         long count = bookRepository.countBySeriesId(series.getId());
 
-        series.setTitle(seriesRequest.getTitle());
-        series.setStatus(seriesRequest.getStatus());
+        series.setTitle(seriesRequest.title());
+        series.setStatus(seriesRequest.status());
         series.setAuthor(author);
 
         return seriesMapper.toResponse(seriesRepository.save(series), count, author.getId());

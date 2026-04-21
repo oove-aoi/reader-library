@@ -7,5 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.oovetest.webDemo.author.entity.Author;
 
 public interface AuthorRepository extends JpaRepository<Author, Long> {
-    public Optional<Author> findByName(String name);
+    public Optional<Author> findByName(String name);//精準查詢
+    //考慮新增模糊查詢方法
 } 

@@ -4,14 +4,12 @@ import java.time.LocalDateTime;
 
 import com.oovetest.webDemo.tracking.entity.TrackingStatus;
 
-import lombok.Data;
 
-@Data
-public class SeriesTrackingResponse {
-    private Long seriesTrackingId;
-    private Long seriesId;
-    private TrackingStatus status;
-    private String seriesTitle;
-    private String seriesAuthor;
-    private LocalDateTime createdAt;
-}
+public record SeriesTrackingResponse(
+    Long seriesTrackingId,
+    Long seriesId,
+    TrackingStatus status,
+    String seriesTitle,
+    String seriesAuthor,
+    LocalDateTime createdAt
+) {}

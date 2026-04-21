@@ -66,8 +66,8 @@ public class ExperienceController {
         @Parameter(description = "心得資料")
         ExperienceRequest experienceRequest) {
 
-            if (experienceRequest.getBookId() != null &&
-                !experienceRequest.getBookId().equals(bookId)) {
+            if (experienceRequest.bookId() != null &&
+                !experienceRequest.bookId().equals(bookId)) {
                     throw new ValidationException("RequestBody 中 bookId 與路徑不一致");
             }
             
@@ -91,8 +91,8 @@ public class ExperienceController {
         @Valid
         @Parameter(description = "心得資料")
         ExperienceRequest experienceRequest) {
-            if (experienceRequest.getBookId() != null && 
-                !experienceRequest.getBookId().equals(bookId)) {
+            if (experienceRequest.bookId() != null && 
+                !experienceRequest.bookId().equals(bookId)) {
                 throw new ValidationException("ExperienceRequest 的 bookId" +
                                                     "與路徑不一致，請確認請求內容");
             }

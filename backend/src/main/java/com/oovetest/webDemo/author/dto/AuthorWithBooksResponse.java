@@ -4,11 +4,8 @@ import java.util.Set;
 
 import com.oovetest.webDemo.book.dto.BookWithNoAuthorReponse;
 
-import lombok.Data;
-
-@Data
-public class AuthorWithBooksResponse {
-    private Long id;
-    private String name;
-    private Set<BookWithNoAuthorReponse> books;
-}
+public record AuthorWithBooksResponse (
+    Long id,
+    String name,
+    Set<BookWithNoAuthorReponse> books
+) {}

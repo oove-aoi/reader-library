@@ -21,10 +21,8 @@ public class GmailFilterService {
     public GmailFilterResponse getGmailFilter() {
         GmailFilterResponse response = new GmailFilterResponse();
         // 從seriesTrackingRepository中獲取追蹤列表，然後生成篩選器字串
-        List<String> titles = seriesTrackingRepository.findAll().stream()
-                .map(SeriesTracking::getSeries)
-                .map(Series::getTitle)
-                .collect(Collectors.toList());
+        List<String> titles = seriesTrackingRepository.findAllSeriesTitles();
+
         String result = titles.stream()
                 .filter(s -> s != null && !s.isBlank())
                 .collect(Collectors.joining(" OR ", "(", ")"));

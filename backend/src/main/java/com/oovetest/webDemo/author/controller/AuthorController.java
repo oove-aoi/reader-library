@@ -75,7 +75,7 @@ public class AuthorController {
 
 
 
-    /* 先暫時不寫攜帶書籍資料的方法
+    /* 先暫時不寫攜帶書籍資料的創建方法
     @Operation(
         summary = "新增作者並同時建立書籍",
         tags = {"作者管理"},

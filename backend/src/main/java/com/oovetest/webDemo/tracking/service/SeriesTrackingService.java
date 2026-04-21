@@ -45,10 +45,10 @@ public class SeriesTrackingService {
 
     public SeriesTrackingResponse createSeriesTracking(SeriesTrackingRequest request) {
         SeriesTracking seriesTracking = new SeriesTracking();
-        Series series = seriesService.getEntityById(request.getSeriesId());
+        Series series = seriesService.getEntityById(request.seriesId());
 
         seriesTracking.setSeries(series);
-        seriesTracking.setStatus(request.getStatus());
+        seriesTracking.setStatus(request.status());
         seriesTracking.setCreatedAt(LocalDateTime.now());
 
         return seriesTrackingMapper.toResponse(seriesTrackingRepository.save(seriesTracking));
@@ -59,10 +59,10 @@ public class SeriesTrackingService {
 
     public SeriesTrackingResponse updateSeriesTracking(Long id, SeriesTrackingRequest request) {
         SeriesTracking seriesTracking = getEntityById(id);
-        Series series = seriesService.getEntityById(request.getSeriesId());
+        Series series = seriesService.getEntityById(request.seriesId());
 
         seriesTracking.setSeries(series);
-        seriesTracking.setStatus(request.getStatus());
+        seriesTracking.setStatus(request.status());
 
         return seriesTrackingMapper.toResponse(seriesTrackingRepository.save(seriesTracking));
     }

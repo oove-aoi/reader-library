@@ -11,16 +11,13 @@ import org.springframework.stereotype.Component;
 @Component
 public class ExperienceMapper {
     public ExperienceResponse toResponse(Experience experience) {
-        ExperienceResponse response = new ExperienceResponse();
-
-        response.setBookId(experience.getBook().getId());
-        response.setBookTitle(experience.getBook().getBookTitle());
-
-        response.setContent(experience.getContent());
-        response.setRating(experience.getRating());
-        response.setCreatedAt(experience.getCreatedAt());
-
-        return response;
+        return new ExperienceResponse(
+            experience.getBook().getId(),
+            experience.getBook().getBookTitle(),
+            experience.getContent(),
+            experience.getRating(),
+            experience.getCreatedAt()
+        );
     }
 
     public List<ExperienceResponse> toResponse(List<Experience> experiences) {
@@ -30,14 +27,12 @@ public class ExperienceMapper {
     }
 
     public ExperienceSimpleResponse toSimpleResponse(Experience experience) {
-        ExperienceSimpleResponse response = new ExperienceSimpleResponse();
-
-        response.setId(experience.getId());
-        response.setBookId(experience.getBook().getId());
-        response.setBookTitle(experience.getBook().getBookTitle());
-        response.setRating(experience.getRating());
-
-        return response;
+        return new ExperienceSimpleResponse(
+            experience.getId(),
+            experience.getRating(),
+            experience.getBook().getId(),
+            experience.getBook().getBookTitle()
+        );
     }
     
     public List<ExperienceSimpleResponse> toSimpleResponse(List<Experience> experiences) {

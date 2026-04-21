@@ -13,23 +13,18 @@ public class BookMapper {
 
     // 將 Book 實體轉換為 BookResponse DTO
     public BookResponse toResponse(Book book) {
-        BookResponse response = new BookResponse();
-        
-        response.setId(book.getId());
-        response.setTitle(book.getBookTitle());
-        response.setAuthorName(book.getAuthor().getName());
-        response.setStatus(book.getStatus());
-        response.setIsbn(book.getIsbn());
-        response.setBuyTime(book.getBuytime());
-        // 轉換 tags 為字串列表
-        response.setTags(
+        return new BookResponse(
+            book.getId(),
+            book.getBookTitle(),
+            book.getAuthor().getName(),
+            book.getStatus(),
+            book.getIsbn(),
+            book.getBuytime(),
             book.getBookTags().stream()
                 .map(bt -> bt.getTag().getName())
-                .toList()
+                .toList(),
+            book.getExperience() != null
         );
-        // 心得狀態
-        response.setHasExperience(book.getExperience() == null ? false : true);
-        return response;
     }
 
     // 批次轉換
@@ -40,11 +35,8 @@ public class BookMapper {
     }
 
     public BookSimpleResponse toSimpleResponse(Book book) {
-        BookSimpleResponse response = new BookSimpleResponse();
-        
-        response.setId(book.getId());
-        response.setTitle(book.getBookTitle());
-        
+        BookSimpleResponse response = new BookSimpleResponse(book.getId(), book.getBookTitle());
+
         return response;
     }
 
@@ -55,16 +47,12 @@ public class BookMapper {
     }
 
     public SeriesBookSimpleResponse toSeriesBookSimpleResponse(Book book) {
-        SeriesBookSimpleResponse response = new SeriesBookSimpleResponse();
-        
-        response.setId(book.getId());
-        response.setTitle(book.getBookTitle());
-        if (book.getSeries() != null) {
-            response.setSeriesName(book.getSeries().getTitle());
-            response.setVolume(book.getVolume());
-        }
-        
-        return response;
+        return new SeriesBookSimpleResponse(
+            book.getId(),
+            book.getBookTitle(),
+            book.getSeries() != null ? book.getSeries().getTitle() : null,
+            book.getSeries() != null ? book.getVolume() : null
+        );
     }
 
     public List<SeriesBookSimpleResponse> toSeriesBookSimpleResponse(List<Book> books){

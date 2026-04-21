@@ -63,13 +63,13 @@ public class AuthorService {
     }
     
     public AuthorResponse createAuthor(AuthorRequest authorRequest) {
-        authorRepository.findByName(authorRequest.getName())
+        authorRepository.findByName(authorRequest.name())
                 .ifPresent(a -> {
                     throw new ValidationException("已存在相同作者名稱");
                 });
                 
         Author author = new Author();
-        author.setName(authorRequest.getName());
+        author.setName(authorRequest.name());
 
         return authorMapper.toResponse(authorRepository.save(author));
     }
@@ -79,7 +79,7 @@ public class AuthorService {
     public Author createAuthorAndBooks(AuthorWithBooksRequest authorWithBooksRequest) {
         Author author = new Author();
         
-        author.setName(authorWithBooksRequest.getName());
+        author.setName(authorWithBooksRequest.name());
         if (authorWithBooksRequest.getBooks() != null) {
             for (var bookRequest : authorWithBooksRequest.getBooks()) {
                 Book book = new Book();
@@ -105,7 +105,7 @@ public class AuthorService {
 
     public AuthorResponse updateAuthor(@NonNull Long authorId, AuthorRequest authorRequest) {
         Author existingAuthor = getEntityById(authorId);
-        existingAuthor.setName(authorRequest.getName());
+        existingAuthor.setName(authorRequest.name());
 
         return authorMapper.toResponse(authorRepository.save(existingAuthor));
     }

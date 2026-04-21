@@ -6,6 +6,4 @@ public record AuthorListResponse (
     String name,
     int bookCount,
     boolean hasBooks
-){
-
-}
+){}

@@ -14,10 +14,7 @@ import com.oovetest.webDemo.book.dto.BookWithNoAuthorReponse;
 public class AuthorMapper {
     
     public AuthorResponse toResponse(Author author) {
-        AuthorResponse response = new AuthorResponse();
-
-        response.setId(author.getId());
-        response.setName(author.getName());
+        AuthorResponse response = new AuthorResponse(author.getId(), author.getName());
 
         return response;
     }
@@ -33,17 +30,18 @@ public class AuthorMapper {
     }
 
     public AuthorWithBooksResponse toWithBooksResponse(Author author) {
-        AuthorWithBooksResponse response = new AuthorWithBooksResponse();
-
-        response.setId(author.getId());
-        response.setName(author.getName());
-        response.setBooks(author.getBooks().stream()
+        AuthorWithBooksResponse response = new AuthorWithBooksResponse(
+            author.getId(),
+            author.getName(),
+            author.getBooks().stream()
                 .map(book -> {
-                    BookWithNoAuthorReponse bookResponse = new BookWithNoAuthorReponse();
-                    bookResponse.setTitle(book.getBookTitle());
-                    bookResponse.setStatus(book.getStatus());
-                    bookResponse.setIsbn(book.getIsbn());
-                    bookResponse.setBuyTime(book.getBuytime());
+                    BookWithNoAuthorReponse bookResponse = new BookWithNoAuthorReponse(
+                        book.getBookTitle(),
+                        book.getStatus(),
+                        book.getIsbn(),
+                        book.getBuytime()
+                    );
+
                     return bookResponse;
                 })
                 .collect(Collectors.toSet()));
@@ -54,14 +52,13 @@ public class AuthorMapper {
 
     public List<AuthorResponse> toResponse(List<Author> authors) {
         return authors.stream()
-                      .map(this::toResponse)
-                      .toList();
+                    .map(this::toResponse)
+                    .toList();
     }
 
     public List<AuthorListResponse> toListResponse(List<Author> authors) {
         return authors.stream()
-                      .map(this::toListResponse)
-                      .toList();
+                    .map(this::toListResponse)
+                    .toList();
     }
-                      
 }

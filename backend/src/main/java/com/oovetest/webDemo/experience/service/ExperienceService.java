@@ -61,11 +61,11 @@ public class ExperienceService {
 
     public ExperienceResponse saveExperience(ExperienceRequest experienceRequest) {
         Experience experience = new Experience();
-        Book book = bookRepository.findById(experienceRequest.getBookId())
+        Book book = bookRepository.findById(experienceRequest.bookId())
                 .orElseThrow(() -> new NotFoundException("使用此書籍ID找不到這本書"));
 
-        experience.setContent(experienceRequest.getContent());
-        experience.setRating(experienceRequest.getRating());
+        experience.setContent(experienceRequest.content());
+        experience.setRating(experienceRequest.rating());
         experience.setBook(book);
         experience.setCreatedAt(LocalDateTime.now());
 
@@ -76,11 +76,11 @@ public class ExperienceService {
                                                ExperienceRequest experienceRequest) {
         Experience experience = getEntityById(experienceId);
 
-        Book book = bookRepository.findById(experienceRequest.getBookId())
+        Book book = bookRepository.findById(experienceRequest.bookId())
                 .orElseThrow(() -> new NotFoundException("使用此書籍ID找不到這本書"));
 
-        experience.setContent(experienceRequest.getContent());
-        experience.setRating(experienceRequest.getRating());
+        experience.setContent(experienceRequest.content());
+        experience.setRating(experienceRequest.rating());
         experience.setBook(book);
 
         return experienceMapper.toResponse(experienceRepository.save(experience));

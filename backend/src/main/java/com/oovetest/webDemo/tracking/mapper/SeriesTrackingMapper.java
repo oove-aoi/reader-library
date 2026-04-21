@@ -11,16 +11,15 @@ import com.oovetest.webDemo.tracking.entity.SeriesTracking;
 @Component
 public class SeriesTrackingMapper {
     public SeriesTrackingResponse toResponse(SeriesTracking seriesTracking) {
-        SeriesTrackingResponse response = new SeriesTrackingResponse();
-        
-        response.setSeriesTrackingId(seriesTracking.getId());
-        response.setSeriesId(seriesTracking.getSeries().getId());
-        response.setStatus(seriesTracking.getStatus());
-        response.setCreatedAt(seriesTracking.getCreatedAt());
-        response.setSeriesTitle(seriesTracking.getSeries().getTitle());
-        response.setSeriesAuthor(seriesTracking.getSeries().getAuthor().getName());
-        
-        return response;
+        return new SeriesTrackingResponse(
+            seriesTracking.getId(),
+            seriesTracking.getSeries().getId(),
+            seriesTracking.getStatus(),
+            seriesTracking.getSeries().getTitle(),
+            seriesTracking.getSeries().getAuthor().getName(),
+            seriesTracking.getCreatedAt()
+
+        );
     }
 
     public List<SeriesTrackingResponse> toResponse(List<SeriesTracking> seriesTrackings) {

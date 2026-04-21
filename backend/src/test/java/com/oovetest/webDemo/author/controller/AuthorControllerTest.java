@@ -2,14 +2,12 @@ package com.oovetest.webDemo.author.controller;
 
 import com.oovetest.webDemo.author.dto.AuthorRequest;
 import com.oovetest.webDemo.author.dto.AuthorResponse;
-import com.oovetest.webDemo.author.entity.Author;
-import com.oovetest.webDemo.author.mapper.AuthorMapper;
-import com.oovetest.webDemo.author.repository.AuthorRepository;
+
 import com.oovetest.webDemo.author.service.AuthorService;
 import com.oovetest.webDemo.exception.GlobalExceptionHandler;
 import com.oovetest.webDemo.exception.NotFoundException;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.eq;
@@ -21,14 +19,11 @@ import static org.mockito.Mockito.when;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentCaptor;
+
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
@@ -60,9 +55,7 @@ public class AuthorControllerTest {
     
     @Test
     public void getAuthorById_shouldReturn200_whenAuthorExists() throws Exception {
-        AuthorResponse response = new AuthorResponse();
-        response.setId(1L);
-        response.setName("Tom");
+        AuthorResponse response = new AuthorResponse(1L, "Tom");
 
         when(authorService.getAuthorById(1L)).thenReturn(response);
 
@@ -104,9 +97,7 @@ public class AuthorControllerTest {
             }
         """;
 
-        AuthorResponse response = new AuthorResponse();
-        response.setId(1L);
-        response.setName("Tom");
+        AuthorResponse response = new AuthorResponse(1L, "Tom");
 
         when(authorService.createAuthor(any(AuthorRequest.class)))
                 .thenReturn(response);
@@ -151,9 +142,7 @@ public class AuthorControllerTest {
             }
         """;
 
-        AuthorResponse response = new AuthorResponse();
-        response.setId(1L);
-        response.setName("Tom");
+        AuthorResponse response = new AuthorResponse(1L, "Tom");
 
         //當使用 any()、eq() 或其他 matcher 時，該方法的所有參數都必須用 matcher，不能混用「實際值 + matcher」
         when(authorService.updateAuthor(eq(1L), any(AuthorRequest.class)))

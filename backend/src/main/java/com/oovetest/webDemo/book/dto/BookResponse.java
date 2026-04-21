@@ -1,23 +1,19 @@
 package com.oovetest.webDemo.book.dto;
 
-import lombok.Data;
-
 import java.time.LocalDateTime;
 import java.util.List;
 
 import com.oovetest.webDemo.book.entity.BookStatus;
 
-
-@Data
-public class BookResponse {
-    private Long id;
-    private String title;
-    private String authorName;
-    private BookStatus status;
-    private String isbn;
-    private LocalDateTime buyTime;
-    private List<String> tags;
+public record BookResponse (
+    Long id,
+    String title,
+    String authorName,
+    BookStatus status,
+    String isbn,
+    LocalDateTime buyTime,
+    List<String> tags,
 
     // 心得狀態
-    private boolean hasExperience;
-}
+    boolean hasExperience
+){}

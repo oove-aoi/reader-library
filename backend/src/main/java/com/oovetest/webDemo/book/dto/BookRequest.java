@@ -16,21 +16,21 @@ import jakarta.validation.constraints.NotNull;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
-@Data
-public class BookRequest {
+
+public record BookRequest (
     @NotBlank(message = "書名不能為空")
     @Size(max = 100, message = "書名長度不能超過100字元")
     @Schema(example = "哈利波特與魔法石")
-    private String title;
+    String title,
 
     @NotBlank(message = "作者名稱不能為空")
     @Size(max = 100, message = "作者名稱長度不能超過100字元")
     @Schema(example = "J.K. Rowling")
-    private String authorName;
+    String authorName,
 
     @NotNull(message = "書籍狀態不能為空")
     @Schema(example = "BUYED")
-    private BookStatus status;
+    BookStatus status,
 
     @Schema(
         description = "ISBN，可為 null",
@@ -38,19 +38,20 @@ public class BookRequest {
         nullable = true,
         requiredMode = Schema.RequiredMode.NOT_REQUIRED
     )
-    private String isbn;
+    String isbn,
 
-    private LocalDateTime buyTime;
+    LocalDateTime buyTime,
 
     @NotBlank(message = "系列名稱不可為空")
     @Size(max = 100, message = "系列名稱長度不能超過100字元")
     @Schema(example = "哈利波特系列")
-    private String seriesName;
+    String seriesName,
     
     @Positive(message = "卷數必須為正整數")
     @Schema(example = "1")
-    private Integer volume;
+    Integer volume,
 
     // 用 Set<String> 代替 Tag 實體
-    private Set<String> tagNames = new HashSet<>();
-}
+    Set<String> tagNames
+) {}
+
