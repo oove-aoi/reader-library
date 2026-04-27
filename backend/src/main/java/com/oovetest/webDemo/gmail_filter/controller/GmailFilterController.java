@@ -4,12 +4,10 @@ import org.springframework.web.bind.annotation.*;
 
 import com.oovetest.webDemo.gmail_filter.dto.GmailFilterResponse;
 import com.oovetest.webDemo.gmail_filter.service.GmailFilterService;
-import com.oovetest.webDemo.series.service.SeriesService;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 
 @Validated
 @RestController
@@ -31,4 +29,7 @@ public class GmailFilterController {
         GmailFilterResponse response = gmailFilterService.getGmailFilter();
         return ResponseEntity.ok(response);
     }
+
+
+    
 }

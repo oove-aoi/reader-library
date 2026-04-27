@@ -11,6 +11,7 @@ public record BookResponse (
     String authorName,
     BookStatus status,
     String isbn,
+    Integer volume,
     LocalDateTime buyTime,
     List<String> tags,
 

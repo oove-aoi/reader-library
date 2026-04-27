@@ -19,6 +19,7 @@ public class BookMapper {
             book.getAuthor().getName(),
             book.getStatus(),
             book.getIsbn(),
+            book.getVolume(),
             book.getBuytime(),
             book.getBookTags().stream()
                 .map(bt -> bt.getTag().getName())
@@ -34,12 +35,12 @@ public class BookMapper {
                     .toList();
     }
 
+    //棄用
     public BookSimpleResponse toSimpleResponse(Book book) {
-        BookSimpleResponse response = new BookSimpleResponse(book.getId(), book.getBookTitle());
-
-        return response;
+        return new BookSimpleResponse(book.getId(), book.getBookTitle());
     }
 
+    //棄用
     public List<BookSimpleResponse> toSimpleResponse(List<Book> books){
         return books.stream()
                     .map(this::toSimpleResponse)
@@ -49,6 +50,7 @@ public class BookMapper {
     public SeriesBookSimpleResponse toSeriesBookSimpleResponse(Book book) {
         return new SeriesBookSimpleResponse(
             book.getId(),
+            book.getAuthor().getName(),
             book.getBookTitle(),
             book.getSeries() != null ? book.getSeries().getTitle() : null,
             book.getSeries() != null ? book.getVolume() : null

@@ -19,7 +19,6 @@ public class GmailFilterService {
     }
 
     public GmailFilterResponse getGmailFilter() {
-        GmailFilterResponse response = new GmailFilterResponse();
         // 從seriesTrackingRepository中獲取追蹤列表，然後生成篩選器字串
         List<String> titles = seriesTrackingRepository.findAllSeriesTitles();
 
@@ -27,8 +26,7 @@ public class GmailFilterService {
                 .filter(s -> s != null && !s.isBlank())
                 .collect(Collectors.joining(" OR ", "(", ")"));
         
-        response.setGmailFilterString(result);
-        return response;
+        return new GmailFilterResponse(result);
     }
 
     

@@ -3,11 +3,11 @@ package com.oovetest.webDemo.book.controller;
 import com.oovetest.webDemo.book.dto.BookRequest;
 import com.oovetest.webDemo.book.dto.BookResponse;
 import com.oovetest.webDemo.book.dto.BookSimpleResponse;
+import com.oovetest.webDemo.book.dto.SeriesBookSimpleResponse;
 import com.oovetest.webDemo.book.service.BookSearchCondition;
 import com.oovetest.webDemo.book.service.BookService;
 
 import io.swagger.v3.oas.annotations.Operation;
-import jakarta.validation.constraints.Positive;
 
 import java.util.List;
 
@@ -18,6 +18,7 @@ import org.springframework.validation.annotation.Validated;
 
 import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Positive;
 
 @Validated
 @RestController
@@ -40,7 +41,7 @@ public class BookController {
         @PathVariable 
         @Positive(message = "書籍ID必須為正整數") 
         @Parameter(description = "書籍ID", example = "1", required = true)
-        Long bookId) {
+        long bookId) {
             return ResponseEntity.ok(bookService.getBookById(bookId));
         }
 
@@ -52,12 +53,12 @@ public class BookController {
         description = "查詢書籍資料，需提供作者ID"
     )
     @GetMapping("/authors/{authorId}/books")
-    public ResponseEntity<List<BookSimpleResponse>> getBooksByAuthorId(
+    public ResponseEntity<List<SeriesBookSimpleResponse>> getBooksByAuthorId(
         @PathVariable 
         @Positive(message = "作者ID必須為正整數")
         @Parameter(description = "作者ID", example = "1", required = true)
-        Long authorId) {
-            List<BookSimpleResponse> books = bookService.getAllBookByAuthorId(authorId);
+        long authorId) {
+            List<SeriesBookSimpleResponse> books = bookService.getAllBookByAuthorId(authorId);
             return ResponseEntity.ok(books);
         }      
 
@@ -67,12 +68,12 @@ public class BookController {
         description = "查詢書籍資料，需提供標籤ID"
     )
     @GetMapping("/tags/id/{tagId}/books")
-    public ResponseEntity<List<BookSimpleResponse>> getBooksByTagId(
+    public ResponseEntity<List<SeriesBookSimpleResponse>> getBooksByTagId(
         @PathVariable 
         @Positive(message = "標籤ID必須為正整數")
         @Parameter(description = "標籤ID", example = "1", required = true)
-        Long tagId) {
-            List<BookSimpleResponse> books = bookService.getAllBooksByTagId(tagId);
+        long tagId) {
+            List<SeriesBookSimpleResponse> books = bookService.getAllBooksByTagId(tagId);
             return ResponseEntity.ok(books);
         }
 
@@ -82,12 +83,12 @@ public class BookController {
         description = "需提供title、authorName、status等欄位資訊"
     )
     @PostMapping("/books")
-    public ResponseEntity<BookSimpleResponse> createBook(
+    public ResponseEntity<BookResponse> createBook(
         @RequestBody 
         @Valid
         @Parameter(description = "書籍資料")
         BookRequest bookRequest){
-            BookSimpleResponse book = bookService.createBook(bookRequest);
+            BookResponse book = bookService.createBook(bookRequest);
             return ResponseEntity.status(HttpStatus.CREATED).body(book);
         }
 
@@ -98,9 +99,9 @@ public class BookController {
     )
     @PutMapping("/books/{bookid}")
     public ResponseEntity<BookResponse> updateBookById(
-        @Positive(message = "作者ID必須為正整數")
-        @Parameter(description = "作者ID", example = "1", required = true)
-        @PathVariable Long bookid,
+        @Positive(message = "書籍ID必須為正整數")
+        @Parameter(description = "書籍ID", example = "1", required = true)
+        @PathVariable long bookid,
 
         @Valid
         @RequestBody 
@@ -120,7 +121,7 @@ public class BookController {
         @PathVariable 
         @Positive(message = "書籍ID必須為正整數")
         @Parameter(description = "書籍ID", example = "1")
-        Long bookid){
+        long bookid){
             bookService.deleteBookById(bookid);
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         }

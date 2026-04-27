@@ -10,21 +10,19 @@ import com.oovetest.webDemo.tracking.entity.SeriesTracking;
 
 @Component
 public class SeriesTrackingMapper {
-    public SeriesTrackingResponse toResponse(SeriesTracking seriesTracking) {
+    public SeriesTrackingResponse toResponse(SeriesTracking seriesTracking, int ownedVolume, int nextVolume) {
         return new SeriesTrackingResponse(
             seriesTracking.getId(),
             seriesTracking.getSeries().getId(),
             seriesTracking.getStatus(),
             seriesTracking.getSeries().getTitle(),
             seriesTracking.getSeries().getAuthor().getName(),
+            ownedVolume,
+            nextVolume,
             seriesTracking.getCreatedAt()
 
         );
     }
 
-    public List<SeriesTrackingResponse> toResponse(List<SeriesTracking> seriesTrackings) {
-        return seriesTrackings.stream()
-                .map(this::toResponse)
-                .collect(Collectors.toList());
-    }
+    
 }

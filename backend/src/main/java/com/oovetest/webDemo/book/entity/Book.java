@@ -20,8 +20,8 @@ import lombok.Setter;
 @Entity
 @Table(
     name = "book",
-    uniqueConstraints = { // 確保同一本書同一作者只能有一筆紀錄
-        @UniqueConstraint(columnNames = {"book_title", "author_id"}),
+    uniqueConstraints = { // 確保同一系列同一集數只能有一筆紀錄
+        @UniqueConstraint(columnNames = {"series_id", "volume"}),
     }
 )
 @Getter @Setter
@@ -62,9 +62,11 @@ public class Book {
     private Set<BookTag> bookTags = new HashSet<>();
     
     //追加關於系列的設定
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @Column(nullable = true)
     private Series series;
 
+    @Column(nullable = true)
     private Integer volume; // 第幾集
 
     //心得
@@ -76,15 +78,12 @@ public class Book {
 
     // 加一個 Tag
     public void addTag(Tag tag) {
-        BookTag bookTag = new BookTag();
-        bookTag.setBook(this);      // 指回父 Book
-        bookTag.setTag(tag);         // 設定 Tag
-        bookTags.add(bookTag);       // 加入集合
+        BookTag.set(this, tag);
     }
 
     // 移除一個 Tag
     public void removeTag(Tag tag) {
-        bookTags.removeIf(bt -> bt.getTag().equals(tag));
+        BookTag.remove(this, tag);
     }
 
     // 取得 Tag 集合（只讀）

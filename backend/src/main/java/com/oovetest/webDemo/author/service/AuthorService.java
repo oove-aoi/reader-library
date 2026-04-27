@@ -26,7 +26,7 @@ public class AuthorService {
         this.authorMapper = authorMapper;
     }
 
-    public Author getEntityById(long id) {
+    public Author getEntityById(long id) { //可以改成findAuthorOrThrow
         return authorRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("查無此作者ID"));
     }

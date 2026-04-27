@@ -42,8 +42,8 @@ public class Series {
 
     @Enumerated(EnumType.STRING)
     private SeriesStatus status; // e.g., "ongoing", "completed"
-
-    @Column(unique = true)
+    
+    @Column(name = "title")
     private String title;
 
     @ManyToOne(fetch = FetchType.LAZY)

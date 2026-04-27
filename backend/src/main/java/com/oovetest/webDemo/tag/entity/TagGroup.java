@@ -34,7 +34,7 @@ public class TagGroup {
     private TagGroupCode code;   
 
     //實務上給使用者用的名稱
-    @Column(nullable = false, unique = true, name = "tag_group_name")
+    @Column(nullable = false, name = "tag_group_name")
     private String tagGroupName; 
 
     @OneToMany(

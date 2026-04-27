@@ -34,7 +34,7 @@ public class BookTag {
     private Tag tag;
 
     //中介表的工廠方法
-    public static BookTag of(Book book, Tag tag) {
+    public static BookTag set(Book book, Tag tag) {
         BookTag bt = new BookTag();
         bt.setBook(book);
         bt.setTag(tag);
@@ -43,5 +43,10 @@ public class BookTag {
         tag.getBookTags().add(bt);
         
         return bt;
+    }
+    //中介表的移除方法
+    public static void remove(Book book, Tag tag) {
+        book.getBookTags().removeIf(bt -> bt.getTag().equals(tag));
+        tag.getBookTags().removeIf(bt -> bt.getBook().equals(book));
     }
 }

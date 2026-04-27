@@ -35,7 +35,7 @@ public class SeriesTrackingController {
         @PathVariable 
         @Positive(message = "追蹤ID必須為正數")
         @Parameter(description = "追蹤ID", example = "1", required = true)
-        Long id) {
+        long id) {
             return ResponseEntity.ok(seriesTrackingService.getSeriesTrackingById(id)); 
     }
 
@@ -76,7 +76,7 @@ public class SeriesTrackingController {
         @PathVariable 
         @Positive(message = "追蹤ID必須為正數")
         @Parameter(description = "追蹤ID", example = "1",required = true)
-        Long id, 
+        long id, 
 
         @RequestBody
         @Valid
@@ -96,9 +96,12 @@ public class SeriesTrackingController {
         @PathVariable 
         @Positive(message = "追蹤ID必須為正數")
         @Parameter(description = "追蹤ID", example = "1", required = true)
-        Long id) {
+        long id) {
             seriesTrackingService.deleteSeriesTracking(id);
             return ResponseEntity.noContent().build();
-            
     }
+
+    //todo:後面可能新增可查看目前各系列買到哪一集、下一本該買哪一集的方法
+
+
 }

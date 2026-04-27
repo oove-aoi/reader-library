@@ -15,7 +15,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.EnumType;
 
 import com.oovetest.webDemo.series.entity.Series;
-import com.oovetest.webDemo.tracking.entity.TrackingStatus;
+
 
 @Entity
 @Table(
@@ -35,8 +35,12 @@ public class SeriesTracking {
     @ManyToOne(optional = false)
     private Series series;
 
+    // 已購買的卷數(最大連續集數) 目前不適配非連續集數的情況，後續可能會改成set或list的紀錄
+    //private Integer ownedVolume; 目前決定使用時在service撈就好，不在entity紀錄，避免資料不一致的問題
+
     @Enumerated(EnumType.STRING)
     private TrackingStatus status;
 
     private LocalDateTime createdAt;
+
 }

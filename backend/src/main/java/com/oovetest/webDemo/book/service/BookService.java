@@ -2,7 +2,6 @@ package com.oovetest.webDemo.book.service;
 
 import com.oovetest.webDemo.book.dto.BookRequest;
 import com.oovetest.webDemo.book.dto.BookResponse;
-import com.oovetest.webDemo.book.dto.BookSimpleResponse;
 import com.oovetest.webDemo.book.dto.SeriesBookSimpleResponse;
 import com.oovetest.webDemo.book.entity.Book;
 import com.oovetest.webDemo.book.repository.BookRepository;
@@ -70,58 +69,55 @@ public class BookService {
         return bookMapper.toResponse(getEntityByTitle(bookName));
     }
 
-    public BookSimpleResponse createBook(BookRequest bookRequest) {
+    public BookResponse createBook(BookRequest bookRequest) {
         //雙邊關係，關聯欄位得自己手動更新
         Book book = new Book();
-        Author author = authorService.getEntityByName(bookRequest.getAuthorName());
-        Series series = seriesService.getEntityByTitle(bookRequest.getSeriesName());
+        Author author = authorService.getEntityByName(bookRequest.authorName());
+        Series series = seriesService.getEntityByTitle(bookRequest.seriesName());
         
-        if (bookRepository.existsByAuthorAndBookTitle(author, bookRequest.getTitle())) {
-            throw new IllegalStateException("該作者已存在同名書籍");
-        }
-        if(bookRequest.getIsbn() != null && bookRepository.existsByIsbn(bookRequest.getIsbn())) {
+        if(bookRequest.isbn() != null && bookRepository.existsByIsbn(bookRequest.isbn())) {
             throw new IllegalStateException("已存在相同ISBN的書籍");
         }
-        if(bookRequest.getSeriesName() != null && bookRepository.existsBySeriesAndVolume(series, bookRequest.getVolume())) {
+        if(bookRequest.seriesName() != null && bookRepository.existsBySeriesAndVolume(series, bookRequest.volume())) {
             throw new IllegalStateException("已存在相同系列與卷數的書籍");
         }
-        if (bookRequest.getIsbn() != null && bookRequest.getIsbn().isBlank()) {
+        if (bookRequest.isbn() != null && bookRequest.isbn().isBlank()) {
             book.setIsbn(null);
         };
-        if (bookRequest.getSeriesName() != null && bookRequest.getSeriesName().isBlank()) {
+        if (bookRequest.seriesName() != null && bookRequest.seriesName().isBlank()) {
             book.setSeries(null);
         };
-        if (bookRequest.getVolume() != null && bookRequest.getVolume() < 1) {
+        if (bookRequest.volume() != null && bookRequest.volume() < 1) {
             book.setVolume(null);
         };
 
         book.setAuthor(author);
         book.setSeries(series);
-        book.setVolume(bookRequest.getVolume());
-        book.setIsbn(bookRequest.getIsbn());
-        book.setBookTitle(bookRequest.getTitle());
-        book.setStatus(bookRequest.getStatus());
+        book.setVolume(bookRequest.volume());
+        book.setIsbn(bookRequest.isbn());
+        book.setBookTitle(bookRequest.title());
+        book.setStatus(bookRequest.status());
         book.setBuytime(LocalDateTime.now());
 
-        for (String tagName : bookRequest.getTagNames()) {
+        for (String tagName : bookRequest.tagNames()) {
             Tag tag = tagService.getEntityByName(tagName);
             book.addTag(tag);  // helper method 自動生成 BookTag
         }
 
         author.addBook(book); 
         // 儲存到資料庫
-        return bookMapper.toSimpleResponse(bookRepository.save(book));
+        return bookMapper.toResponse(bookRepository.save(book));
     }
 
     public BookResponse updateBookById(long bookId, BookRequest bookRequest) {
         Book existingBook = getEntityById(bookId);
-        Author author = authorService.getEntityByName(bookRequest.getAuthorName());
+        Author author = authorService.getEntityByName(bookRequest.authorName());
 
         author.addBook(existingBook);    
 
-        existingBook.setBookTitle(bookRequest.getTitle());
-        existingBook.setStatus(bookRequest.getStatus());
-        for (String tagName : bookRequest.getTagNames()) {
+        existingBook.setBookTitle(bookRequest.title());
+        existingBook.setStatus(bookRequest.status());
+        for (String tagName : bookRequest.tagNames()) {
             Tag tag = tagService.getEntityByName(tagName);
             existingBook.addTag(tag);  // helper method 自動生成 BookTag
         }
@@ -148,21 +144,21 @@ public class BookService {
      */
 
     @Transactional(readOnly = true)
-    public List<BookSimpleResponse> getAllBookByAuthorId (@NonNull Long authorId) {
+    public List<SeriesBookSimpleResponse> getAllBookByAuthorId (@NonNull Long authorId) {
         Author author = authorService.getEntityById(authorId);
 
         return bookRepository.findAllBooksByAuthorId(author.getId())
                 .stream()
-                .map(bookMapper::toSimpleResponse)
+                .map(bookMapper::toSeriesBookSimpleResponse)
                 .toList();
     }
 
     @Transactional(readOnly = true)
-    public List<BookSimpleResponse> getAllBooksByAuthorName (@NonNull String authorName) {
+    public List<SeriesBookSimpleResponse> getAllBooksByAuthorName (@NonNull String authorName) {
         Author author = authorService.getEntityByName(authorName);
         return bookRepository.findAllBooksByAuthorId(author.getId())
                 .stream()
-                .map(bookMapper::toSimpleResponse)
+                .map(bookMapper::toSeriesBookSimpleResponse)
                 .toList();
     }
 
@@ -170,34 +166,34 @@ public class BookService {
     //1.把「找作者」與「找作者的所有書」拆成兩個方法，其中找作者可以各自寫，但共用的部分（查書）抽出來
     //2.讓 ID 與 Name 方法都呼叫一個「主要方法」，只負責接收 Author 物件
     @Transactional(readOnly = true)
-    public List<BookSimpleResponse> getAllBooksByTagId (@NonNull Long tagId) {
+    public List<SeriesBookSimpleResponse> getAllBooksByTagId (@NonNull Long tagId) {
         Tag tag = tagService.getEntityById(tagId);
         return bookRepository.findAllByBookTags_Tag_Id(tag.getId())
                 .stream()
-                .map(bookMapper::toSimpleResponse)
+                .map(bookMapper::toSeriesBookSimpleResponse)
                 .toList();
     }
 
     @Transactional(readOnly = true)
-    public List<BookSimpleResponse> getAllBookByTagName (@NonNull String tagName) {
+    public List<SeriesBookSimpleResponse> getAllBookByTagName (@NonNull String tagName) {
         Tag tag = tagService.getEntityByName(tagName);
         return bookRepository.findAllByBookTags_Tag_Id(tag.getId())
                 .stream()
-                .map(bookMapper::toSimpleResponse)
+                .map(bookMapper::toSeriesBookSimpleResponse)
                 .toList();
     }
 
-    public List<BookSimpleResponse> getAllBookByStatus (@NonNull String status) {
+    public List<SeriesBookSimpleResponse> getAllBookByStatus (@NonNull String status) {
         return bookRepository.findAllBooksByStatus(status)
                 .stream()
-                .map(bookMapper::toSimpleResponse)
+                .map(bookMapper::toSeriesBookSimpleResponse)
                 .toList();
     }
 
-    public List<BookSimpleResponse> getAllBookByTitleKeyword (@NonNull String keyword) {
+    public List<SeriesBookSimpleResponse> getAllBookByTitleKeyword (@NonNull String keyword) {
         return bookRepository.findAllByBookTitleContaining(keyword)
                 .stream()
-                .map(bookMapper::toSimpleResponse)
+                .map(bookMapper::toSeriesBookSimpleResponse)
                 .toList();
     }
 

@@ -38,7 +38,7 @@ public class AuthorController {
         @PathVariable 
         @Positive(message = "作者ID必須為正整數")  //id 不應為 0 或負數
         @Parameter(description = "作者ID", example = "1", required = true)
-        Long authorid) {
+        long authorid) {
             return ResponseEntity.ok(authorService.getAuthorById(authorid));
     }
 
@@ -98,7 +98,7 @@ public class AuthorController {
         @PathVariable 
         @Positive(message = "作者ID必須為正整數")  //id 不應為 0 或負數
         @Parameter(description = "作者ID", example = "1", required = true)
-        Long authorid,
+        long authorid,
 
         @RequestBody 
         @Valid 
@@ -117,7 +117,7 @@ public class AuthorController {
         @PathVariable 
         @Positive(message = "作者ID必須為正整數")  //id 不應為 0 或負數
         @Parameter(description = "作者ID", example = "1", required = true)
-        Long authorid) {
+        long authorid) {
             authorService.deleteAuthorById(authorid);
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }

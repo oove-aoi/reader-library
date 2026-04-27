@@ -7,6 +7,7 @@ import com.oovetest.webDemo.series.entity.Series;
 
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 import java.util.Optional;
@@ -26,7 +27,16 @@ public interface BookRepository extends JpaRepository<Book, Long>, BookRepositor
 
     public List<Book> findAllBySeries_Id(Long seriesId); // 透過系列ID查詢書籍
     //public List<Book> findAllBySeries_Name(String seriesName); // 透過系列名稱查詢書籍
+
+    @Query("""
+    SELECT MAX(b.volume)
+    FROM Book b
+    WHERE b.series.id = :seriesId
+    """)
+    public Integer findMaxVolumeBySeriesId(Long seriesId);//計算目前系列中最大的集數是幾 不能用EntityGraph，因為是計算數字他無效
+
     public boolean existsBySeriesAndVolume(Series series, Integer volume); // 檢查同系列同卷數的書籍是否存在
+
     public long countBySeriesId(Long seriesId); // 統計系列中的書籍數量
 
     @EntityGraph(attributePaths = "author, bookTags.tag, experience")

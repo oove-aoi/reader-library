@@ -1,4 +1,4 @@
-package com.oovetest.webDemo.exception;
+package com.oovetest.webDemo.exception.exceptionhandler;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -6,6 +6,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import com.oovetest.webDemo.exception.AppException;
 import com.oovetest.webDemo.exception.dto.ErrorDTO;
 
 import jakarta.validation.ConstraintViolationException;
@@ -27,7 +28,8 @@ public class GlobalExceptionHandler {
                              .body(new ErrorDTO(ex.getErrorCode(), ex.getMessage()));
     }
 
-    //這兩個處理驗證控制器參數時自動回拋的錯誤
+    //下面兩個處理驗證控制器參數時自動回拋的錯誤
+
     //這個處理純參數驗證未通過
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<ErrorDTO> handleValidation(ConstraintViolationException ex) {
@@ -50,6 +52,7 @@ public class GlobalExceptionHandler {
                 .body(new ErrorDTO("VALIDATION_ERROR", message));
     }
 
+    //攔截「沒有被其他 @ExceptionHandler 處理的 Exception」，並統一回傳 HTTP 500 與錯誤格式
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorDTO> handleAll(Exception ex) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)

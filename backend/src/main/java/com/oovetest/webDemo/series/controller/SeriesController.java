@@ -36,7 +36,7 @@ public class SeriesController {
         @PathVariable 
         @Positive(message = "系列ID必須為正整數")
         @Parameter(description = "系列ID", example = "152", required = true) 
-        Long seriesId) {
+        long seriesId) {
 
             SeriesResponse series = seriesService.getSeriesById(seriesId);
             return ResponseEntity.ok(series);
@@ -56,7 +56,6 @@ public class SeriesController {
         @Size(min = 1, message = "系列名稱至少要有1個字元")
         @Parameter(description = "系列名稱", example = "哈利波特系列") 
         String seriesName) {
-           
             SeriesResponse series = seriesService.getSeriesByName(seriesName);
             return ResponseEntity.ok(series);
             
@@ -72,10 +71,8 @@ public class SeriesController {
         @RequestBody 
         @Valid
         SeriesRequest seriesRequest) {
-        
             SeriesResponse series = seriesService.createSeries(seriesRequest);
             return ResponseEntity.status(201).body(series);
-           
     }
 
 
@@ -89,7 +86,7 @@ public class SeriesController {
         @PathVariable 
         @Positive(message = "系列ID必須為正整數")
         @Parameter(description = "系列ID", example = "152", required = true)
-        Long seriesId,
+        long seriesId,
 
         @RequestBody 
         @Valid
@@ -108,7 +105,7 @@ public class SeriesController {
         @PathVariable 
         @Positive(message = "系列ID必須為正整數")
         @Parameter(description = "系列ID", example = "152", required = true)
-        Long seriesId) {
+        long seriesId) {
             seriesService.deleteSeries(seriesId);
             return ResponseEntity.noContent().build();
             

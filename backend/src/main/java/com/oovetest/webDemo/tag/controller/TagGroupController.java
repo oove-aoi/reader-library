@@ -42,10 +42,8 @@ public class TagGroupController {
         @Size(max = 100, message = "tag群組名稱長度不能超過100字元")
         @Parameter(description = "tag群組名稱", example = "類型", required = true)
         String name) {
-            
             return ResponseEntity.ok(tagGroupService.findByName(name));
-             
-    }
+        }
 
     @Operation(
         summary = "依tag群組ID搜尋",
@@ -57,16 +55,14 @@ public class TagGroupController {
         @PathVariable
         @Positive(message = "tag群組ID必須為正整數")
         @Parameter(description = "tag群組ID", example = "1", required = true)
-        Long id) {  
-            
+        long id) {  
             return ResponseEntity.ok(tagGroupService.findById(id));
-                 
-    }
+        }
 
     @Operation(
-        summary = "取得tag群組內所有tag資料",
+        summary = "取得tag群組內所有標籤",
         tags = {"tag群組查詢"},
-        description = "查詢tag群組內所有資料"
+        description = "查詢tag群組內所有標籤"
     )
     @GetMapping("/tagGroups")
     public ResponseEntity<List<TagGroupResponse>> getAllTagGroups() {
@@ -84,9 +80,9 @@ public class TagGroupController {
         @PathVariable
         @Positive(message = "tag群組ID必須為正整數")
         @Parameter(description = "tag群組ID", example = "1", required = true)
-        Long id) {
+        long id) {
             return ResponseEntity.ok(tagGroupService.findTagsByGroupId(id));
-    }
+        }
 
     //刪除方法不提供，有需要的話可使用軟刪除的形式處理
     //未來僅保留查詢方法，其他的創建、更新、刪除方法將不再提供
@@ -116,7 +112,7 @@ public class TagGroupController {
         @PathVariable
         @Positive(message = "tag群組ID必須為正整數")
         @Parameter(description = "tag群組ID", example = "1")
-        Long id,
+        long id,
 
         @RequestBody
         @Valid

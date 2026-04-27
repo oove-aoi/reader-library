@@ -44,7 +44,7 @@ public class ExperienceController {
         @PathVariable 
         @Positive(message = "作者ID必須為正整數")
         @Parameter(description = "書籍ID", example = "1", required = true)
-        Long bookId) {
+        long bookId) {
             ExperienceResponse experienceResponse = experienceService.getExperienceByBookId(bookId);
             return ResponseEntity.ok(experienceResponse);
     }
@@ -59,7 +59,7 @@ public class ExperienceController {
         @PathVariable 
         @Positive(message = "書籍ID必須為正整數")
         @Parameter(description = "書籍ID", example = "1", required = true)
-        Long bookId,
+        long bookId,
 
         @RequestBody 
         @Valid
@@ -85,7 +85,7 @@ public class ExperienceController {
         @PathVariable 
         @Positive(message = "書籍ID必須為正整數")
         @Parameter(description = "書籍ID", example = "1", required = true)
-        Long bookId, 
+        long bookId, 
 
         @RequestBody 
         @Valid
@@ -110,7 +110,7 @@ public class ExperienceController {
     public ResponseEntity<?> deleteExperience(@PathVariable 
         @Positive(message = "書籍ID必須為正整數")
         @Parameter(description = "書籍ID", example = "1", required = true)
-        Long bookId) {
+        long bookId) {
             experienceService.deleteExperience(bookId);
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }

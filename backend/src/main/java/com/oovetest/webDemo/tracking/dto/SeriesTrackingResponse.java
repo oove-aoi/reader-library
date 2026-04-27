@@ -11,5 +11,7 @@ public record SeriesTrackingResponse(
     TrackingStatus status,
     String seriesTitle,
     String seriesAuthor,
+    int ownedVolume,
+    int nextVolume,
     LocalDateTime createdAt
 ) {}

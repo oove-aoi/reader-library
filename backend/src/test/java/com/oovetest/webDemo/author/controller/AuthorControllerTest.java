@@ -4,9 +4,8 @@ import com.oovetest.webDemo.author.dto.AuthorRequest;
 import com.oovetest.webDemo.author.dto.AuthorResponse;
 
 import com.oovetest.webDemo.author.service.AuthorService;
-import com.oovetest.webDemo.exception.GlobalExceptionHandler;
 import com.oovetest.webDemo.exception.NotFoundException;
-
+import com.oovetest.webDemo.exception.exceptionhandler.GlobalExceptionHandler;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;

@@ -35,7 +35,7 @@ public class TagController {
         @PathVariable 
         @Positive(message = "tag ID必須為正整數")
         @Parameter(description = "tag ID", example = "1", required = true)
-        Long tagId) {
+        long tagId) {
             try {
                 return ResponseEntity.ok(tagService.findById(tagId));
             } catch (RuntimeException e) {
@@ -69,11 +69,9 @@ public class TagController {
         @Valid 
         @Parameter(description = "tag資料", required = true)
         TagRequest tagRequest) {
-            
             TagResponse tagResponse = tagService.createTag(tagRequest);
             return ResponseEntity.status(HttpStatus.CREATED).body(tagResponse);
-            
-    }
+        }
 
     @Operation(
         summary = "更新tag",
@@ -85,7 +83,7 @@ public class TagController {
         @PathVariable
         @Positive(message = "tag ID必須為正整數")
         @Parameter(description = "tag ID", example = "1", required = true)
-        Long tagId,
+        long tagId,
 
         @RequestBody
         @Valid
@@ -107,9 +105,9 @@ public class TagController {
         @PathVariable
         @Positive(message = "tag ID必須為正整數")
         @Parameter(description = "tag ID", example = "1", required = true)
-        Long tagId) {
+        long tagId) {
             tagService.deleteTag(tagId);
-    }
+        }
 
 
 }

@@ -28,7 +28,7 @@ public class Author {
     @EqualsAndHashCode.Include
     private Long id;
 
-    @Column(name = "name", nullable = false, unique = true)
+    @Column(name = "name", nullable = false)
     private String name;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "author")

@@ -1,7 +1,5 @@
 package com.oovetest.webDemo.tag.service;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,7 +24,7 @@ public class TagService {
         this.tagMapper = tagMapper;
     }
 
-   
+
     public Tag getEntityById(Long id) {
         return tagRepository.findById(id)
                             .orElseThrow(()-> new NotFoundException("ID 未查找到相應的Tag"));

@@ -7,8 +7,8 @@ import java.util.Set;
 import com.oovetest.webDemo.book.entity.BookStatus;
 
 import java.time.LocalDateTime;
-import java.util.HashSet;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
@@ -16,7 +16,7 @@ import jakarta.validation.constraints.NotNull;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
-
+@Valid
 public record BookRequest (
     @NotBlank(message = "書名不能為空")
     @Size(max = 100, message = "書名長度不能超過100字元")
