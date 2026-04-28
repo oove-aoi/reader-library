@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -40,14 +41,19 @@ public class AuthorController {
         ### 📌 必填參數
         - ** page**: 頁碼，從0開始，預設為0
         - ** size**: 每頁筆數，預設為5
+        - ** sortBy**: 排序欄位，預設為"id"
+        - ** direction**: 排序方向，預設為"asc"
         """
     )
     @GetMapping("/authors/")
     public ResponseEntity<Page<AuthorListResponse>> getAllAuthor(
         @RequestParam(defaultValue = "0") int page,
-        @RequestParam(defaultValue = "5") int size
+        @RequestParam(defaultValue = "5") int size,
+        @RequestParam(defaultValue = "id") String sortBy,
+        @RequestParam(defaultValue = "asc") String direction
     ) {
-        Pageable pageable = PageRequest.of(page, size);
+        Sort.Direction sortDirection = direction.equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC;
+        Pageable pageable = PageRequest.of(page, size, sortDirection, sortBy);
         return ResponseEntity.ok(authorService.getAllAuthor(pageable));
     }
 
