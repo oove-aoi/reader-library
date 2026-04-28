@@ -1,5 +1,6 @@
 package com.oovetest.webDemo.author.controller;
 
+import com.oovetest.webDemo.author.dto.AuthorListResponse;
 import com.oovetest.webDemo.author.dto.AuthorRequest;
 import com.oovetest.webDemo.author.dto.AuthorResponse;
 import com.oovetest.webDemo.author.service.AuthorService;
@@ -7,10 +8,14 @@ import com.oovetest.webDemo.author.service.AuthorService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
@@ -26,6 +31,24 @@ public class AuthorController {
 
     public AuthorController(AuthorService authorService) {
         this.authorService = authorService;
+    }
+
+    @Operation(
+        summary = "依作者ID搜尋",
+        tags = {"作者查詢"},
+        description = """
+        ### 📌 必填參數
+        - ** page**: 頁碼，從0開始，預設為0
+        - ** size**: 每頁筆數，預設為5
+        """
+    )
+    @GetMapping("/authors/")
+    public ResponseEntity<Page<AuthorListResponse>> getAllAuthor(
+        @RequestParam(defaultValue = "0") int page,
+        @RequestParam(defaultValue = "5") int size
+    ) {
+        Pageable pageable = PageRequest.of(page, size);
+        return ResponseEntity.ok(authorService.getAllAuthor(pageable));
     }
 
     @Operation(

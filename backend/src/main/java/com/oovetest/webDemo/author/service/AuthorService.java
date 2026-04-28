@@ -1,8 +1,11 @@
 package com.oovetest.webDemo.author.service;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.oovetest.webDemo.author.dto.AuthorListResponse;
 import com.oovetest.webDemo.author.dto.AuthorRequest;
 import com.oovetest.webDemo.author.dto.AuthorResponse;
 import com.oovetest.webDemo.author.dto.AuthorWithBooksResponse;
@@ -34,6 +37,10 @@ public class AuthorService {
     public Author getEntityByName(String name) {
         return authorRepository.findByName(name)
                 .orElseThrow(() -> new NotFoundException("查無此作者名稱"));
+    }
+
+    public Page<AuthorListResponse> getAllAuthor(Pageable pageable) {
+        return authorRepository.findAll(pageable).map(authorMapper::toListResponse);
     }
 
     //作者不帶書
