@@ -4,12 +4,15 @@ import com.oovetest.webDemo.book.dto.BookRequest;
 import com.oovetest.webDemo.book.dto.BookResponse;
 import com.oovetest.webDemo.book.dto.BookSimpleResponse;
 import com.oovetest.webDemo.book.dto.SeriesBookSimpleResponse;
+import com.oovetest.webDemo.book.entity.BookStatus;
 import com.oovetest.webDemo.book.service.BookSearchCondition;
 import com.oovetest.webDemo.book.service.BookService;
 
 import io.swagger.v3.oas.annotations.Operation;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,6 +32,21 @@ public class BookController {
 
     public BookController(BookService bookService) {
         this.bookService = bookService;
+    }
+
+    @Operation(
+        summary = "查詢書籍狀態選項",
+        tags = {"狀態碼查詢(書籍、系列、追蹤清單)"},
+        description = "查詢書籍狀態列表，無需提供參數"
+    )   
+    @GetMapping("/book-status-options")
+    public List<Map<String, String>> getBookStatuses() {
+    return Arrays.stream(BookStatus.values())
+        .map(s -> Map.of(
+            "code", s.name(),
+            "label", s.getLabel()
+        ))
+        .toList();
     }
 
     @Operation(
@@ -80,7 +98,29 @@ public class BookController {
     @Operation(
         summary = "新增書籍",
         tags = {"書籍管理"},
-        description = "需提供title、authorName、status等欄位資訊"
+        description = """
+        ### 📌 必填欄位
+        - **title**
+        - **authorName**
+        - **buyTime**
+        - **status**
+
+        ### 📌 選填項目
+        - **isbn**
+        - **buyTime** (會自動填入新增當天的資訊)
+        - **seriesName**
+        - **volume**
+        - **tagNames** (可傳空陣列)
+
+        ### 📌 status限制常用範例
+        - **BUYED** (已購買)
+        - **READING** (正在閱讀)
+        - **READ** (已閱讀)
+        
+        ### 📌 status查詢參考
+        可透過 `/api/book-status-options` 取得完整列表
+
+        """//資訊不夠仔細，那些必填那些可選填都沒寫清楚
     )
     @PostMapping("/books")
     public ResponseEntity<BookResponse> createBook(

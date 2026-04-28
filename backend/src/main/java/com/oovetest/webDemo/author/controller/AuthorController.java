@@ -62,7 +62,10 @@ public class AuthorController {
     @Operation(
         summary = "新增一位作者",
         tags = {"作者管理"},
-        description = "需提供作者名稱等欄位資訊"
+        description = """
+        ### 📌 必填欄位
+        - **name**
+        """
     )
     @PostMapping("/authors")
     public ResponseEntity<AuthorResponse> createAuthor(

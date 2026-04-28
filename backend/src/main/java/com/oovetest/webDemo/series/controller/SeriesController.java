@@ -1,11 +1,18 @@
 package com.oovetest.webDemo.series.controller;
 
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 
+import com.oovetest.webDemo.book.entity.BookStatus;
 import com.oovetest.webDemo.series.dto.SeriesRequest;
 import com.oovetest.webDemo.series.dto.SeriesResponse;
+import com.oovetest.webDemo.series.entity.SeriesStatus;
 
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.NotBlank;
@@ -24,6 +31,21 @@ public class SeriesController {
 
     public SeriesController(SeriesService seriesService) {
         this.seriesService = seriesService;
+    }
+
+    @Operation(
+        summary = "查詢系列狀態選項",
+        tags = {"狀態碼查詢(書籍、系列、追蹤清單)"},
+        description = "查詢系列狀態列表，無需提供參數"
+    )   
+    @GetMapping("/series-status-options")
+    public List<Map<String, String>> getSeriesStatus() {
+    return Arrays.stream(SeriesStatus.values())
+        .map(s -> Map.of(
+            "code", s.name(),
+            "label", s.getLabel()
+        ))
+        .toList();
     }
 
     @Operation(
@@ -64,7 +86,21 @@ public class SeriesController {
     @Operation(
         summary = "創建系列",
         tags = {"系列管理"},
-        description = "創建系列資料，需提供系列名稱"
+        description = """
+        ### 📌 必填欄位
+        - **title** 系列名稱
+        - **author_id** 作者ID
+
+        ### 📌 series status 說明
+        series status 對應以下分類：
+
+        - **ONGOING**：進行中
+        - **COMPLETED**：已完結
+        - **AXED**：斷尾
+
+        ### 📌 查詢參考
+        可透過 `/api/series-status-options` 取得完整列表
+        """
     )
     @PostMapping("/series")
     public ResponseEntity<SeriesResponse> createSeries(

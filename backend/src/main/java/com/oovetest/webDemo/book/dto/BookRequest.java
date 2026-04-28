@@ -42,7 +42,6 @@ public record BookRequest (
 
     LocalDateTime buyTime,
 
-    @NotBlank(message = "系列名稱不可為空")
     @Size(max = 100, message = "系列名稱長度不能超過100字元")
     @Schema(example = "哈利波特系列")
     String seriesName,

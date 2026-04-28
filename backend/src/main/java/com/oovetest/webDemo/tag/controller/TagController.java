@@ -61,7 +61,21 @@ public class TagController {
     @Operation(
         summary = "建立tag",
         tags = {"tag管理"},
-        description = "建立新的tag"
+        description = """
+        ### 📌 必填欄位
+        - **name**
+
+        ### 📌 tagGroup 說明
+        groupId 對應以下分類：
+
+        - **1**：類型
+        - **2**：氛圍
+        - **3**：角色關係
+        - **4**：媒介（小說、漫畫等）
+
+        ### 📌 查詢參考
+        可透過 `/api/tagGroups` 取得完整列表
+        """
     )
     @PostMapping("/tags")
     public ResponseEntity<TagResponse> createTag(

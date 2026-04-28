@@ -2,11 +2,15 @@ package com.oovetest.webDemo.tracking.controller;
 
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import com.oovetest.webDemo.tracking.dto.SeriesTrackingResponse;
+import com.oovetest.webDemo.tracking.entity.TrackingStatus;
+import com.oovetest.webDemo.series.entity.SeriesStatus;
 import com.oovetest.webDemo.tracking.dto.SeriesTrackingRequest;
 import com.oovetest.webDemo.tracking.service.SeriesTrackingService;
 
@@ -25,6 +29,21 @@ public class SeriesTrackingController {
         this.seriesTrackingService = seriesTrackingService;
     }
 
+    @Operation(
+        summary = "查詢追蹤狀態選項",
+        tags = {"狀態碼查詢(書籍、系列、追蹤清單)"},
+        description = "查詢追蹤狀態列表，無需提供參數"
+    )   
+    @GetMapping("/tracking-status-options")
+    public List<Map<String, String>> getTrackingStatus() {
+    return Arrays.stream(TrackingStatus.values())
+        .map(s -> Map.of(
+            "code", s.name(),
+            "label", s.getLabel()
+        ))
+        .toList();
+    }
+    
     @Operation(
         summary = "以追蹤ID查詢",
         tags = {"追蹤查詢"},
@@ -54,7 +73,21 @@ public class SeriesTrackingController {
     @Operation(
         summary = "創建追蹤",
         tags = {"追蹤管理"},
-        description = "創建追蹤資料，需提供系列ID與追蹤狀態"
+        description = """
+        ### 📌 必填欄位
+        - **seriesId** 系列ID
+        - **status** 追蹤狀態 
+
+        ### 📌 status 說明
+        status 對應以下分類：
+
+        - **TRACKING**：追蹤中
+        - **COMPLETED**：已完結
+        - **DROPPED**：取消追蹤
+
+        ### 📌 查詢參考
+        可透過 `/api/tracking-status-options` 取得完整列表
+        """
     )
     @PostMapping("/series-tracking")
     public ResponseEntity<SeriesTrackingResponse> createSeriesTracking(

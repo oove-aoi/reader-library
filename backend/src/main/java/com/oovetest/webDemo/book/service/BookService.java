@@ -72,57 +72,139 @@ public class BookService {
     public BookResponse createBook(BookRequest bookRequest) {
         //雙邊關係，關聯欄位得自己手動更新
         Book book = new Book();
-        Author author = authorService.getEntityByName(bookRequest.authorName());
-        Series series = seriesService.getEntityByTitle(bookRequest.seriesName());
-        
-        if(bookRequest.isbn() != null && bookRepository.existsByIsbn(bookRequest.isbn())) {
-            throw new IllegalStateException("已存在相同ISBN的書籍");
-        }
-        if(bookRequest.seriesName() != null && bookRepository.existsBySeriesAndVolume(series, bookRequest.volume())) {
-            throw new IllegalStateException("已存在相同系列與卷數的書籍");
-        }
-        if (bookRequest.isbn() != null && bookRequest.isbn().isBlank()) {
-            book.setIsbn(null);
-        };
-        if (bookRequest.seriesName() != null && bookRequest.seriesName().isBlank()) {
-            book.setSeries(null);
-        };
-        if (bookRequest.volume() != null && bookRequest.volume() < 1) {
-            book.setVolume(null);
-        };
 
+        // ========= 基本資料 =========
+        Author author = authorService.getEntityByName(bookRequest.authorName());
+
+        String isbn = bookRequest.isbn();
+        String seriesName = bookRequest.seriesName();
+        Integer volume = bookRequest.volume();
+
+        // ========= ISBN 處理 =========
+        if (isbn == null || isbn.isBlank()) {
+            isbn = null;
+        } else {
+            if (bookRepository.existsByIsbn(isbn)) {
+                throw new IllegalStateException("已存在相同ISBN的書籍");
+            }
+        }
+
+        // ========= 系列 / 集數 處理 =========
+        Series series = null;
+
+        if (seriesName != null && !seriesName.isBlank()) {
+            // 有系列 → 取得 series
+            series = seriesService.getEntityByTitle(seriesName);
+
+            // 檢查 volume
+            if (volume == null || volume < 1) {
+                throw new IllegalArgumentException("系列書必須有有效的集數");
+            }
+
+            // 檢查唯一性
+            if (bookRepository.existsBySeriesAndVolume(series, volume)) {
+                throw new IllegalStateException("已存在相同系列與卷數的書籍");
+            }
+
+        } else {
+            // 無系列 → volume 一律視為 null
+            series = null;
+            volume = null;
+        }
+
+        // ========= 設定 Entity（統一在這裡） =========
         book.setAuthor(author);
         book.setSeries(series);
-        book.setVolume(bookRequest.volume());
-        book.setIsbn(bookRequest.isbn());
+        book.setVolume(volume);
+        book.setIsbn(isbn);
         book.setBookTitle(bookRequest.title());
         book.setStatus(bookRequest.status());
         book.setBuytime(LocalDateTime.now());
 
+        // ========= Tag 關聯 =========
         for (String tagName : bookRequest.tagNames()) {
             Tag tag = tagService.getEntityByName(tagName);
-            book.addTag(tag);  // helper method 自動生成 BookTag
+            book.addTag(tag);
         }
 
-        author.addBook(book); 
-        // 儲存到資料庫
+        // ========= 雙邊關聯 =========
+        author.addBook(book);
+
+        // ========= 儲存 =========
         return bookMapper.toResponse(bookRepository.save(book));
     }
 
     public BookResponse updateBookById(long bookId, BookRequest bookRequest) {
-        Book existingBook = getEntityById(bookId);
-        Author author = authorService.getEntityByName(bookRequest.authorName());
 
-        author.addBook(existingBook);    
+        Book book = getEntityById(bookId);
 
-        existingBook.setBookTitle(bookRequest.title());
-        existingBook.setStatus(bookRequest.status());
-        for (String tagName : bookRequest.tagNames()) {
-            Tag tag = tagService.getEntityByName(tagName);
-            existingBook.addTag(tag);  // helper method 自動生成 BookTag
+        // ========= Author 處理 =========
+        Author newAuthor = authorService.getEntityByName(bookRequest.authorName());
+        Author oldAuthor = book.getAuthor();
+
+        if (!oldAuthor.equals(newAuthor)) {
+            oldAuthor.getBooks().remove(book);
+            newAuthor.addBook(book);
         }
 
-        return bookMapper.toResponse(bookRepository.save(existingBook));
+        // ========= 基本資料 =========
+        String isbn = bookRequest.isbn();
+        String seriesName = bookRequest.seriesName();
+        Integer volume = bookRequest.volume();
+
+        // ========= ISBN =========
+        if (isbn == null || isbn.isBlank()) {
+            isbn = null;
+        } else {
+            boolean exists = bookRepository.existsByIsbn(isbn);
+            if (exists && !isbn.equals(book.getIsbn())) {
+                throw new IllegalStateException("已存在相同ISBN的書籍");
+            }
+        }
+
+        // ========= Series / Volume =========
+        Series series = null;
+
+        if (seriesName != null && !seriesName.isBlank()) {
+            series = seriesService.getEntityByTitle(seriesName);
+
+            if (volume == null || volume < 1) {
+                throw new IllegalArgumentException("系列書必須有有效的集數");
+            }
+
+            boolean exists = bookRepository.existsBySeriesAndVolume(series, volume);
+
+            boolean isSameRecord =
+                book.getSeries() != null &&
+                book.getSeries().equals(series) &&
+                book.getVolume() != null &&
+                book.getVolume().equals(volume);
+
+            if (exists && !isSameRecord) {
+                throw new IllegalStateException("已存在相同系列與卷數的書籍");
+            }
+
+        } else {
+            series = null;
+            volume = null;
+        }
+
+        // ========= Tag（先清再加） =========
+        book.getTags().clear();
+
+        for (String tagName : bookRequest.tagNames()) {
+            Tag tag = tagService.getEntityByName(tagName);
+            book.addTag(tag);
+        }
+
+        // ========= 統一設定 =========
+        book.setBookTitle(bookRequest.title());
+        book.setStatus(bookRequest.status());
+        book.setIsbn(isbn);
+        book.setSeries(series);
+        book.setVolume(volume);
+
+        return bookMapper.toResponse(bookRepository.save(book));
     }
 
     public void deleteBookById(@NonNull Long bookId) {

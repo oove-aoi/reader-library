@@ -69,7 +69,12 @@ public class OpenApiConfig {
                 //gmail 篩選器
                 new io.swagger.v3.oas.models.tags.Tag()
                     .name("Gmail 篩選器生成")
-                    .description("將系列追蹤清單內的所有系列名稱轉換成可以直接在gmail篩選器上使用的字串")
+                    .description("將系列追蹤清單內的所有系列名稱轉換成可以直接在gmail篩選器上使用的字串"),
+
+                //狀態碼(書籍、系列、追蹤清單)
+                new io.swagger.v3.oas.models.tags.Tag()
+                    .name("狀態碼查詢(書籍、系列、追蹤清單)")
+                    .description("列出書籍、系列、追蹤清單的完整狀態碼")
             ));
     }
 }

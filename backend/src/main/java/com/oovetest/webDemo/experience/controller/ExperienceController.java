@@ -52,7 +52,16 @@ public class ExperienceController {
     @Operation(
         summary = "以書籍ID新增心得",
         tags = {"心得管理"},
-        description = "新增心得資料，需提供書籍ID"
+        description = """
+        ### 📌 必填參數 
+        - **bookId**
+
+        ### 📌 必填欄位
+        - **bookId** 需與路徑參數一致
+        - **content** 心得內容
+        - **rating** 評分，範圍1-10
+
+        """
     )
     @PostMapping("/books/{bookId}/experience")
     public ResponseEntity<ExperienceResponse> createExperience(

@@ -60,10 +60,13 @@ public class Book {
         orphanRemoval = true
     )
     private Set<BookTag> bookTags = new HashSet<>();
+
+    //後面依照系列作品、單一作品、同人誌來分流處理
+    private BookType type;
     
     //追加關於系列的設定
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    @Column(nullable = true)
+    @ManyToOne(optional = true, fetch = FetchType.LAZY)
+    @JoinColumn(name = "series_id", nullable = true)
     private Series series;
 
     @Column(nullable = true)
