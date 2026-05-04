@@ -20,8 +20,9 @@ import lombok.Setter;
 @Entity
 @Table(
     name = "book",
-    uniqueConstraints = { // 確保同一系列同一集數只能有一筆紀錄
-        @UniqueConstraint(columnNames = {"series_id", "volume"}),
+    uniqueConstraints = { 
+        @UniqueConstraint(columnNames = {"isbn"}),//確保isbn只有一個
+        @UniqueConstraint(columnNames = {"series_id", "volume"}),// 確保同一系列同一集數只能有一筆紀錄
     }
 )
 @Getter @Setter

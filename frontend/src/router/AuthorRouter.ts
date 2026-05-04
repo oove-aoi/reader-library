@@ -10,7 +10,7 @@ export default [
       component: AuthorList,
     },
     {
-      path: '/authors/:id',
+      path: '/authors/:id',//動態參數
       name: 'authorDetail',
       component: AuthorDetail, // 你現在那個頁面
     }

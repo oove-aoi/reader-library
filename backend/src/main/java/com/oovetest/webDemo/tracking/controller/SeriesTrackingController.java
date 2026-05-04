@@ -79,7 +79,7 @@ public class SeriesTrackingController {
         - **status** 追蹤狀態 
 
         ### 📌 status 說明
-        status 對應以下分類：
+        status 對應以下分類：(預設值為 **TRACKING**)
 
         - **TRACKING**：追蹤中
         - **COMPLETED**：已完結

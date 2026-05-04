@@ -45,6 +45,60 @@ public class BookService {
         this.seriesService = seriesService;
     }
 
+    private void validateAndCheckUnique(
+        Book book,
+        String isbn,
+        Series series,
+        Integer volume
+    ) {
+
+        // ========= 清理 =========
+        if (isbn != null && isbn.isBlank()) {
+            isbn = null;
+        }
+
+        // ========= 基本規則 =========
+
+        if (series != null && (volume == null || volume < 1)) {
+            throw new IllegalArgumentException("系列書必須有集數");
+        }
+
+        if (volume != null && series == null) {
+            throw new IllegalArgumentException("有集數必須指定系列");
+        }
+
+        // ========= 唯一性檢查 =========
+
+        // 1️⃣ ISBN
+        if (isbn != null) {
+            boolean exists = bookRepository.existsByIsbn(isbn);
+
+            boolean isSame = book.getIsbn() != null &&
+                            book.getIsbn().equals(isbn);
+
+            if (exists && !isSame) {
+                throw new IllegalStateException("ISBN 已存在");
+            }
+        }
+
+        // 2️⃣ series + volume（即使有 ISBN 也要檢查）
+        if (series != null && volume != null) {
+
+            boolean exists =
+                bookRepository.existsBySeriesAndVolume(series, volume);
+
+            boolean isSame =
+                book.getSeries() != null &&
+                book.getSeries().equals(series) &&
+                book.getVolume() != null &&
+                book.getVolume().equals(volume);
+
+            if (exists && !isSame) {
+                throw new IllegalStateException("系列與集數已存在");
+            }
+        }
+    }
+
     @Transactional(readOnly = true)
     private Book getEntityById(@NonNull Long bookId) {
         //findById 回傳 Optional<Book> 所以後面必須加上orElseThrow

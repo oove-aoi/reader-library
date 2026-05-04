@@ -19,7 +19,7 @@ public record SeriesRequest(
     String title,
 
     @NotNull(message = "系列狀態不能為空")
-    @Schema(example = "COMPLETED")
+    @Schema(example = "ONGOING")
     SeriesStatus status,
 
     @NotNull(message = "作者ID不能為空")

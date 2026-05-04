@@ -92,7 +92,7 @@ public class SeriesController {
         - **author_id** 作者ID
 
         ### 📌 series status 說明
-        series status 對應以下分類：
+        series status 對應以下分類：(預設值為 **ONGOING**)
 
         - **ONGOING**：進行中
         - **COMPLETED**：已完結

@@ -33,16 +33,17 @@ public class AuthorController {
     public AuthorController(AuthorService authorService) {
         this.authorService = authorService;
     }
-
+    
+    
     @Operation(
-        summary = "依作者ID搜尋",
+        summary = "分頁查詢所有作者",
         tags = {"作者查詢"},
         description = """
         ### 📌 必填參數
-        - ** page**: 頁碼，從0開始，預設為0
-        - ** size**: 每頁筆數，預設為5
-        - ** sortBy**: 排序欄位，預設為"id"
-        - ** direction**: 排序方向，預設為"asc"
+        - **page** : 頁碼，從0開始，預設為0
+        - **size** : 每頁筆數，預設為5
+        - **sortBy** : 排序欄位，預設為"id"
+        - **direction** : 排序方向，預設為"asc"
         """
     )
     @GetMapping("/authors/")
