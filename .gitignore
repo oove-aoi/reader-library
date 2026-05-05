@@ -47,7 +47,8 @@ frontend/.vscode/
 
 ### 重要設定跟筆記 ###
 
-goal.TXT
+*.TXT
+*.txt
 backend/AI問答 - Spring boot 作品方向_單元測試跟全域例外處理.txt
 backend/流程規劃.TXT
 

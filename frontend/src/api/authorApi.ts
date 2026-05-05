@@ -1,6 +1,11 @@
 import apiClient from "./axios";
 import type { AuthorResponse } from "../types/author";
+import type { AuthorListItem } from "../types/author";
 
+export const getAuthors = () => {
+  return apiClient.get<AuthorListItem[]>("/authors")
+    .then(response => response.data);
+}
 
 export const getAuthorById = (authorid: number) => {
   console.log("API CALLED"); // ⭐
@@ -15,3 +20,7 @@ export const getAuthorByName = (name: string) => {
     {params: { name }
   });
 };
+
+export const createAuthor = (CreateAuthorRequest: { name: string }) => {
+  return apiClient.post("/authors", CreateAuthorRequest);
+}

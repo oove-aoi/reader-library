@@ -35,11 +35,15 @@ import { getAuthorById } from "../api/authorApi";
 import type { AuthorResponse } from "../types/author";
 import axios from "axios";
 
+
 const route = useRoute(); // 取得路由資訊
 //新增loading、error處理讀取中與錯誤狀態以利於後續處理
 const author = ref<AuthorResponse | null>(null);
 const loading = ref(true);
 const error = ref<string | null>(null);
+
+//console.log('目前路徑:', route.fullPath)
+//console.log('params:', route.params)
 
 onMounted(async () => {
   try {
