@@ -32,7 +32,7 @@ public class BookService {
     private final BookMapper bookMapper;
 
 
-    //考慮未來bookService的重構，改成使用其他必要模組的service而非Repository
+    //
     public BookService(BookRepository bookRepository, 
             AuthorService authorService,
             TagService tagService,

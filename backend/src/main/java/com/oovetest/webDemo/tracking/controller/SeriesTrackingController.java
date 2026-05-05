@@ -6,6 +6,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import com.oovetest.webDemo.tracking.dto.SeriesTrackingResponse;
@@ -60,14 +64,28 @@ public class SeriesTrackingController {
 
 
     @Operation(
-        summary = "查詢所有追蹤",
+        summary = "分頁查詢所有追蹤",
         tags = {"追蹤查詢"},
-        description = "查詢所有追蹤資料"
+        description = """
+        ### 📌 必填參數
+        - **page** : 頁碼，從0開始，預設為0
+        - **size** : 每頁筆數，預設為5
+        - **sortBy** : 排序欄位，預設為"id"
+        - **direction** : 排序方向，預設為"asc"
+        """
     )
     @GetMapping("/series-tracking")
-    public ResponseEntity<List<SeriesTrackingResponse>> getAllSeriesTracking() {
-            return ResponseEntity.ok(seriesTrackingService.getAllSeriesTracking()); 
+    public ResponseEntity<Page<SeriesTrackingResponse>> getAllSeriesTracking(
+        @RequestParam(defaultValue = "0") int page,
+        @RequestParam(defaultValue = "5") int size,
+        @RequestParam(defaultValue = "id") String sortBy,
+        @RequestParam(defaultValue = "asc") String direction
+    ) {
+        Sort.Direction sortDirection = direction.equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC;
+        Pageable pageable = PageRequest.of(page, size, sortDirection, sortBy);
+        return ResponseEntity.ok(seriesTrackingService.getAllSeriesTracking(pageable)); 
     }
+    
 
 
     @Operation(

@@ -2608,13 +2608,16 @@ tag加上BL、小說、漫畫這三筆資料
 
 由於前端遇到Cors問題，因此在後端新增全域設定檔 CorsConfig (倘若有Spring Security，會導致這個檔案失效，需要再Spring Security中重新設定)
 
+
 """
 ##重點預定
 
-考慮依照前端所需將page改為DTO
+考慮依照前端所需將page改為DTO(util.PageResponse)
 以方便如作者列表頁這類分頁機制回傳的結果
 
-考慮將非ID參數、可能獲取多個結果的頁面都改成分頁列表機制(主要應該就book的各參數查詢)
+考慮將非ID參數、可能獲取多個結果的頁面都改成分頁列表機制(主要應該就book的各參數查詢、追蹤中的列表頁)
+
+思考是否要給系列追蹤的各個追蹤自定義分組
 
 (資料庫約束部分未來考慮改用PostgreSQL ，利用partial unique index解決
 但目前先在book 實體上加上BookType ，但service的分流之後再說)
@@ -2634,3 +2637,6 @@ github webdemo readme再調整
 """
 
 5/5
+
+將系列追蹤列表改成可分頁查詢的形式
+先新增了util.PageResponse 之後的page回傳格式改成他

@@ -2,6 +2,8 @@ package com.oovetest.webDemo.tracking.repository;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -19,6 +21,8 @@ public interface SeriesTrackingRepository extends JpaRepository<SeriesTracking, 
         JOIN st.series s
     """)
     List<String> findAllSeriesTitles();
+
+    public @NonNull Page<SeriesTracking> findAll(Pageable pageable);
 
     //暫不使用也暫不修改，等未來有優化想法再來改輸出DTO的方式
     @Query("""

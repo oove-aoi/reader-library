@@ -1,5 +1,7 @@
 package com.oovetest.webDemo.tracking.service;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import com.oovetest.webDemo.tracking.repository.SeriesTrackingRepository;
 
@@ -48,14 +50,12 @@ public class SeriesTrackingService {
         return getOwnedVolume(seriesId) == 0 ? 1 : getOwnedVolume(seriesId) + 1;
     }
 
-    public List<SeriesTrackingResponse> getAllSeriesTracking() {
-    return seriesTrackingRepository.findAll()
-        .stream()
-        .map(t -> {
-            int owned = getOwnedVolume(t.getSeries().getId()); 
-            return seriesTrackingMapper.toResponse(t, owned, owned + 1);
-        })
-        .toList();
+    public Page<SeriesTrackingResponse> getAllSeriesTracking(Pageable pageable) {
+    return seriesTrackingRepository.findAll(pageable).map(seriesTracking -> {
+            int ownedVolume = getOwnedVolume(seriesTracking.getSeries().getId());
+            int nextVolume = getNextVolume(seriesTracking.getSeries().getId());
+            return seriesTrackingMapper.toResponse(seriesTracking, ownedVolume, nextVolume);
+        });
     }
 
     public SeriesTrackingResponse getSeriesTrackingById(Long id) {
