@@ -15,12 +15,6 @@ export const getAuthorById = (authorid: number) => {
     .then(response => response.data);
 };
 
-export const getAuthorByName = (name: string) => {
-  return apiClient.get<AuthorResponse>("/authors",
-    {params: { name }
-  });
-};
-
 export const createAuthor = (CreateAuthorRequest: { name: string }) => {
   return apiClient.post("/authors", CreateAuthorRequest);
 }

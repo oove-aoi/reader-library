@@ -43,6 +43,15 @@ public class AuthorService {
         return authorRepository.findAll(pageable).map(authorMapper::toListResponse);
     }
 
+    public Page<AuthorListResponse> getAuthors(String name, Pageable pageable) {
+        if (name != null && !name.isBlank()) {
+            return authorRepository.findByNameContaining(name, pageable)
+                .map(authorMapper::toListResponse);
+        }
+        return authorRepository.findAll(pageable)
+            .map(authorMapper::toListResponse);
+    }
+
     //作者不帶書
     @Transactional(readOnly = true)
     public AuthorResponse getAuthorById(@NonNull Long authorId) {

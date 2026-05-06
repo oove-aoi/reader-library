@@ -34,30 +34,6 @@ public class AuthorController {
         this.authorService = authorService;
     }
     
-    
-    @Operation(
-        summary = "分頁查詢所有作者",
-        tags = {"作者查詢"},
-        description = """
-        ### 📌 必填參數
-        - **page** : 頁碼，從0開始，預設為0
-        - **size** : 每頁筆數，預設為5
-        - **sortBy** : 排序欄位，預設為"id"
-        - **direction** : 排序方向，預設為"asc"
-        """
-    )
-    @GetMapping("/authors/")
-    public ResponseEntity<Page<AuthorListResponse>> getAllAuthor(
-        @RequestParam(defaultValue = "0") int page,
-        @RequestParam(defaultValue = "5") int size,
-        @RequestParam(defaultValue = "id") String sortBy,
-        @RequestParam(defaultValue = "asc") String direction
-    ) {
-        Sort.Direction sortDirection = direction.equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC;
-        Pageable pageable = PageRequest.of(page, size, sortDirection, sortBy);
-        return ResponseEntity.ok(authorService.getAllAuthor(pageable));
-    }
-
     @Operation(
         summary = "依作者ID搜尋",
         tags = {"作者查詢"},
@@ -73,19 +49,27 @@ public class AuthorController {
     }
 
     @Operation(
-        summary = "依作者名稱查詢",
+        summary = "依作者名稱搜尋",
         tags = {"作者查詢"},
         description = "依據作者名稱查詢作者資料"
     )
     @GetMapping("/authors")
-    public ResponseEntity<AuthorResponse> getAuthorByName(
-        @RequestParam  
-        @NotBlank(message = "作者名稱不可為空白") //名稱不應為空白
-        @Size(max = 100, message = "作者名稱長度不可超過100字元") //名稱不應過長
-        @Parameter(description = "作者名稱", example = "J.K. Rowling", required = true)
-        String name) {
-            return ResponseEntity.ok(authorService.getAuthorByName(name));
-            
+    public ResponseEntity<Page<AuthorListResponse>> getAuthors(
+        @RequestParam(required = false)
+        @Size(max = 100, message = "作者名稱長度不可超過100字元")
+        String name,
+
+        @RequestParam(defaultValue = "0") int page,
+        @RequestParam(defaultValue = "5") int size,
+        @RequestParam(defaultValue = "id") String sortBy,
+        @RequestParam(defaultValue = "asc") String direction
+    ) {
+        Sort.Direction sortDirection =
+            direction.equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC;
+
+        Pageable pageable = PageRequest.of(page, size, sortDirection, sortBy);
+
+        return ResponseEntity.ok(authorService.getAuthors(name, pageable));
     }
     
 

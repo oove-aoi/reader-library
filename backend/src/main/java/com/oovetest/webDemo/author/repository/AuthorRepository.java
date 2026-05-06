@@ -12,5 +12,5 @@ public interface AuthorRepository extends JpaRepository<Author, Long> {
     public Optional<Author> findByName(String name);//精準查詢
     //考慮新增模糊查詢方法
     
-    public @NonNull Page<Author> findAll(@NonNull Pageable pageable);
+    public @NonNull Page<Author> findByNameContaining(@NonNull String name, @NonNull Pageable pageable);
 } 
