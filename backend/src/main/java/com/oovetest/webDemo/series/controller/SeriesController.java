@@ -9,7 +9,6 @@ import java.util.Map;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 
-import com.oovetest.webDemo.book.entity.BookStatus;
 import com.oovetest.webDemo.series.dto.SeriesRequest;
 import com.oovetest.webDemo.series.dto.SeriesResponse;
 import com.oovetest.webDemo.series.entity.SeriesStatus;

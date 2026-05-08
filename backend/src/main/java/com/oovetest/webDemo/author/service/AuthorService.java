@@ -13,6 +13,7 @@ import com.oovetest.webDemo.author.entity.Author;
 import com.oovetest.webDemo.author.repository.AuthorRepository;
 import com.oovetest.webDemo.exception.NotFoundException;
 import com.oovetest.webDemo.exception.ValidationException;
+import com.oovetest.webDemo.util.PageResponse;
 import com.oovetest.webDemo.author.mapper.AuthorMapper;
 import lombok.NonNull;
 
@@ -39,17 +40,20 @@ public class AuthorService {
                 .orElseThrow(() -> new NotFoundException("查無此作者名稱"));
     }
 
-    public Page<AuthorListResponse> getAllAuthor(Pageable pageable) {
-        return authorRepository.findAll(pageable).map(authorMapper::toListResponse);
+    public PageResponse<AuthorListResponse> getAllAuthor(Pageable pageable) {
+        Page<AuthorListResponse> authorPage = authorRepository.findAll(pageable).map(authorMapper::toListResponse);
+        return PageResponse.from(authorPage);
     }
 
-    public Page<AuthorListResponse> getAuthors(String name, Pageable pageable) {
+    public PageResponse<AuthorListResponse> getAuthors(String name, Pageable pageable) {
+        Page<Author> authorPage;
         if (name != null && !name.isBlank()) {
-            return authorRepository.findByNameContaining(name, pageable)
-                .map(authorMapper::toListResponse);
+            authorPage = authorRepository.findByNameContaining(name, pageable);
+            
+        } else {
+            authorPage = authorRepository.findAll(pageable);
         }
-        return authorRepository.findAll(pageable)
-            .map(authorMapper::toListResponse);
+        return PageResponse.from(authorPage.map(authorMapper::toListResponse));
     }
 
     //作者不帶書

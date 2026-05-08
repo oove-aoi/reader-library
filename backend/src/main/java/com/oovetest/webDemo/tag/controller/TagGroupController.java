@@ -3,20 +3,16 @@ package com.oovetest.webDemo.tag.controller;
 import java.util.List;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.validation.constraints.Positive;
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
+
 import com.oovetest.webDemo.tag.service.TagGroupService;
-import com.oovetest.webDemo.tag.dto.TagGroupRequest;
 import com.oovetest.webDemo.tag.dto.TagGroupResponse;
-import com.oovetest.webDemo.tag.dto.TagGroupUpdateRequest;
+
 import com.oovetest.webDemo.tag.dto.TagGroupWithTagsResponse;
 
 @Validated

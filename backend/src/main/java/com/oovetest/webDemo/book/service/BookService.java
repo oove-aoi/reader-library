@@ -10,6 +10,7 @@ import com.oovetest.webDemo.author.entity.Author;
 import com.oovetest.webDemo.author.service.AuthorService;
 import com.oovetest.webDemo.tag.entity.Tag;
 import com.oovetest.webDemo.tag.service.TagService;
+import com.oovetest.webDemo.util.PageResponse;
 import com.oovetest.webDemo.book.mapper.BookMapper;
 import com.oovetest.webDemo.series.entity.Series;
 import com.oovetest.webDemo.series.service.SeriesService;
@@ -18,6 +19,9 @@ import lombok.NonNull;
 
 import java.time.LocalDateTime;
 import java.util.List;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -351,12 +355,9 @@ public class BookService {
 
     //複合條件查詢、考慮將上面那些加上其他條件的搜索方法去掉
     @Transactional(readOnly = true)
-    public List<BookResponse> search(BookSearchCondition condition) {
-        return bookRepository
-            .search(condition)
-            .stream()
-            .map(bookMapper::toResponse)
-            .toList();
+    public PageResponse<BookResponse> search(BookSearchCondition condition, Pageable pageable) {
+        Page<Book> bookPage = bookRepository.search(condition, pageable);
+        return PageResponse.from(bookPage.map(bookMapper::toResponse));
     }
 
 }

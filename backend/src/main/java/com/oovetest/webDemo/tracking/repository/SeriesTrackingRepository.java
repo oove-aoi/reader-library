@@ -4,12 +4,10 @@ import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.lang.NonNull;
 
-import com.oovetest.webDemo.tracking.dto.SeriesTrackingResponse;
 import com.oovetest.webDemo.tracking.entity.SeriesTracking;
 
 public interface SeriesTrackingRepository extends JpaRepository<SeriesTracking, Long> {

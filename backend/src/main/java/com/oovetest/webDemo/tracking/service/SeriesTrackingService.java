@@ -5,8 +5,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import com.oovetest.webDemo.tracking.repository.SeriesTrackingRepository;
 
-import jakarta.validation.constraints.NotNull;
-
 import com.oovetest.webDemo.series.entity.Series;
 import com.oovetest.webDemo.series.service.SeriesService;
 import com.oovetest.webDemo.tracking.dto.SeriesTrackingRequest;
@@ -17,7 +15,6 @@ import com.oovetest.webDemo.book.repository.BookRepository;
 import com.oovetest.webDemo.exception.NotFoundException;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Service
 public class SeriesTrackingService {

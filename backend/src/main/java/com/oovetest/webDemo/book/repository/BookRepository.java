@@ -39,10 +39,6 @@ public interface BookRepository extends JpaRepository<Book, Long>, BookRepositor
 
     public long countBySeriesId(Long seriesId); // 統計系列中的書籍數量
 
-    //過一段時間改成page的版本
-    @EntityGraph(attributePaths = "author, bookTags.tag, experience")
-    public List<Book> search(BookSearchCondition condition);//新增複合條件查詢
-
 
     public boolean existsByIsbn(String isbn);
 

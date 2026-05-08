@@ -14,7 +14,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import com.oovetest.webDemo.tracking.dto.SeriesTrackingResponse;
 import com.oovetest.webDemo.tracking.entity.TrackingStatus;
-import com.oovetest.webDemo.series.entity.SeriesStatus;
 import com.oovetest.webDemo.tracking.dto.SeriesTrackingRequest;
 import com.oovetest.webDemo.tracking.service.SeriesTrackingService;
 

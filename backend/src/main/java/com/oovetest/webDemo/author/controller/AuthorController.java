@@ -4,11 +4,11 @@ import com.oovetest.webDemo.author.dto.AuthorListResponse;
 import com.oovetest.webDemo.author.dto.AuthorRequest;
 import com.oovetest.webDemo.author.dto.AuthorResponse;
 import com.oovetest.webDemo.author.service.AuthorService;
+import com.oovetest.webDemo.util.PageResponse;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.*;
 
 
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 
@@ -54,7 +53,7 @@ public class AuthorController {
         description = "依據作者名稱查詢作者資料"
     )
     @GetMapping("/authors")
-    public ResponseEntity<Page<AuthorListResponse>> getAuthors(
+    public ResponseEntity<PageResponse<AuthorListResponse>> getAuthors(
         @RequestParam(required = false)
         @Size(max = 100, message = "作者名稱長度不可超過100字元")
         String name,

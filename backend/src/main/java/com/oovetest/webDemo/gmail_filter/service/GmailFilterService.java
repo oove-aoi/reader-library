@@ -6,9 +6,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.oovetest.webDemo.gmail_filter.dto.GmailFilterResponse;
-import com.oovetest.webDemo.tracking.entity.SeriesTracking;
 import com.oovetest.webDemo.tracking.repository.SeriesTrackingRepository;
-import com.oovetest.webDemo.series.entity.Series;
 
 @Service
 public class GmailFilterService {

@@ -66,7 +66,7 @@ class BookRepositoryTest {
         condition.setKeyword("Spring");
 
         // Act
-        List<Book> result = bookRepository.search(condition);
+        List<Book> result = bookRepository.search(condition, null).getContent();
 
         // Assert
         assertThat(result).hasSize(1);
