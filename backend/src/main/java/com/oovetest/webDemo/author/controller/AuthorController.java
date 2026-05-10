@@ -56,6 +56,7 @@ public class AuthorController {
     public ResponseEntity<PageResponse<AuthorListResponse>> getAuthors(
         @RequestParam(required = false)
         @Size(max = 100, message = "作者名稱長度不可超過100字元")
+        @Parameter(description = "作者名稱（可選，支援模糊搜尋）", example = "Rowling", required = false)
         String name,
 
         @RequestParam(defaultValue = "0") int page,

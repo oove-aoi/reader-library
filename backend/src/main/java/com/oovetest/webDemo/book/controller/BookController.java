@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.data.domain.Pageable;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -181,6 +182,7 @@ public class BookController {
     @GetMapping("/books")
     public ResponseEntity<PageResponse<BookResponse>> findBooksByCondition(
         @Valid
+        @ParameterObject 
         BookSearchCondition condition,
     
         @RequestParam(defaultValue = "0") int page,
