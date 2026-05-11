@@ -47,22 +47,22 @@ public class BookRepositoryImpl implements BookRepositoryCustom {
         Map<String, Object> params = new HashMap<>();
 
         // ===== 原有條件 =====
-        if (condition.getAuthorId() != null) {
+        if (condition.authorId() != null) {
             jpql.append(" AND a.id = :authorId");
             countJpql.append(" AND a.id = :authorId");
 
-            params.put("authorId", condition.getAuthorId());
+            params.put("authorId", condition.authorId());
         }
 
-        if (condition.getTagId() != null) {
+        if (condition.tagId() != null) {
             jpql.append(" AND t.id = :tagId");
             countJpql.append(" AND t.id = tagId");
 
-            params.put("tagId", condition.getTagId());
+            params.put("tagId", condition.tagId());
         }
 
-        if (condition.getKeyword() != null 
-            && !condition.getKeyword().isBlank()) {
+        if (condition.keyword() != null 
+            && !condition.keyword().isBlank()) {
             jpql.append("""
                 AND (
                     LOWER(b.title) LIKE :keyword
@@ -77,21 +77,21 @@ public class BookRepositoryImpl implements BookRepositoryCustom {
                 )
             """);
 
-            params.put("keyword", "%" + condition.getKeyword());
+            params.put("keyword", "%" + condition.keyword());
         }
 
         // ===== 新增條件 =====
 
         // 作者名稱
-        if (condition.getAuthorName() != null && !condition.getAuthorName().isBlank()) {
+        if (condition.authorName() != null && !condition.authorName().isBlank()) {
             jpql.append(" AND LOWER(a.name) LIKE :authorName");
             countJpql.append(" AND LOWER(a.name) LIKE :authorName");
         
-            params.put("authorName", "%" + condition.getAuthorName().toLowerCase() + "%");
+            params.put("authorName", "%" + condition.authorName().toLowerCase() + "%");
         }
 
         // Tag 名稱
-        if (condition.getTagName() != null && !condition.getTagName().isBlank()) {
+        if (condition.tagName() != null && !condition.tagName().isBlank()) {
             jpql.append(" AND LOWER(t.name) LIKE :tagName");
             countJpql.append(
                     " AND LOWER(t.name) LIKE :tagName"
@@ -99,12 +99,12 @@ public class BookRepositoryImpl implements BookRepositoryCustom {
 
             params.put(
                     "tagName",
-                    "%" + condition.getTagName().toLowerCase() + "%"
+                    "%" + condition.tagName().toLowerCase() + "%"
             );
         }
 
         // 書名
-        if (condition.getBookTitle() != null && !condition.getBookTitle().isBlank()) {
+        if (condition.bookTitle() != null && !condition.bookTitle().isBlank()) {
             jpql.append(
                     " AND LOWER(b.bookTitle) LIKE :bookTitle"
             );
@@ -115,7 +115,7 @@ public class BookRepositoryImpl implements BookRepositoryCustom {
 
             params.put(
                     "bookTitle",
-                    "%" + condition.getBookTitle().toLowerCase() + "%"
+                    "%" + condition.bookTitle().toLowerCase() + "%"
             );
         }
 
@@ -125,7 +125,7 @@ public class BookRepositoryImpl implements BookRepositoryCustom {
                 Book.class
             );
         TypedQuery<Long> countQuery = 
-            entityManager.createNamedQuery(
+            entityManager.createQuery(
                 countJpql.toString(), 
                 Long.class
             );

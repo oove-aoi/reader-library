@@ -26,7 +26,6 @@ public class TagGroupController {
         this.tagGroupService = tagGroupService;
     }  
 
-    
     @Operation(
         summary = "依tag群組ID搜尋",
         tags = {"tag群組查詢"},
@@ -50,7 +49,6 @@ public class TagGroupController {
     public ResponseEntity<List<TagGroupResponse>> getAllTagGroups() {
         return ResponseEntity.ok(tagGroupService.findAllTagGroups());
     }
-
 
     @Operation(
         summary = "依tag群組ID取得所屬tag清單",

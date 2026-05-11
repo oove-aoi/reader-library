@@ -284,15 +284,18 @@ public class BookService {
      */
 
     @Transactional(readOnly = true)
-    public List<SeriesBookSimpleResponse> getAllBookByAuthorId (@NonNull Long authorId) {
+    public PageResponse<SeriesBookSimpleResponse> getAllBookByAuthorId (
+        @NonNull Long authorId,
+        Pageable pageable
+    ) {
         Author author = authorService.getEntityById(authorId);
-
-        return bookRepository.findAllBooksByAuthorId(author.getId())
-                .stream()
-                .map(bookMapper::toSeriesBookSimpleResponse)
-                .toList();
+        Page<SeriesBookSimpleResponse> page = bookRepository
+                .findAllBooksByAuthorId(author.getId(), pageable)
+                .map(bookMapper::toSeriesBookSimpleResponse);
+        return PageResponse.from(page);
+        
     }
-
+    /* 
     @Transactional(readOnly = true)
     public List<SeriesBookSimpleResponse> getAllBooksByAuthorName (@NonNull String authorName) {
         Author author = authorService.getEntityByName(authorName);
@@ -301,19 +304,23 @@ public class BookService {
                 .map(bookMapper::toSeriesBookSimpleResponse)
                 .toList();
     }
-
+    */
     //也許可以再簡化
     //1.把「找作者」與「找作者的所有書」拆成兩個方法，其中找作者可以各自寫，但共用的部分（查書）抽出來
     //2.讓 ID 與 Name 方法都呼叫一個「主要方法」，只負責接收 Author 物件
     @Transactional(readOnly = true)
-    public List<SeriesBookSimpleResponse> getAllBooksByTagId (@NonNull Long tagId) {
+    public PageResponse<SeriesBookSimpleResponse> getAllBooksByTagId (
+        @NonNull Long tagId,
+        Pageable pageable
+    ) {
         Tag tag = tagService.getEntityById(tagId);
-        return bookRepository.findAllByBookTags_Tag_Id(tag.getId())
-                .stream()
-                .map(bookMapper::toSeriesBookSimpleResponse)
-                .toList();
+        Page<SeriesBookSimpleResponse> page = bookRepository
+                .findAllByBookTags_Tag_Id(tag.getId(), pageable)
+                .map(bookMapper::toSeriesBookSimpleResponse);
+        return PageResponse.from(page);
+        
     }
-
+    /*
     @Transactional(readOnly = true)
     public List<SeriesBookSimpleResponse> getAllBookByTagName (@NonNull String tagName) {
         Tag tag = tagService.getEntityByName(tagName);
@@ -322,7 +329,7 @@ public class BookService {
                 .map(bookMapper::toSeriesBookSimpleResponse)
                 .toList();
     }
-
+     */
     public List<SeriesBookSimpleResponse> getAllBookByStatus (@NonNull String status) {
         return bookRepository.findAllBooksByStatus(status)
                 .stream()

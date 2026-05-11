@@ -62,8 +62,14 @@ class BookRepositoryTest {
         em.flush();
         em.clear();
 
-        BookSearchCondition condition = new BookSearchCondition();
-        condition.setKeyword("Spring");
+        BookSearchCondition condition = new BookSearchCondition(
+            null,
+            null,
+            "Spring",
+            null,
+            null,
+            null
+        );
 
         // Act
         List<Book> result = bookRepository.search(condition, null).getContent();

@@ -2,9 +2,10 @@ package com.oovetest.webDemo.book.repository;
 
 import com.oovetest.webDemo.author.entity.Author;
 import com.oovetest.webDemo.book.entity.Book;
-import com.oovetest.webDemo.book.service.BookSearchCondition;
 import com.oovetest.webDemo.series.entity.Series;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -19,8 +20,8 @@ public interface BookRepository extends JpaRepository<Book, Long>, BookRepositor
     @EntityGraph(attributePaths = "author, bookTags.tag, experience")
     public Optional<Book> findByBookTitle(String bookTitle);
 
-    public List<Book> findAllBooksByAuthorId(Long id);
-    public List<Book> findAllByBookTags_Tag_Id(Long tagId); //透過中介表的tag_id找書
+    public Page<Book> findAllBooksByAuthorId(Long id, Pageable pageable);
+    public Page<Book> findAllByBookTags_Tag_Id(Long tagId, Pageable pageable); //透過中介表的tag_id找書
     public List<Book> findAllBooksByStatus(String status);
     public List<Book> findAllByBookTitleContaining(String keyword); //查詢書名改用模糊識別
     public boolean existsByAuthorAndBookTitle(Author author, String bookTitle);

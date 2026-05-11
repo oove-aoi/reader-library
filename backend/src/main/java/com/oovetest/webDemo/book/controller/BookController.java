@@ -69,38 +69,6 @@ public class BookController {
             return ResponseEntity.ok(bookService.getBookById(bookId));
         }
 
-    
-    
-    @Operation(
-        summary = "以作者ID查詢該作者的所有書籍",
-        tags = {"書籍查詢"},
-        description = "查詢書籍資料，需提供作者ID"
-    )
-    @GetMapping("/authors/{authorId}/books")
-    public ResponseEntity<List<SeriesBookSimpleResponse>> getBooksByAuthorId(
-        @PathVariable 
-        @Positive(message = "作者ID必須為正整數")
-        @Parameter(description = "作者ID", example = "1", required = true)
-        long authorId) {
-            List<SeriesBookSimpleResponse> books = bookService.getAllBookByAuthorId(authorId);
-            return ResponseEntity.ok(books);
-        }      
-
-    @Operation(
-        summary = "以標籤ID查詢該標籤的所有書籍",
-        tags = {"書籍查詢"},
-        description = "查詢書籍資料，需提供標籤ID"
-    )
-    @GetMapping("/tags/id/{tagId}/books")
-    public ResponseEntity<List<SeriesBookSimpleResponse>> getBooksByTagId(
-        @PathVariable 
-        @Positive(message = "標籤ID必須為正整數")
-        @Parameter(description = "標籤ID", example = "1", required = true)
-        long tagId) {
-            List<SeriesBookSimpleResponse> books = bookService.getAllBooksByTagId(tagId);
-            return ResponseEntity.ok(books);
-        }
-
     @Operation(
         summary = "新增書籍",
         tags = {"書籍管理"},
@@ -172,8 +140,56 @@ public class BookController {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         }
 
+    @Operation(
+        summary = "以作者ID查詢該作者的所有書籍",
+        tags = {"書籍查詢"},
+        description = "查詢書籍資料，需提供作者ID"
+    )
+    @GetMapping("/authors/{authorId}/books")
+    public ResponseEntity<PageResponse<SeriesBookSimpleResponse>> getBooksByAuthorId(
+        @PathVariable 
+        @Positive(message = "作者ID必須為正整數")
+        @Parameter(description = "作者ID", example = "1", required = true)
+        long authorId,
+
+        @RequestParam(defaultValue = "0") int page,
+        @RequestParam(defaultValue = "5") int size,
+        @RequestParam(defaultValue = "id") String sortBy,
+        @RequestParam(defaultValue = "asc") String direction
+    ) {
+        Sort.Direction sortDirection =
+            direction.equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC;
+
+        Pageable pageable = PageRequest.of(page, size, sortDirection, sortBy);
+        return ResponseEntity.ok(bookService.getAllBookByAuthorId(authorId, pageable));
+    }      
+
+    @Operation(
+        summary = "以標籤ID查詢該標籤的所有書籍",
+        tags = {"書籍查詢"},
+        description = "查詢書籍資料，需提供標籤ID"
+    )
+    @GetMapping("/tags/id/{tagId}/books")
+    public ResponseEntity<PageResponse<SeriesBookSimpleResponse>> getBooksByTagId(
+        @PathVariable 
+        @Positive(message = "標籤ID必須為正整數")
+        @Parameter(description = "標籤ID", example = "1", required = true)
+        long tagId,
+
+        @RequestParam(defaultValue = "0") int page,
+        @RequestParam(defaultValue = "5") int size,
+        @RequestParam(defaultValue = "id") String sortBy,
+        @RequestParam(defaultValue = "asc") String direction
+    ) {
+        Sort.Direction sortDirection =
+            direction.equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC;
+
+        Pageable pageable = PageRequest.of(page, size, sortDirection, sortBy);
+        return ResponseEntity.ok(bookService.getAllBooksByTagId(tagId, pageable));
+    }
+
     //搜索條件設計
-    //後面將所有使用名稱做查詢條件的部分全部併進來
+    //將所有使用名稱做查詢條件的部分全部併進來
     @Operation(
         summary = "以複合條件查詢書籍",
         tags = {"書籍查詢"},
