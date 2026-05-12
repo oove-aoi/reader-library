@@ -60,9 +60,27 @@ public class TagGroupController {
         @PathVariable
         @Positive(message = "tag群組ID必須為正整數")
         @Parameter(description = "tag群組ID", example = "1", required = true)
-        long id) {
+        long id,
+
+        @RequestParam(defaultValue = "0") 
+        @Parameter(description = "頁碼（從0開始）", example = "0", required = false)
+        int page,
+
+        @RequestParam(defaultValue = "5") 
+        @Parameter(description = "每頁筆數", example = "5", required = false)
+        int size,
+
+        @RequestParam(defaultValue = "id") 
+        @Parameter(description = "排序欄位", example = "id", required = false)
+        String sortBy,
+
+        @RequestParam(defaultValue = "asc") 
+        @Parameter(description = "排序方向", example = "asc", required = false)
+        String direction
+    ) {
+        
             return ResponseEntity.ok(tagGroupService.findTagsByGroupId(id));
-        }
+    }
 
     //刪除方法不提供，有需要的話可使用軟刪除的形式處理
     //未來僅保留查詢方法，其他的創建、更新、刪除方法將不再提供

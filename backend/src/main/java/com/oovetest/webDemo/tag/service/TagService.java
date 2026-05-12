@@ -1,5 +1,7 @@
 package com.oovetest.webDemo.tag.service;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -9,6 +11,7 @@ import com.oovetest.webDemo.tag.dto.TagResponse;
 import com.oovetest.webDemo.tag.entity.Tag;
 import com.oovetest.webDemo.tag.entity.TagGroup;
 import com.oovetest.webDemo.tag.repository.TagRepository;
+import com.oovetest.webDemo.util.PageResponse;
 import com.oovetest.webDemo.tag.mapper.TagMapper;
 
 @Service
@@ -38,6 +41,12 @@ public class TagService {
     public TagResponse findByName(String name)  {
         Tag tag = getEntityByName(name);
         return tagMapper.toResponse(tag);
+    }
+
+    public PageResponse<TagResponse> findTagByKeyword(String keyword, Pageable pageable)  {
+        Page<TagResponse> page = tagRepository.findByNameContaining(keyword, pageable).map(tagMapper::toResponse);
+        
+        return PageResponse.from(page);
     }
 
     public TagResponse findById(Long id)  {

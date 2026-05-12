@@ -59,10 +59,21 @@ public class AuthorController {
         @Parameter(description = "作者名稱（可選，支援模糊搜尋）", example = "Rowling", required = false)
         String name,
 
-        @RequestParam(defaultValue = "0") int page,
-        @RequestParam(defaultValue = "5") int size,
-        @RequestParam(defaultValue = "id") String sortBy,
-        @RequestParam(defaultValue = "asc") String direction
+        @RequestParam(defaultValue = "0") 
+        @Parameter(description = "頁碼（從0開始）", example = "0", required = false)
+        int page,
+        
+        @RequestParam(defaultValue = "5") 
+        @Parameter(description = "每頁筆數", example = "5", required = false)
+        int size,
+
+        @RequestParam(defaultValue = "id") 
+        @Parameter(description = "排序欄位", example = "id", required = false)
+        String sortBy,
+
+        @RequestParam(defaultValue = "asc") 
+        @Parameter(description = "排序方向", example = "asc", required = false)
+        String direction
     ) {
         Sort.Direction sortDirection =
             direction.equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC;

@@ -3,6 +3,9 @@ package com.oovetest.webDemo.tag.controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -12,6 +15,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import com.oovetest.webDemo.tag.dto.TagResponse;
 import com.oovetest.webDemo.tag.service.TagService;
+import com.oovetest.webDemo.util.PageResponse;
 import com.oovetest.webDemo.tag.dto.TagRequest;
 import com.oovetest.webDemo.tag.service.TagGroupService;
 
@@ -49,13 +53,33 @@ public class TagController {
         description = "依tag名稱搜尋tag資料"
     )
     @GetMapping("/tags")
-    public ResponseEntity<TagResponse> findTagByName(
+    public ResponseEntity<PageResponse<TagResponse>> findTagByKeyword(
         @RequestParam
         @NotBlank(message = "tag名稱不能為空")
         @Size(max = 100, message = "tag名稱長度不能超過100字元")
         @Parameter(description = "tag名稱", example = "技術", required = true)
-        String tagName) {
-            return ResponseEntity.ok(tagService.findByName(tagName));
+        String keyWord,
+        
+        @RequestParam(defaultValue = "0") 
+        @Parameter(description = "頁碼（從0開始）", example = "0", required = false)
+        int page,
+        
+        @RequestParam(defaultValue = "5") 
+        @Parameter(description = "每頁筆數", example = "5", required = false)
+        int size,
+
+        @RequestParam(defaultValue = "id") 
+        @Parameter(description = "排序欄位", example = "id", required = false)
+        String sortBy,
+
+        @RequestParam(defaultValue = "asc") 
+        @Parameter(description = "排序方向", example = "asc", required = false)
+        String direction
+    ) {
+        Sort.Direction sortDirection = 
+                direction.equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC;
+        Pageable pageable = PageRequest.of(page, size, sortDirection, sortBy);
+        return ResponseEntity.ok(tagService.findTagByKeyword(keyWord, pageable));
     }
 
     @Operation(

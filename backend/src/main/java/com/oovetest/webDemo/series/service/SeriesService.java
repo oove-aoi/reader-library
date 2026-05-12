@@ -1,5 +1,7 @@
 package com.oovetest.webDemo.series.service;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
@@ -7,6 +9,7 @@ import com.oovetest.webDemo.series.dto.SeriesRequest;
 import com.oovetest.webDemo.series.dto.SeriesResponse;
 import com.oovetest.webDemo.series.entity.Series;
 import com.oovetest.webDemo.series.repository.SeriesRepository;
+import com.oovetest.webDemo.util.PageResponse;
 
 import jakarta.validation.constraints.NotNull;
 
@@ -26,10 +29,12 @@ public class SeriesService {
     private final AuthorService authorService;
     private final BookRepository bookRepository;
 
-    public SeriesService(SeriesRepository seriesRepository, 
-        SeriesMapper seriesMapper, 
-        AuthorService authorService, 
-        BookRepository bookRepository) {
+    public SeriesService(
+            SeriesRepository seriesRepository, 
+            SeriesMapper seriesMapper, 
+            AuthorService authorService, 
+            BookRepository bookRepository
+    ) {
             this.seriesRepository = seriesRepository;
             this.seriesMapper = seriesMapper;
             this.authorService = authorService;
@@ -55,13 +60,17 @@ public class SeriesService {
             series.getAuthor().getId());
     }
 
-    public SeriesResponse getSeriesByName(String name) {
-        Series series = getEntityByTitle(name);
+    public PageResponse<SeriesResponse> findByTitleContaining(String keyword, Pageable pageable) {
+        Page<SeriesResponse> page = seriesRepository
+                .findByTitleContaining(keyword, pageable)
+                .map((series) -> {
+                    return seriesMapper.toResponse(
+                            series, 
+                            bookRepository.countBySeriesId(series.getId()),
+                            series.getAuthor().getId());
+                });
+        return PageResponse.from(page);
         
-        return seriesMapper.toResponse(
-            series, 
-            bookRepository.countBySeriesId(series.getId()), 
-            series.getAuthor().getId());
     }
 
     public SeriesResponse createSeries(SeriesRequest seriesRequest) {

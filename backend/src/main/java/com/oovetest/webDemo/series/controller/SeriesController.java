@@ -6,6 +6,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 
@@ -21,6 +24,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 
 import com.oovetest.webDemo.series.service.SeriesService;
+import com.oovetest.webDemo.util.PageResponse;
 
 @Validated
 @RestController
@@ -70,15 +74,36 @@ public class SeriesController {
         description = "查詢系列資料，需提供系列名稱"
     )
     @GetMapping("/series")
-    public ResponseEntity<SeriesResponse> getSeriesByName(
+    public ResponseEntity<PageResponse<SeriesResponse>> getSeriesByKeyword(
         @RequestParam 
         @NotBlank(message = "系列名稱不能為空")
         @Size(max = 255, message = "系列名稱不能超過255個字")
         @Size(min = 1, message = "系列名稱至少要有1個字元")
         @Parameter(description = "系列名稱", example = "哈利波特系列") 
-        String seriesName) {
-            SeriesResponse series = seriesService.getSeriesByName(seriesName);
-            return ResponseEntity.ok(series);
+        String keyword,
+
+        @RequestParam(defaultValue = "0") 
+        @Parameter(description = "頁碼（從0開始）", example = "0", required = false)
+        int page,
+        
+        @RequestParam(defaultValue = "5") 
+        @Parameter(description = "每頁筆數", example = "5", required = false)
+        int size,
+
+        @RequestParam(defaultValue = "id") 
+        @Parameter(description = "排序欄位", example = "id", required = false)
+        String sortBy,
+
+        @RequestParam(defaultValue = "asc") 
+        @Parameter(description = "排序方向", example = "asc", required = false)
+        String direction
+    ) {
+        Sort.Direction sortDirection = 
+            direction.equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC;
+        
+        Pageable pageable = PageRequest.of(page, size, sortDirection, sortBy);
+        PageResponse<SeriesResponse> pageResponse = seriesService.findByTitleContaining(keyword, pageable);
+        return ResponseEntity.ok(pageResponse);
             
     }
 
